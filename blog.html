@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow"> <!-- テスト公開中：本番公開時にこの行を削除 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>買取お役立ちブログ｜ナニウル</title>
 <meta name="description" content="ナニウルスタッフがお送りする買取お役立ちブログ。買取実績や高く売るコツを鑑定士がご紹介します。">
@@ -270,7 +271,10 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.85);padding:44px 0 3
   </div>
 </footer>
 
-<script src="data/posts.js"></script>
+<script>
+/* 記事データはキャッシュを避けて毎回最新を読み込む（GitHub Pagesの10分キャッシュ対策） */
+document.write('<script src="data/posts.js?v=' + Date.now() + '"><\/script>');
+</script>
 <script>
 const yen = n => Number(n).toLocaleString("ja-JP");
 const params = new URLSearchParams(location.search);

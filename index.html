@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow"> <!-- テスト公開中：本番公開時にこの行を削除 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ナニウル｜八王子の高価買取専門店 金・プラチナ・宝石・ブランド品</title>
 <meta name="description" content="八王子で高価買取ならナニウル。金・プラチナ・宝石・ブランド品・腕時計・切手・お酒など幅広く買取。本日の金相場を毎朝10時に更新。LINE査定・店頭買取・出張買取に対応。">
@@ -827,7 +828,10 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   </div>
 </footer>
 
-<script src="data/posts.js"></script>
+<script>
+/* 記事データはキャッシュを避けて毎回最新を読み込む（GitHub Pagesの10分キャッシュ対策） */
+document.write('<script src="data/posts.js?v=' + Date.now() + '"><\/script>');
+</script>
 <script>
 /* =========================================================
    設定
