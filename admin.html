@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ナニウル CMS｜買取実績×ブログ管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#FFFFFF;--ivory:#F7F6F2;--black:#141414;
+  --green:#1E4438;--green-deep:#16352C;--green-soft:#E9EFEC;
+  --grey:#6E6E68;--line:#E4E2DC;--red:#B4463C;
+  --didone:"Montserrat","Zen Kaku Gothic New",sans-serif;
+  --sans:"Zen Kaku Gothic New",sans-serif;
+  --mont:"Montserrat",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:clip}
+body{font-family:var(--sans);background:var(--ivory);color:var(--black);font-size:14px;line-height:1.8}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{font-family:var(--sans);cursor:pointer}
+
+/* header */
+header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
+.head-in{max-width:1360px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--didone);font-size:20px;letter-spacing:.34em;display:flex;align-items:baseline;gap:12px}
+.logo small{font-family:var(--mont);font-size:9.5px;letter-spacing:.3em;color:rgba(255,255,255,.7)}
+.head-btns{display:flex;gap:8px;align-items:center}
+.status-dot{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;margin-right:8px;color:rgba(255,255,255,.85)}
+.status-dot i{width:8px;height:8px;border-radius:50%;background:#D9A54A;display:inline-block}
+.status-dot.ok i{background:#7FC08B}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;font-size:12.5px;letter-spacing:.08em;border:1px solid var(--black);background:#fff;color:var(--black);transition:.25s;font-weight:500}
+.btn:hover{background:var(--black);color:#fff}
+.btn.green{background:var(--green);border-color:#fff3;color:#fff}
+.btn.green:hover{background:var(--green-deep)}
+.btn.solid{background:var(--black);color:#fff}
+.btn.solid:hover{background:var(--green)}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn.danger:hover{background:var(--red);color:#fff}
+.btn.sm{padding:6px 12px;font-size:11.5px}
+.btn:disabled{opacity:.4;pointer-events:none}
+
+/* layout */
+.layout{max-width:1360px;margin:0 auto;padding:24px;display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line)}
+.panel h2{font-size:13px;letter-spacing:.2em;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--green-soft);display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.panel .in{padding:18px}
+
+/* post list */
+.post-item{border:1px solid var(--line);padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:.2s;display:flex;gap:12px;align-items:center;background:#fff}
+.post-item:hover{border-color:var(--green)}
+.post-item.on{border-color:var(--green);background:var(--green-soft)}
+.post-item .thumb{width:52px;height:52px;background:var(--ivory);border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-family:var(--mont);font-size:8px;letter-spacing:.1em;color:var(--green);overflow:hidden}
+.post-item .thumb img{width:100%;height:100%;object-fit:cover}
+.post-item .m{min-width:0;flex:1}
+.post-item .t{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-item .d{font-size:10.5px;color:var(--grey);display:flex;gap:8px}
+.post-item .badge{font-size:9.5px;background:var(--green);color:#fff;padding:1px 7px}
+.post-item .badge.col{background:var(--grey)}
+.post-item .badge.sch{background:#D9A54A}
+
+/* form */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;letter-spacing:.16em;color:var(--grey);margin-bottom:6px;font-weight:700}
+.field label b{color:var(--red);font-weight:700}
+.field input[type=text],.field input[type=number],.field input[type=password],.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);font-family:var(--sans);font-size:13.5px;background:#fff}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--green);outline-offset:-1px}
+.field textarea{min-height:220px;resize:vertical;line-height:1.9}
+.field .hint{font-size:10.5px;color:var(--grey);margin-top:4px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+
+/* images */
+.img-drop{border:2px dashed var(--line);padding:22px;text-align:center;font-size:12px;color:var(--grey);cursor:pointer;transition:.25s;background:var(--ivory)}
+.img-drop:hover,.img-drop.over{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+.img-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.img-card{width:110px;border:1px solid var(--line);background:#fff;position:relative}
+.img-card img{width:100%;height:80px;object-fit:cover;display:block}
+.img-card .nm{font-size:9.5px;padding:4px 6px;color:var(--grey);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mont)}
+.img-card .del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(20,20,20,.75);color:#fff;border:none;font-size:11px;line-height:1}
+.img-card .main-tag{position:absolute;top:4px;left:4px;font-size:8.5px;background:var(--green);color:#fff;padding:1px 6px}
+.img-card.pending::after{content:"未公開";position:absolute;bottom:26px;right:4px;font-size:8.5px;background:#D9A54A;color:#fff;padding:1px 6px}
+
+/* related */
+.rel-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px;max-height:180px;overflow:auto;border:1px solid var(--line);padding:10px}
+.rel-list label{display:flex;gap:8px;align-items:center;font-size:12px;padding:5px 6px;cursor:pointer;border:1px solid transparent}
+.rel-list label:hover{background:var(--green-soft)}
+.rel-list input{accent-color:var(--green)}
+
+/* tabs */
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tabs button{flex:1;padding:12px;border:none;background:var(--ivory);font-size:12px;letter-spacing:.12em;color:var(--grey);border-bottom:2px solid transparent;font-weight:700}
+.tabs button.on{background:#fff;color:var(--green);border-bottom-color:var(--green)}
+.tab-body{display:none;padding:20px}
+.tab-body.on{display:block}
+
+/* preview */
+.pv{border:1px solid var(--line);background:#fff}
+.pv-head{background:var(--green);color:#fff;padding:14px 20px;font-size:11px;letter-spacing:.24em;font-family:var(--mont)}
+.pv-in{padding:26px;max-width:680px;margin:0 auto}
+.pv-cat{font-size:10.5px;background:var(--green);color:#fff;padding:3px 10px;display:inline-block;margin-right:10px}
+.pv-date{font-family:var(--mont);font-size:11.5px;color:var(--grey)}
+.pv-title{font-size:20px;font-weight:700;letter-spacing:.06em;line-height:1.7;padding:12px 0 16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.pv-img{width:100%;max-height:320px;object-fit:cover;border:1px solid var(--line);margin-bottom:20px}
+.pv-body p{margin-bottom:1.4em;font-size:14px}
+.pv-price{position:relative;margin:32px 0;padding:30px 24px 26px;text-align:center;
+  background:linear-gradient(165deg,#FCF8EE 0%,#F5ECD7 100%);
+  border:2px solid #C9A96A;
+  box-shadow:0 0 0 4px #FCF8EE,0 0 0 5px #DCC68F,0 14px 30px rgba(140,110,50,.14)}
+.pv-price::before,.pv-price::after{content:"";position:absolute;left:14px;right:14px;height:1px;
+  background:linear-gradient(90deg,transparent,#C9A96A 18%,#C9A96A 82%,transparent)}
+.pv-price::before{top:8px}
+.pv-price::after{bottom:8px}
+.pv-price .pp-label{display:block;font-family:var(--mont);font-size:10.5px;letter-spacing:.4em;color:#9A7B3C;margin-bottom:6px}
+.pv-price .pp-name{display:block;font-size:14px;font-weight:700;letter-spacing:.1em;color:#5A4A26;margin-bottom:10px}
+.pv-price .v{display:block;font-family:var(--didone);font-size:44px;line-height:1.15;letter-spacing:.02em;
+  background:linear-gradient(180deg,#C9A54F 0%,#A07E35 55%,#8A6A28 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.7))}
+.pv-price .v small{font-size:18px;-webkit-background-clip:text;background-clip:text}
+.pv-rel{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}
+.pv-rel h4{font-size:12px;letter-spacing:.16em;margin-bottom:10px}
+.pv-rel a{display:block;font-size:12.5px;color:var(--green);padding:4px 0}
+
+/* toast / modal */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--black);color:#fff;padding:13px 26px;font-size:13px;letter-spacing:.06em;transition:.35s;z-index:200;opacity:0}
+.toast.show{transform:translateX(-50%);opacity:1}
+.toast.err{background:var(--red)}
+.log{font-family:var(--mont);font-size:11px;background:var(--black);color:#9fd0a8;padding:14px;max-height:160px;overflow:auto;white-space:pre-wrap;display:none;line-height:1.7}
+.log.show{display:block}
+
+.empty{padding:40px 20px;text-align:center;color:var(--grey);font-size:12.5px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+@media(max-width:600px){
+  .layout{padding:14px;gap:16px}
+  .head-in{flex-wrap:wrap;height:auto;padding:10px 16px;gap:8px}
+  .head-btns{width:100%;justify-content:flex-end;flex-wrap:wrap}
+  .status-dot{margin-right:auto}
+  .field input[type=text],.field input[type=number],.field input[type=password],.field select,.field textarea{font-size:16px}
+  .img-drop{padding:16px}
+  .tab-body{padding:14px}
+  .pv-in{padding:16px}
+  .pv-price .v{font-size:34px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <span class="logo"><img src="img/logo/logo-h-white.png" alt="ナニウル" style="height:30px;width:auto;display:block"><small>CMS — RESULTS × BLOG</small></span>
+    <div class="head-btns">
+      <span class="status-dot" id="ghStatus"><i></i><span>GitHub未接続</span></span>
+      <button class="btn sm" id="btnSettings">⚙ 接続設定</button>
+      <button class="btn sm" id="btnExport">JSエクスポート</button>
+      <button class="btn green" id="btnPublish">サイトに公開する</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ============ 左：記事リスト ============ -->
+  <div>
+    <div class="panel">
+      <h2>記事一覧<button class="btn sm solid" id="btnNew">＋ 新規作成</button></h2>
+      <div class="in">
+        <div class="field" style="margin-bottom:12px">
+          <input type="text" id="searchBox" placeholder="タイトル・商品名で検索…">
+        </div>
+        <div id="postList"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <h2>使い方</h2>
+      <div class="in" style="font-size:12px;color:var(--grey);line-height:2">
+        1. 記事を編集・作成し「保存」<br>
+        2. 「サイトに公開する」で <b>data/posts.js</b> と画像がGitHubへコミットされ、トップの実績スライダー／ブログ一覧／記事ページに自動反映されます。<br>
+        3. 「予約投稿」を選ぶと、指定日時までサイト上で非表示になり、日時到来で自動表示されます（公開操作は事前に済ませてください）。<br>
+        4. GitHub未接続でも「JSエクスポート」でposts.jsをダウンロードし、手動アップロードできます。
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 右：エディタ ============ -->
+  <div>
+    <div class="panel">
+      <div class="tabs">
+        <button class="on" data-tab="edit">✎ 編集</button>
+        <button data-tab="preview">◫ プレビュー</button>
+      </div>
+
+      <!-- ---- 編集タブ ---- -->
+      <div class="tab-body on" id="tab-edit">
+        <div class="toolbar">
+          <button class="btn sm solid" id="btnSave">保存</button>
+          <button class="btn sm" id="btnDup">複製</button>
+          <button class="btn sm danger" id="btnDelete">削除</button>
+          <span style="flex:1"></span>
+          <span id="editState" style="font-size:11px;color:var(--grey);align-self:center"></span>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>記事タイプ</label>
+            <select id="fType">
+              <option value="result">買取実績記事（実績スライダーに表示）</option>
+              <option value="column">お役立ちコラム（ブログのみ）</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>公開日（表示用） <b>*</b></label>
+            <input type="date" id="fDate">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>公開設定</label>
+            <select id="fPubMode">
+              <option value="now">すぐに公開</option>
+              <option value="scheduled">予約投稿（日時指定）</option>
+            </select>
+          </div>
+          <div class="field" id="pubAtField" style="display:none">
+            <label>公開日時 <b>*</b></label>
+            <input type="datetime-local" id="fPublishAt">
+            <div class="hint">この日時になるとサイトに自動表示されます</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>タイトル <b>*</b></label>
+          <input type="text" id="fTitle" placeholder="例）ブランド品買取 東京都のお客様 シャネル マトラッセ">
+          <div class="hint">ラフテル形式：「◯◯買取 ◯◯のお客様 商品名」</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>スラッグ（URL） <b>*</b></label>
+            <input type="text" id="fSlug" placeholder="20260721-chanel-matelasse">
+            <div class="hint">blog.html?post=<b>スラッグ</b> になります（半角英数とハイフン）</div>
+          </div>
+          <div class="field">
+            <label>カテゴリ <b>*</b></label>
+            <select id="fCat"></select>
+            <div class="hint">「＋新しいカテゴリを追加…」で候補に追加できます</div>
+          </div>
+        </div>
+
+        <div id="resultFields">
+          <div class="grid-3">
+            <div class="field">
+              <label>商品名 <b>*</b></label>
+              <input type="text" id="fName" placeholder="シャネル マトラッセ">
+            </div>
+            <div class="field">
+              <label>買取価格（円） <b>*</b></label>
+              <input type="number" id="fPrice" placeholder="380000">
+            </div>
+            <div class="field">
+              <label>商品タグ</label>
+              <select id="fTag"></select>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="field">
+              <label>買取方法</label>
+              <select id="fMethod">
+                <option>店頭買取</option>
+                <option>出張買取</option>
+                <option>LINE査定</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>お客様エリア</label>
+              <input type="text" id="fArea" placeholder="東京都">
+            </div>
+            <div class="field">
+              <label>担当鑑定士</label>
+              <input type="text" id="fStaff" placeholder="鑑定士 佐々木">
+            </div>
+          </div>
+          <div class="field">
+            <label>実績カード用の一言（抜粋）<b>*</b></label>
+            <input type="text" id="fExcerpt" placeholder="初めてのボーナスで購入されたシャネルのバッグを買取しました。">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>本文 <b>*</b></label>
+          <textarea id="fBody" placeholder="こんにちは。鑑定士の◯◯です。&#10;&#10;（空行で段落を区切ります）"></textarea>
+          <div class="hint">空行で段落区切り。「こんにちは。鑑定士の◯◯です。」から始まる一人称スタイル推奨</div>
+        </div>
+
+        <div class="field">
+          <label>画像（1枚目がメイン画像・実績カードにも表示）</label>
+          <div class="img-drop" id="imgDrop">クリックまたはドラッグ＆ドロップで画像を追加（JPG / PNG / WebP）</div>
+          <input type="file" id="imgInput" accept="image/jpeg,image/png,image/webp" multiple hidden>
+          <div class="img-list" id="imgList"></div>
+          <div class="hint">公開時に img/posts/スラッグ/ 配下へ自動コミットされます。ドラッグで並び替え可。</div>
+        </div>
+
+        <div class="field">
+          <label>関連記事（記事ページに表示・複数選択可）</label>
+          <div class="rel-list" id="relList"></div>
+        </div>
+      </div>
+
+      <!-- ---- プレビュータブ ---- -->
+      <div class="tab-body" id="tab-preview">
+        <div class="pv">
+          <div class="pv-head">PREVIEW — blog.html?post=<span id="pvSlug"></span></div>
+          <div class="pv-in" id="pvIn"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="log" id="log"></div>
+  </div>
+</div>
+
+<!-- ============ 接続設定モーダル ============ -->
+<div id="settingsModal" style="display:none;position:fixed;inset:0;background:rgba(20,20,20,.55);z-index:180;align-items:center;justify-content:center">
+  <div class="panel" style="width:min(480px,92vw)">
+    <h2>GitHub 接続設定</h2>
+    <div class="in">
+      <div class="field">
+        <label>Personal Access Token（repo権限）</label>
+        <input type="password" id="ghToken" placeholder="github_pat_…">
+      </div>
+      <div class="field">
+        <label>リポジトリ（owner/repo）</label>
+        <input type="text" id="ghRepo" placeholder="yxxk/naniuru-site">
+      </div>
+      <div class="field">
+        <label>ブランチ</label>
+        <input type="text" id="ghBranch" placeholder="main" value="main">
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn sm" id="ghCancel">閉じる</button>
+        <button class="btn sm solid" id="ghSave">保存して接続テスト</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   ストレージ（localStorage不可環境ではメモリにフォールバック）
+========================================================= */
+const store = (() => {
+  let mem = {};
+  try { localStorage.setItem("__t","1"); localStorage.removeItem("__t");
+    return { get:k=>localStorage.getItem(k), set:(k,v)=>localStorage.setItem(k,v), del:k=>localStorage.removeItem(k) };
+  } catch(e){
+    return { get:k=>mem[k]??null, set:(k,v)=>{mem[k]=v}, del:k=>{delete mem[k]} };
+  }
+})();
+
+/* =========================================================
+   状態
+========================================================= */
+let POSTS = [];        // 実績記事
+let COLUMNS = [];      // コラム
+let current = null;    // 編集中オブジェクト（コピー）
+let currentType = "result";
+let currentIndex = -1; // -1 = 新規
+let pendingImages = {}; // path -> {dataUrl, base64, mime}（未コミット画像）
+let dirty = false;
+
+const $ = id => document.getElementById(id);
+const yen = n => Number(n||0).toLocaleString("ja-JP");
+
+/* =========================================================
+   初期ロード：GitHub → 相対fetch → サンプル の順で試行
+========================================================= */
+async function loadData(){
+  const gh = ghConf();
+  if (gh.token && gh.repo){
+    try{
+      const src = await ghGetFile("data/posts.js");
+      parsePostsJs(src.text);
+      setGhStatus(true);
+      log("GitHubから data/posts.js を読み込みました。");
+      renderAll(); return;
+    }catch(e){ log("GitHub読込失敗: "+e.message); }
+  }
+  try{
+    const r = await fetch("data/posts.js?t="+Date.now(),{cache:"no-store"});
+    if(r.ok){ parsePostsJs(await r.text()); log("同一ディレクトリの data/posts.js を読み込みました。"); renderAll(); return; }
+  }catch(e){}
+  POSTS=[]; COLUMNS=[];
+  log("posts.js が見つからないため空の状態で開始します。");
+  renderAll();
+}
+
+function parsePostsJs(src){
+  const fn = new Function(src + ";return {POSTS: typeof POSTS!=='undefined'?POSTS:[], COLUMNS: typeof COLUMNS!=='undefined'?COLUMNS:[]}");
+  const r = fn();
+  POSTS = (r.POSTS||[]).map(p=>({images:[],related:[],...p}));
+  COLUMNS = (r.COLUMNS||[]).map(c=>({images:[],related:[],body:c.body||[],...c}));
+}
+
+/* =========================================================
+   一覧表示
+========================================================= */
+function renderAll(){
+  renderList();
+  renderCatList();
+  if(currentIndex===-1 && !current){
+    if(POSTS.length) selectPost("result",0); else newPost();
+  }
+}
+
+function renderList(){
+  const q = $("searchBox").value.trim();
+  const box = $("postList");
+  box.innerHTML = "";
+  const items = [
+    ...POSTS.map((p,i)=>({p,i,type:"result"})),
+    ...COLUMNS.map((p,i)=>({p,i,type:"column"}))
+  ].sort((a,b)=> (b.p.date||"").localeCompare(a.p.date||""));
+
+  const filtered = items.filter(({p}) =>
+    !q || (p.title||"").includes(q) || (p.name||"").includes(q) || (p.cat||"").includes(q));
+
+  if(!filtered.length){ box.innerHTML = `<div class="empty">記事がありません。<br>「＋ 新規作成」から追加してください。</div>`; return; }
+
+  filtered.forEach(({p,i,type})=>{
+    const el = document.createElement("div");
+    el.className = "post-item" + (type===currentType && i===currentIndex ? " on":"");
+    const img = (p.images&&p.images[0]) ? imgSrc(p.images[0]) : null;
+    el.innerHTML = `
+      <div class="thumb">${img?`<img src="${img}" alt="">`:"NO IMG"}</div>
+      <div class="m">
+        <div class="t">${p.title||"（無題）"}</div>
+        <div class="d"><span>${p.date||""}</span>
+          <span class="badge ${type==="column"?"col":""}">${type==="result"?"実績":"コラム"}</span>
+          ${(p.publishAt && new Date(p.publishAt) > new Date())?`<span class="badge sch">予約 ${p.publishAt.replace("T"," ")}</span>`:""}
+          ${type==="result"?`<span>¥${yen(p.price)}</span>`:""}</div>
+      </div>`;
+    el.addEventListener("click",()=>selectPost(type,i));
+    box.appendChild(el);
+  });
+}
+
+const DEFAULT_CATS = ["ブランド品","ロレックス","腕時計","宝石","貴金属","ダイヤモンド","切手","お酒","カメラ","古銭","骨董","その他"];
+const DEFAULT_TAGS = ["BAG","WATCH","JEWELRY","WALLET","GOLD","PLATINUM","DIAMOND","STAMP","LIQUOR","CAMERA","COIN","ANTIQUE","OTHER"];
+let extraCats = [], extraTags = [];
+
+function renderCatList(){ if(current) renderCatTagOptions($("fCat").value, $("fTag").value); }
+
+function buildSelect(sel, base, extras, used, currentVal, newLabel){
+  const opts = [...new Set([...base, ...extras, ...used, ...(currentVal?[currentVal]:[])].filter(Boolean))];
+  sel.innerHTML = '<option value="">選択してください</option>'
+    + opts.map(o=>`<option value="${o}"${o===currentVal?" selected":""}>${o}</option>`).join("")
+    + `<option value="__new__">＋ ${newLabel}を追加…</option>`;
+}
+
+function renderCatTagOptions(catVal, tagVal){
+  const usedCats = [...POSTS.map(p=>p.cat), ...COLUMNS.map(c=>c.cat)];
+  const usedTags = POSTS.map(p=>p.tag);
+  buildSelect($("fCat"), DEFAULT_CATS, extraCats, usedCats, catVal||"", "新しいカテゴリ");
+  buildSelect($("fTag"), DEFAULT_TAGS, extraTags, usedTags, (tagVal||"").toUpperCase(), "新しいタグ");
+}
+
+function handleNewOption(sel, extras, label, upper){
+  sel.addEventListener("change", ()=>{
+    if(sel.value!=="__new__") return;
+    let v = prompt(label+"を入力してください");
+    v = (v||"").trim(); if(upper) v = v.toUpperCase().replace(/[^A-Z0-9-]/g,"");
+    if(v){ extras.push(v); }
+    renderCatTagOptions(sel.id==="fCat"?v:$("fCat").value, sel.id==="fTag"?v:$("fTag").value);
+    dirty = true; setState("未保存の変更あり");
+  });
+}
+handleNewOption($("fCat"), extraCats, "新しいカテゴリ名", false);
+handleNewOption($("fTag"), extraTags, "新しいタグ（半角英字）", true);
+
+function togglePubAt(){
+  $("pubAtField").style.display = $("fPubMode").value==="scheduled" ? "block" : "none";
+}
+$("fPubMode").addEventListener("change", ()=>{ togglePubAt(); dirty=true; setState("未保存の変更あり"); });
+$("fPublishAt").addEventListener("input", ()=>{ dirty=true; setState("未保存の変更あり"); });
+
+/* =========================================================
+   編集
+========================================================= */
+function blankPost(type){
+  const today = new Date();
+  const d = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,"0")}.${String(today.getDate()).padStart(2,"0")}`;
+  return type==="result"
+    ? {slug:"",date:d,cat:"",tag:"",name:"",area:"東京都",method:"店頭買取",price:0,staff:"",title:"",excerpt:"",body:[],images:[],related:[]}
+    : {slug:"",date:d,cat:"",title:"",body:[],images:[],related:[]};
+}
+
+function newPost(){
+  if(dirty && !confirm("未保存の変更があります。破棄して新規作成しますか？")) return;
+  currentType="result"; currentIndex=-1;
+  current = blankPost("result");
+  fillForm(); renderList(); setState("新規記事");
+}
+
+function selectPost(type,i){
+  if(dirty && !confirm("未保存の変更があります。破棄して移動しますか？")) return;
+  currentType=type; currentIndex=i;
+  const src = type==="result"?POSTS[i]:COLUMNS[i];
+  current = JSON.parse(JSON.stringify(src));
+  fillForm(); renderList(); setState("編集中");
+}
+
+function fillForm(){
+  const p = current;
+  $("fType").value = currentType;
+  $("fDate").value = (p.date||"").replaceAll(".","-");
+  $("fPubMode").value = p.publishAt ? "scheduled" : "now";
+  $("fPublishAt").value = p.publishAt || "";
+  togglePubAt();
+  $("fTitle").value = p.title||"";
+  $("fSlug").value = p.slug||"";
+  renderCatTagOptions(p.cat, p.tag);
+  $("fName").value = p.name||"";
+  $("fPrice").value = p.price||"";
+  $("fMethod").value = p.method||"店頭買取";
+  $("fArea").value = p.area||"";
+  $("fStaff").value = p.staff||"";
+  $("fExcerpt").value = p.excerpt||"";
+  $("fBody").value = (p.body||[]).join("\n\n");
+  $("resultFields").style.display = currentType==="result"?"block":"none";
+  dirty=false;
+  renderImages(); renderRelated(); renderPreview();
+}
+
+function readForm(){
+  const p = current;
+  p.date = $("fDate").value.trim().replaceAll("-",".");
+  if($("fPubMode").value==="scheduled" && $("fPublishAt").value){
+    p.publishAt = $("fPublishAt").value;
+  } else {
+    delete p.publishAt;
+  }
+  p.title = $("fTitle").value.trim();
+  p.slug = $("fSlug").value.trim();
+  p.cat = $("fCat").value.trim();
+  p.body = $("fBody").value.split(/\n\s*\n/).map(t=>t.trim()).filter(Boolean);
+  if(currentType==="result"){
+    p.name = $("fName").value.trim();
+    p.price = Number($("fPrice").value)||0;
+    p.tag = $("fTag").value.trim().toUpperCase();
+    p.method = $("fMethod").value;
+    p.area = $("fArea").value.trim();
+    p.staff = $("fStaff").value.trim();
+    p.excerpt = $("fExcerpt").value.trim();
+  }
+}
+
+function validate(){
+  readForm();
+  const p = current, errs=[];
+  if(!p.date) errs.push("公開日");
+  if(!p.title) errs.push("タイトル");
+  if(!/^[a-z0-9-]+$/i.test(p.slug||"")) errs.push("スラッグ（半角英数とハイフン）");
+  if(!p.cat) errs.push("カテゴリ");
+  if(!p.body.length) errs.push("本文");
+  if($("fPubMode").value==="scheduled" && !$("fPublishAt").value) errs.push("予約公開日時");
+  if(currentType==="result"){
+    if(!p.name) errs.push("商品名");
+    if(!p.price) errs.push("買取価格");
+    if(!p.excerpt) errs.push("抜粋");
+  }
+  const dup = [...POSTS,...COLUMNS].some((x,idx)=>
+    x.slug===p.slug && !(currentIndex>-1 && x===(currentType==="result"?POSTS[currentIndex]:COLUMNS[currentIndex])));
+  if(dup) errs.push("スラッグが他の記事と重複");
+  return errs;
+}
+
+function savePost(){
+  const errs = validate();
+  if(errs.length){ toast("未入力・不備: "+errs.join("、"),true); return false; }
+  const arr = currentType==="result"?POSTS:COLUMNS;
+  if(currentIndex===-1){ arr.push(current); currentIndex=arr.length-1; }
+  else arr[currentIndex]=current;
+  arr.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  currentIndex = arr.indexOf(current);
+  dirty=false; renderList(); renderCatList(); renderPreview();
+  toast("保存しました（未公開）"); setState("保存済・未公開");
+  return true;
+}
+
+function deletePost(){
+  if(currentIndex===-1){ toast("未保存の記事です",true); return; }
+  if(!confirm("この記事を削除しますか？（公開するまでサイトには反映されません）")) return;
+  const arr = currentType==="result"?POSTS:COLUMNS;
+  arr.splice(currentIndex,1);
+  // 他記事のrelatedから除去
+  [...POSTS,...COLUMNS].forEach(p=>{ p.related=(p.related||[]).filter(s=>s!==current.slug); });
+  current=null; currentIndex=-1; renderAll(); toast("削除しました（未公開）");
+}
+
+function dupPost(){
+  readForm();
+  const copy = JSON.parse(JSON.stringify(current));
+  copy.slug = copy.slug + "-copy";
+  copy.title = copy.title + "（複製）";
+  current = copy; currentIndex=-1;
+  fillForm(); setState("複製（新規・未保存）"); dirty=true;
+}
+
+/* =========================================================
+   画像
+========================================================= */
+function imgSrc(path){ return pendingImages[path]?.dataUrl || path; }
+
+$("imgDrop").addEventListener("click",()=>$("imgInput").click());
+$("imgDrop").addEventListener("dragover",e=>{e.preventDefault();$("imgDrop").classList.add("over")});
+$("imgDrop").addEventListener("dragleave",()=>$("imgDrop").classList.remove("over"));
+$("imgDrop").addEventListener("drop",e=>{
+  e.preventDefault();$("imgDrop").classList.remove("over");
+  addImages([...e.dataTransfer.files]);
+});
+$("imgInput").addEventListener("change",e=>{ addImages([...e.target.files]); e.target.value=""; });
+
+async function addImages(files){
+  readForm();
+  if(!/^[a-z0-9-]+$/i.test(current.slug||"")){ toast("先にスラッグを入力してください",true); return; }
+  for(const f of files){
+    if(!/^image\/(jpeg|png|webp)$/.test(f.type)){ toast(f.name+" は非対応形式です",true); continue; }
+    const dataUrl = await resizeImage(f, 1600);
+    const ext = f.type==="image/png"?"png":f.type==="image/webp"?"webp":"jpg";
+    const base = f.name.replace(/\.[^.]+$/,"").replace(/[^a-zA-Z0-9-_]/g,"").slice(0,40) || "img";
+    let path = `img/posts/${current.slug}/${base}.${ext}`, n=1;
+    while(current.images.includes(path)) path = `img/posts/${current.slug}/${base}-${++n}.${ext}`;
+    pendingImages[path] = { dataUrl, base64: dataUrl.split(",")[1], mime:f.type };
+    current.images.push(path);
+  }
+  dirty=true; renderImages(); renderPreview();
+}
+
+function resizeImage(file, maxW){
+  return new Promise(res=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const scale = Math.min(1, maxW/img.width);
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width*scale); c.height = Math.round(img.height*scale);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      res(c.toDataURL(file.type==="image/png"?"image/png":"image/jpeg",0.86));
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function renderImages(){
+  const box = $("imgList"); box.innerHTML="";
+  (current.images||[]).forEach((path,i)=>{
+    const card = document.createElement("div");
+    card.className = "img-card"+(pendingImages[path]?" pending":"");
+    card.draggable = true;
+    card.innerHTML = `
+      ${i===0?'<span class="main-tag">メイン</span>':""}
+      <img src="${imgSrc(path)}" alt="">
+      <button class="del" title="削除">×</button>
+      <div class="nm">${path.split("/").pop()}</div>`;
+    card.querySelector(".del").addEventListener("click",()=>{
+      current.images.splice(i,1); delete pendingImages[path];
+      dirty=true; renderImages(); renderPreview();
+    });
+    card.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",i));
+    card.addEventListener("dragover",e=>e.preventDefault());
+    card.addEventListener("drop",e=>{
+      e.preventDefault();
+      const from = Number(e.dataTransfer.getData("text/plain"));
+      const [m]=current.images.splice(from,1);
+      current.images.splice(i,0,m);
+      dirty=true; renderImages(); renderPreview();
+    });
+    box.appendChild(card);
+  });
+}
+
+/* =========================================================
+   関連記事
+========================================================= */
+function renderRelated(){
+  const box = $("relList"); box.innerHTML="";
+  const all = [
+    ...POSTS.map(p=>({slug:p.slug,title:p.title,t:"実績"})),
+    ...COLUMNS.map(c=>({slug:c.slug,title:c.title,t:"コラム"}))
+  ].filter(x=>x.slug && x.slug!==current.slug);
+  if(!all.length){ box.innerHTML='<span style="font-size:11.5px;color:var(--grey)">他の記事を保存すると選択できます</span>'; return; }
+  all.forEach(x=>{
+    const l = document.createElement("label");
+    const checked = (current.related||[]).includes(x.slug) ? "checked":"";
+    l.innerHTML = `<input type="checkbox" value="${x.slug}" ${checked}><span>［${x.t}］${x.title}</span>`;
+    l.querySelector("input").addEventListener("change",e=>{
+      current.related = current.related||[];
+      if(e.target.checked) current.related.push(x.slug);
+      else current.related = current.related.filter(s=>s!==x.slug);
+      dirty=true; renderPreview();
+    });
+    box.appendChild(l);
+  });
+}
+
+/* =========================================================
+   プレビュー
+========================================================= */
+function renderPreview(){
+  readForm();
+  const p = current;
+  $("pvSlug").textContent = p.slug||"…";
+  const mainImg = p.images?.[0] ? `<img class="pv-img" src="${imgSrc(p.images[0])}" alt="">` : "";
+  const gallery = (p.images||[]).slice(1).map(x=>`<img class="pv-img" style="max-height:200px" src="${imgSrc(x)}" alt="">`).join("");
+  const relHtml = (p.related||[]).map(s=>{
+    const t=[...POSTS,...COLUMNS].find(x=>x.slug===s);
+    return t?`<a href="#">› ${t.title}</a>`:"";
+  }).join("");
+  $("pvIn").innerHTML = `
+    ${(p.publishAt && new Date(p.publishAt)>new Date())?`<div style="background:#FBF3E2;border:1px solid #D9A54A;color:#8A6520;font-size:11.5px;padding:8px 14px;margin-bottom:14px">◷ 予約投稿：${p.publishAt.replace("T"," ")} に自動公開されます</div>`:""}
+    <div><span class="pv-cat">${p.cat||"カテゴリ"}</span><span class="pv-date">${p.date||""}${currentType==="result"?`　${p.method||""}｜${p.area||""}のお客様`:""}</span></div>
+    <div class="pv-title">${p.title||"（タイトル未入力）"}</div>
+    ${mainImg}
+    <div class="pv-body">${(p.body||[]).map(t=>`<p>${t}</p>`).join("")||"<p style='color:var(--grey)'>（本文未入力）</p>"}</div>
+    ${gallery}
+    ${currentType==="result"?`<div class="pv-price"><span class="pp-label">PURCHASE PRICE ─ 今回の買取価格</span><b class="pp-name">${p.name||""}</b><span class="v">¥${yen(p.price)}<small>円</small></span></div>`:""}
+    ${relHtml?`<div class="pv-rel"><h4>関連記事</h4>${relHtml}</div>`:""}`;
+}
+
+/* =========================================================
+   posts.js 生成
+========================================================= */
+function buildPostsJs(){
+  const header = `/* =========================================================
+   ナニウル｜買取実績 × ブログ 共通データ
+   ---------------------------------------------------------
+   このファイルは admin.html（CMS）から自動生成されています。
+   最終更新: ${new Date().toLocaleString("ja-JP")}
+========================================================= */\n`;
+  return header
+    + "const POSTS = " + JSON.stringify(POSTS,null,2) + ";\n\n"
+    + "const COLUMNS = " + JSON.stringify(COLUMNS,null,2) + ";\n";
+}
+
+$("btnExport").addEventListener("click",()=>{
+  if(current && dirty && !savePost()) return;
+  const blob = new Blob([buildPostsJs()],{type:"text/javascript"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "posts.js"; a.click();
+  URL.revokeObjectURL(a.href);
+  if(Object.keys(pendingImages).length)
+    toast("注意：未公開の画像があります。画像はGitHub公開時のみアップロードされます",true);
+  else toast("posts.js をダウンロードしました");
+});
+
+/* =========================================================
+   GitHub API
+========================================================= */
+function ghConf(){
+  return {
+    token: store.get("gh_token")||"",
+    repo: store.get("gh_repo")||"",
+    branch: store.get("gh_branch")||"main"
+  };
+}
+function setGhStatus(ok){
+  const el=$("ghStatus");
+  el.classList.toggle("ok",ok);
+  el.querySelector("span").textContent = ok?`接続中: ${ghConf().repo}`:"GitHub未接続";
+}
+
+async function ghGetFile(path){
+  const {token,repo,branch}=ghConf();
+  const r = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`,{
+    headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
+  if(!r.ok) throw new Error(`GET ${path}: ${r.status}`);
+  const j = await r.json();
+  const bin = atob(j.content.replace(/\n/g,""));
+  const bytes = Uint8Array.from(bin, c=>c.charCodeAt(0));
+  return { sha:j.sha, text:new TextDecoder("utf-8").decode(bytes) };
+}
+
+async function ghPutFile(path, base64, message){
+  const {token,repo,branch}=ghConf();
+  let sha=null;
+  const g = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`,{
+    headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
+  if(g.ok) sha=(await g.json()).sha;
+  const r = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{
+    method:"PUT",
+    headers:{Authorization:"Bearer "+ghConf().token,Accept:"application/vnd.github+json","Content-Type":"application/json"},
+    body:JSON.stringify({message,content:base64,branch,...(sha?{sha}:{})})
+  });
+  if(!r.ok) throw new Error(`PUT ${path}: ${r.status} ${await r.text()}`);
+}
+
+function toB64Utf8(str){
+  return btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+}
+
+async function publish(){
+  if(current && dirty && !savePost()) return;
+  const gh = ghConf();
+  if(!gh.token || !gh.repo){ openSettings(); toast("先にGitHub接続設定をしてください",true); return; }
+  const imgPaths = Object.keys(pendingImages);
+  if(!confirm(`サイトに公開します。\n・data/posts.js を更新\n・新規画像 ${imgPaths.length}件をアップロード\nよろしいですか？`)) return;
+
+  $("btnPublish").disabled=true;
+  try{
+    for(const path of imgPaths){
+      log("画像アップロード: "+path);
+      await ghPutFile(path, pendingImages[path].base64, "cms: 画像追加 "+path);
+    }
+    log("data/posts.js を更新中…");
+    await ghPutFile("data/posts.js", toB64Utf8(buildPostsJs()), "cms: 記事更新 "+new Date().toLocaleString("ja-JP"));
+    pendingImages={};
+    renderImages(); renderList();
+    toast("公開しました。数十秒でサイトに反映されます");
+    log("公開完了。");
+    setState("公開済み");
+  }catch(e){
+    toast("公開に失敗しました: "+e.message,true);
+    log("エラー: "+e.message);
+  }finally{
+    $("btnPublish").disabled=false;
+  }
+}
+$("btnPublish").addEventListener("click",publish);
+
+/* ---------- 設定モーダル ---------- */
+function openSettings(){
+  const gh=ghConf();
+  $("ghToken").value=gh.token; $("ghRepo").value=gh.repo; $("ghBranch").value=gh.branch;
+  $("settingsModal").style.display="flex";
+}
+$("btnSettings").addEventListener("click",openSettings);
+$("ghCancel").addEventListener("click",()=>$("settingsModal").style.display="none");
+$("ghSave").addEventListener("click",async()=>{
+  store.set("gh_token",$("ghToken").value.trim());
+  store.set("gh_repo",$("ghRepo").value.trim());
+  store.set("gh_branch",$("ghBranch").value.trim()||"main");
+  try{
+    await ghGetFile("data/posts.js");
+    setGhStatus(true); toast("接続に成功しました");
+    $("settingsModal").style.display="none";
+    loadData();
+  }catch(e){
+    setGhStatus(false); toast("接続失敗: "+e.message,true);
+  }
+});
+
+/* =========================================================
+   UIユーティリティ
+========================================================= */
+function toast(msg,err){
+  const t=$("toast"); t.textContent=msg;
+  t.classList.toggle("err",!!err); t.classList.add("show");
+  clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove("show"),3400);
+}
+function log(msg){
+  const l=$("log"); l.classList.add("show");
+  l.textContent += `[${new Date().toLocaleTimeString("ja-JP")}] ${msg}\n`;
+  l.scrollTop=l.scrollHeight;
+}
+function setState(t){ $("editState").textContent=t; }
+
+/* タブ */
+document.querySelectorAll(".tabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("on"));
+    document.querySelectorAll(".tab-body").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    $("tab-"+b.dataset.tab).classList.add("on");
+    if(b.dataset.tab==="preview") renderPreview();
+  });
+});
+
+/* 記事タイプ切替 */
+$("fType").addEventListener("change",()=>{
+  if(currentIndex>-1){ toast("保存済み記事のタイプは変更できません。複製をご利用ください",true); $("fType").value=currentType; return; }
+  readForm();
+  currentType=$("fType").value;
+  const keep={slug:current.slug,date:current.date,cat:current.cat,title:current.title,body:current.body,images:current.images,related:current.related};
+  current={...blankPost(currentType),...keep};
+  fillForm(); dirty=true;
+});
+
+/* フォーム変更検知 */
+["fDate","fTitle","fSlug","fCat","fName","fPrice","fTag","fMethod","fArea","fStaff","fExcerpt","fBody"]
+  .forEach(id=>$(id).addEventListener("input",()=>{dirty=true; setState("未保存の変更あり");}));
+
+/* タイトルからスラッグ補助（新規時のみ） */
+$("fDate").addEventListener("change",()=>{
+  if(currentIndex===-1 && !$("fSlug").value && $("fDate").value){
+    $("fSlug").value = $("fDate").value.replaceAll("-","")+"-";
+  }
+});
+
+$("btnNew").addEventListener("click",newPost);
+$("btnSave").addEventListener("click",savePost);
+$("btnDelete").addEventListener("click",deletePost);
+$("btnDup").addEventListener("click",dupPost);
+$("searchBox").addEventListener("input",renderList);
+window.addEventListener("beforeunload",e=>{ if(dirty){e.preventDefault();e.returnValue="";} });
+
+/* 起動 */
+setGhStatus(!!(ghConf().token&&ghConf().repo));
+loadData();
+</script>
+</body>
+</html>

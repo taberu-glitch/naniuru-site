@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>買取お役立ちブログ｜ナニウル</title>
+<meta name="description" content="ナニウルスタッフがお送りする買取お役立ちブログ。買取実績や高く売るコツを鑑定士がご紹介します。">
+<link rel="icon" type="image/png" href="img/logo/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#FFFFFF;--ivory:#F7F6F2;--black:#141414;
+  --green:#1E4438;--green-deep:#16352C;--green-soft:#E9EFEC;
+  --grey:#5C5B53;--gold:#C9A96A;--gold-deep:#A8874B;--gold-lt:#D8C79C;--gold-pale:#F6F0E2;--line:#E4E2DC;--line-dk:rgba(255,255,255,.22);
+  --serif:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  --didone:"Montserrat","Zen Kaku Gothic New",sans-serif;
+  --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  --mont:"Montserrat","Zen Kaku Gothic New",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+img,iframe{max-width:100%}
+body{font-family:var(--sans);background:var(--white);color:#1D1C19;line-height:1.95;font-size:15.5px;letter-spacing:.02em}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.serif{font-family:var(--serif)}
+
+/* header（トップと共通デザイン・簡易版） */
+.topbar{background:var(--black);color:#fff;font-size:11.5px;letter-spacing:.14em;font-family:var(--mont)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:34px}
+.topbar a{color:#fff}
+header.site{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.head-in{display:flex;align-items:center;justify-content:space-between;height:78px}
+.logo{display:flex;align-items:center}
+.logo img{height:42px;width:auto;display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;font-size:12.5px;letter-spacing:.16em;border:1px solid var(--black);transition:.3s;cursor:pointer;background:var(--white);color:var(--black);font-weight:500}
+.btn:hover{background:var(--black);color:#fff}
+.btn.green{background:var(--green);border-color:var(--green);color:#fff}
+.btn.green:hover{background:var(--green-deep)}
+.btn.black{background:var(--black);color:#fff}
+.btn.black:hover{background:var(--green);border-color:var(--green)}
+.head-cta{display:flex;gap:10px;align-items:center}
+
+/* 常時表示CTA */
+.float-cta{position:fixed;right:22px;bottom:22px;z-index:150;display:flex;flex-direction:column;gap:10px}
+.float-cta a{display:flex;align-items:center;justify-content:center;min-width:210px;padding:15px 22px;font-size:13px;letter-spacing:.12em;font-weight:700;box-shadow:0 12px 28px rgba(20,20,20,.22);transition:.3s;color:#fff}
+.float-cta .tel{background:var(--black)}
+.float-cta .tel:hover{background:#000;transform:translateY(-2px)}
+.float-cta .line{background:var(--green)}
+.float-cta .line:hover{background:var(--green-deep);transform:translateY(-2px)}
+
+/* page head */
+.page-head{background:var(--green);color:#fff;padding:52px 0 46px;text-align:center}
+.page-head .en{font-family:var(--mont);font-size:11.5px;letter-spacing:.46em;color:var(--gold-lt);text-transform:uppercase;margin-bottom:12px}
+.page-head h1{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:600;letter-spacing:.16em}
+
+/* breadcrumb */
+.crumb{font-size:12px;color:var(--grey);padding:18px 0;display:flex;flex-wrap:wrap;gap:6px}
+.crumb a:hover{color:var(--gold-deep)}
+.crumb span::before{content:"›";margin:0 6px;color:var(--line)}
+.crumb span:first-child::before{content:""}
+
+/* layout */
+.blog-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;padding:24px 0 90px}
+@media(max-width:860px){.blog-layout{grid-template-columns:1fr}}
+
+/* article */
+article.post{min-width:0}
+.post-meta{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.post-cat{font-size:11px;letter-spacing:.12em;color:#fff;background:var(--green);padding:4px 12px}
+.post-date{font-family:var(--mont);font-size:12.5px;color:var(--grey);letter-spacing:.08em}
+h1.post-title{font-family:var(--serif);font-size:clamp(21px,2.6vw,28px);font-weight:600;letter-spacing:.08em;line-height:1.7;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:30px}
+.post-photo{border:1px solid var(--line);background:linear-gradient(150deg,var(--ivory),#fff);height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:14px}
+.post-photo .ph{font-family:var(--mont);font-size:14px;letter-spacing:.34em;color:var(--green)}
+.post-photo .nm{font-family:var(--serif);font-size:17px;letter-spacing:.1em}
+.post-photo-cap{font-size:11.5px;color:var(--grey);text-align:center;margin-bottom:34px}
+.post-photo.has-img{height:auto;padding:0;background:none}
+.post-photo.has-img img{width:100%;max-height:460px;object-fit:cover}
+.post-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 30px}
+.post-gallery img{width:100%;height:140px;object-fit:cover;border:1px solid var(--line)}
+.related{margin-top:44px;border-top:1px solid var(--line);padding-top:30px}
+.related h2{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.14em;margin-bottom:18px;padding-left:14px;border-left:3px solid var(--gold)}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+.related-grid a{border:1px solid var(--line);background:#fff;transition:.3s;display:flex;flex-direction:column}
+.related-grid a:hover{border-color:var(--green);box-shadow:0 12px 26px rgba(20,20,20,.08)}
+.related-grid .rimg{height:110px;background:linear-gradient(150deg,var(--ivory),#fff);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);overflow:hidden}
+.related-grid .rimg img{width:100%;height:100%;object-fit:cover}
+.related-grid .rimg .ph{font-family:var(--mont);font-size:10px;letter-spacing:.24em;color:var(--green)}
+.related-grid .rmeta{display:flex;justify-content:space-between;padding:8px 12px 0;font-size:10.5px;color:var(--grey)}
+.related-grid .rcat{color:var(--gold-deep)}
+.related-grid .rtitle{padding:2px 12px 12px;font-size:13px;line-height:1.75;flex:1}
+
+.post-body p{margin-bottom:1.6em;font-size:15.5px}
+.post-price{position:relative;margin:44px 0;padding:38px 28px 32px;text-align:center;
+  background:linear-gradient(165deg,#FCF8EE 0%,#F5ECD7 100%);
+  border:2px solid #C9A96A;
+  box-shadow:0 0 0 5px #FCF8EE,0 0 0 6px #DCC68F,0 18px 38px rgba(140,110,50,.15)}
+.post-price::before,.post-price::after{content:"";position:absolute;left:16px;right:16px;height:1px;
+  background:linear-gradient(90deg,transparent,#C9A96A 18%,#C9A96A 82%,transparent)}
+.post-price::before{top:10px}
+.post-price::after{bottom:10px}
+.post-price .pp-label{display:block;font-family:var(--mont);font-size:11px;letter-spacing:.42em;color:#9A7B3C;margin-bottom:8px}
+.post-price .pp-name{display:block;font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:.12em;color:#5A4A26;margin-bottom:12px}
+.post-price .v{display:block;font-family:var(--didone);font-size:clamp(42px,6vw,56px);line-height:1.15;letter-spacing:.02em;font-weight:500;
+  background:linear-gradient(180deg,#C9A54F 0%,#A07E35 55%,#8A6A28 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.7))}
+.post-price .v small{font-family:var(--serif);font-size:20px;margin-left:4px;-webkit-background-clip:text;background-clip:text}
+.post-cta{margin:44px 0;background:var(--green);color:#fff;padding:36px 32px;text-align:center}
+.post-cta h3{font-family:var(--serif);font-size:19px;letter-spacing:.14em;margin-bottom:8px}
+.post-cta p{font-size:12.5px;color:rgba(255,255,255,.85);margin-bottom:20px}
+.post-cta .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn.ghost-w{background:transparent;border-color:var(--line-dk);color:#fff}
+.btn.ghost-w:hover{background:#fff;color:var(--green)}
+
+/* prev / next */
+.post-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px}
+.post-nav a{background:#fff;padding:20px 22px;font-size:13px;transition:.3s;display:flex;flex-direction:column;gap:4px}
+.post-nav a:hover{background:var(--green-soft)}
+.post-nav .dir{font-family:var(--mont);font-size:10.5px;letter-spacing:.28em;color:var(--gold-deep)}
+.post-nav a.disabled{pointer-events:none;color:var(--line)}
+.post-nav a.disabled .dir{color:var(--line)}
+
+/* 一覧モード */
+.list-grid{display:flex;flex-direction:column}
+.list-grid a{display:flex;flex-wrap:wrap;gap:8px 20px;padding:20px 10px;border-bottom:1px solid var(--line);align-items:baseline;transition:.3s;font-size:14.5px}
+.list-grid a>span:last-child{flex:1 1 320px;min-width:0}
+.list-grid a:hover{background:var(--green-soft)}
+.list-grid time{font-family:var(--mont);font-size:12.5px;color:var(--grey)}
+.list-grid .cat{font-size:11px;color:var(--green);border:1px solid var(--green);text-align:center;padding:2px 6px}
+
+/* sidebar */
+aside .box{border:1px solid var(--line);margin-bottom:26px}
+aside .box h3{background:var(--green);color:#fff;font-family:var(--serif);font-size:14px;letter-spacing:.18em;font-weight:600;padding:12px 18px}
+aside .box .in{padding:16px 18px}
+aside .box li{border-bottom:1px solid var(--line)}
+aside .box li:last-child{border-bottom:none}
+aside .box li a{display:block;padding:12px 2px;font-size:13.5px;color:#33322D;transition:.3s;line-height:1.75}
+aside .box li a:hover{color:var(--gold-deep)}
+aside .box li a time{display:block;font-family:var(--mont);font-size:10.5px;color:var(--grey)}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.tag-cloud a{font-size:11.5px;border:1px solid var(--line);padding:5px 12px;transition:.3s}
+.tag-cloud a:hover{border-color:var(--gold-deep);color:var(--gold-deep);background:var(--gold-pale)}
+.side-cta{background:var(--green);color:#fff;padding:26px 22px;text-align:center;margin-bottom:26px}
+.side-cta .t{font-family:var(--serif);font-size:15.5px;letter-spacing:.14em;margin-bottom:6px}
+.side-cta .tel{font-family:var(--mont);font-size:22px;font-weight:600;letter-spacing:.06em;display:block;margin:8px 0 2px;color:#fff}
+.side-cta p{font-size:11px;color:rgba(255,255,255,.8);margin-bottom:14px}
+.side-company{font-size:12.5px;line-height:2.05;color:var(--grey)}
+.side-company b{display:block;font-family:var(--serif);font-size:14px;color:var(--black);margin-bottom:4px}
+select.archive{width:100%;padding:10px;border:1px solid var(--line);font-family:var(--sans);font-size:13px;color:var(--black);background:#fff}
+
+/* footer */
+footer{background:var(--green-deep);color:rgba(255,255,255,.85);padding:44px 0 30px;font-size:12.5px;text-align:center}
+.f-logo{margin-bottom:10px}
+.copy{margin-top:20px;padding-top:18px;border-top:1px solid var(--line-dk);font-family:var(--mont);font-size:11px;letter-spacing:.28em;color:rgba(255,255,255,.5)}
+
+@media(max-width:960px){
+  .head-cta .btn{display:none}
+  .head-cta .btn.top-link{display:inline-flex;padding:9px 14px;font-size:11.5px}
+}
+@media(max-width:600px){
+  .wrap{padding:0 18px}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  .float-cta{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));flex-direction:row;gap:8px}
+  .float-cta a{flex:1;min-width:0;padding:14px 8px;font-size:12px}
+  .head-in{height:62px}
+  .logo img{height:34px}
+  .page-head{padding:38px 0 34px}
+  .post-photo.has-img img{max-height:280px}
+  .post-price{padding:30px 18px 26px}
+  .post-price .v{font-size:40px}
+  .post-cta{padding:28px 18px}
+  select.archive{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span>営業時間 10:00 – 19:00（年中無休）</span>
+    <a href="tel:0426205615">TEL 042-620-5615</a>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap head-in">
+    <a href="index.html" class="logo"><img src="img/logo/logo-h.png" alt="ナニウル｜八王子の高価買取専門店"></a>
+    <div class="head-cta">
+      <a class="btn green" href="index.html#line">LINE査定</a>
+      <a class="btn black" href="tel:0426205615">電話で相談する</a>
+      <a class="btn top-link" href="index.html">サイトTOPへ</a>
+    </div>
+  </div>
+</header>
+
+<div class="float-cta">
+  <a class="tel" href="tel:0426205615">今すぐ電話する</a>
+  <a class="line" href="index.html#line">LINE査定はこちら</a>
+</div>
+
+<div class="page-head">
+  <p class="en">Staff Blog</p>
+  <h1>ナニウルスタッフがお送りする<br>買取お役立ちブログ</h1>
+</div>
+
+<div class="wrap">
+  <nav class="crumb" id="crumb" aria-label="パンくずリスト"></nav>
+
+  <div class="blog-layout">
+    <!-- ===== main ===== -->
+    <article class="post" id="postArea"></article>
+
+    <!-- ===== sidebar ===== -->
+    <aside>
+      <div class="side-cta">
+        <p class="t">買取・査定のお申し込み</p>
+        <a class="tel" href="tel:0426205615">042-620-5615</a>
+        <p>営業時間 10:00〜19:00（年中無休）</p>
+        <a class="btn ghost-w" href="index.html#line" style="width:100%">LINE査定はこちら</a>
+      </div>
+
+      <div class="box">
+        <h3>カテゴリー</h3>
+        <div class="in"><ul id="sideCats"></ul></div>
+      </div>
+
+      <div class="box">
+        <h3>最近の投稿</h3>
+        <div class="in"><ul id="sideRecent"></ul></div>
+      </div>
+
+      <div class="box">
+        <h3>アーカイブ</h3>
+        <div class="in">
+          <select class="archive" id="sideArchive" aria-label="月別アーカイブ">
+            <option value="">月を選択</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="box">
+        <h3>タグ</h3>
+        <div class="in tag-cloud" id="sideTags"></div>
+      </div>
+
+      <div class="box">
+        <h3>会社案内</h3>
+        <div class="in side-company">
+          <b>ナニウル 本店</b>
+          〒192-0053<br>東京都八王子市八幡町3-17 マルミビル1階<br>
+          TEL 042-620-5615<br>FAX 042-620-5616<br>
+          東京都公安委員会許可 第308832005363号
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="f-logo"><img src="img/logo/logo-h-white.png" alt="ナニウル" style="height:40px;width:auto;margin:0 auto 10px"></div>
+    <p>株式会社yxxk｜東京都公安委員会許可 第308832005363号</p>
+    <p class="copy">© NANIURU — yxxk Co., Ltd. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="data/posts.js"></script>
+<script>
+const yen = n => Number(n).toLocaleString("ja-JP");
+const params = new URLSearchParams(location.search);
+const slug = params.get("post");
+const isLive = p => !p.publishAt || new Date(String(p.publishAt).replace(" ","T")) <= new Date();
+const ALL = [...POSTS, ...COLUMNS].filter(isLive).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+const idx = ALL.findIndex(p => p.slug === slug);
+const post = idx >= 0 ? ALL[idx] : null;
+const isResult = post && POSTS.some(p=>p.slug===post.slug);
+
+/* ---------- パンくず ---------- */
+(function crumb(){
+  const c = document.getElementById("crumb");
+  let html = `<span><a href="index.html">HOME</a></span><span><a href="blog.html">買取お役立ちブログ</a></span>`;
+  if(post){
+    html += `<span><a href="blog.html">${post.cat}</a></span><span>${post.title}</span>`;
+  }
+  c.innerHTML = html;
+})();
+
+/* ---------- 本文 ---------- */
+(function render(){
+  const area = document.getElementById("postArea");
+
+  if(!post){
+    /* 一覧モード（buy実績＋コラムを日付順に） */
+    document.title = "買取お役立ちブログ 一覧｜ナニウル";
+    const all = ALL.map(p=>({date:p.date,cat:p.cat,title:p.title,href:`blog.html?post=${p.slug}`}));
+    area.innerHTML = `<h1 class="post-title">記事一覧</h1><div class="list-grid">` +
+      all.map(p=>`<a href="${p.href}"><time>${p.date}</time><span class="cat">${p.cat}</span><span>${p.title}</span></a>`).join("") +
+      `</div>`;
+    return;
+  }
+
+  document.title = post.title + "｜ナニウル 買取お役立ちブログ";
+
+  const bodyHtml = post.body.map(p=>`<p>${p}</p>`).join("");
+  const prev = ALL[idx+1]; /* 日付降順のため次=古い記事 */
+  const next = ALL[idx-1];
+
+  const imgs = post.images || [];
+  const fb = post.imageFallback || "";
+  const fbAttr = `onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${fb}"`;
+  const photoHtml = imgs.length
+    ? `<figure class="post-photo has-img"><img src="${imgs[0]}" alt="${post.name||post.title}" ${fbAttr}></figure>
+       <p class="post-photo-cap">▲ お買取りした ${post.name||""}</p>`
+    : (isResult
+        ? `<figure class="post-photo"><span class="ph">${post.tag||""}</span><span class="nm">${post.name||""}</span></figure>
+           <p class="post-photo-cap">▲ お買取りした ${post.name||""}</p>`
+        : "");
+  const galleryHtml = imgs.length > 1
+    ? `<div class="post-gallery">${imgs.slice(1).map(x=>`<img src="${x}" alt="">`).join("")}</div>`
+    : "";
+  const relSlugs = post.related || [];
+  const relPosts = relSlugs.map(s2 => ALL.find(p => p.slug === s2)).filter(Boolean);
+  const relatedHtml = relPosts.length ? `
+    <section class="related">
+      <h2>関連記事</h2>
+      <div class="related-grid">
+        ${relPosts.map(r=>{
+          const rimg = (r.images&&r.images[0])
+            ? `<img src="${r.images[0]}" alt="" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${r.imageFallback||''}">`
+            : `<span class="ph">${r.tag||r.cat}</span>`;
+          return `<a href="blog.html?post=${r.slug}">
+            <div class="rimg">${rimg}</div>
+            <div class="rmeta"><span class="rcat">${r.cat}</span><time>${r.date}</time></div>
+            <div class="rtitle">${r.title}</div>
+          </a>`;}).join("")}
+      </div>
+    </section>` : "";
+
+  area.innerHTML = `
+    <div class="post-meta">
+      <span class="post-cat">${post.cat}</span>
+      <time class="post-date">${post.date}</time>
+      ${isResult?`<span class="post-date">${post.method}｜${post.area}のお客様</span>`:""}
+    </div>
+    <h1 class="post-title">${post.title}</h1>
+
+    ${photoHtml}
+
+    <div class="post-body">${bodyHtml}</div>
+
+    ${galleryHtml}
+
+    ${isResult?`<div class="post-price">
+      <span class="pp-label">PURCHASE PRICE ─ 今回の買取価格</span>
+      <b class="pp-name">${post.name}</b>
+      <span class="v">¥${yen(post.price)}<small>円</small></span>
+    </div>`:""}
+
+    ${relatedHtml}
+
+    <div class="post-cta">
+      <h3>同じお品物をお持ちではありませんか？</h3>
+      <p>写真を送るだけのLINE査定で、概算金額をスピード回答いたします。査定・キャンセルはすべて無料です。</p>
+      <div class="row">
+        <a class="btn ghost-w" href="index.html#line">LINE査定はこちら</a>
+        <a class="btn ghost-w" href="tel:0426205615">今すぐ電話する</a>
+      </div>
+    </div>
+
+    <nav class="post-nav" aria-label="前後の記事">
+      ${next
+        ? `<a href="blog.html?post=${next.slug}"><span class="dir">← NEWER</span><span>${next.title}</span></a>`
+        : `<a class="disabled"><span class="dir">← NEWER</span><span>最新の記事です</span></a>`}
+      ${prev
+        ? `<a href="blog.html?post=${prev.slug}" style="text-align:right"><span class="dir">OLDER →</span><span>${prev.title}</span></a>`
+        : `<a class="disabled" style="text-align:right"><span class="dir">OLDER →</span><span>これ以上古い記事はありません</span></a>`}
+    </nav>`;
+})();
+
+/* ---------- サイドバー ---------- */
+(function sidebar(){
+  /* カテゴリー */
+  const cats = [...new Set([...POSTS.map(p=>p.cat), ...COLUMNS.map(c=>c.cat)])];
+  document.getElementById("sideCats").innerHTML =
+    cats.map(c=>`<li><a href="blog.html">${c}</a></li>`).join("");
+
+  /* 最近の投稿 */
+  document.getElementById("sideRecent").innerHTML =
+    ALL.slice(0,5).map(p=>
+      `<li><a href="blog.html?post=${p.slug}"><time>${p.date}</time>${p.title}</a></li>`).join("");
+
+  /* アーカイブ */
+  const months = [...new Set(ALL.map(p=>(p.date||"").slice(0,7)).filter(Boolean))];
+  const sel = document.getElementById("sideArchive");
+  months.forEach(m=>{
+    const [y,mo] = m.split(".");
+    const op = document.createElement("option");
+    op.value = m; op.textContent = `${y}年${Number(mo)}月`;
+    sel.appendChild(op);
+  });
+  sel.addEventListener("change",()=>{ if(sel.value) location.href = "blog.html"; });
+
+  /* タグ */
+  const tags = ["高価買取","八王子","出張買取","LINE査定","ロレックス","エルメス","シャネル","ヴィトン","金・プラチナ","形見・遺品"];
+  document.getElementById("sideTags").innerHTML =
+    tags.map(t=>`<a href="blog.html">${t}</a>`).join("");
+})();
+</script>
+</body>
+</html>
