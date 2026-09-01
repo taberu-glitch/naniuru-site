@@ -1,25 +1,61 @@
 /* =========================================================
    ナニウル｜買取実績 × ブログ 共通データ
    ---------------------------------------------------------
-   このファイルは admin.html（CMS）から自動生成・更新されます。
-   直接編集も可能ですが、CMSでの上書きにご注意ください。
-   images  : 記事画像のパス配列（先頭が実績カード・記事メイン画像）
-   related : 関連記事のスラッグ配列
+   このファイルは admin.html（CMS）から自動生成されています。
+   最終更新: 2026/9/1 12:45:57
 ========================================================= */
 const POSTS = [
   {
-    slug: "20260718-hermes-birkin",
-    date: "2026.07.18",
-    cat: "ブランド品",
-    tag: "BAG",
-    name: "エルメス バーキン",
-    area: "大阪府",
-    method: "出張買取",
-    price: 1350000,
-    staff: "鑑定士 高橋",
-    title: "ブランド品買取 大阪府のお客様 エルメス バーキン",
-    excerpt: "クローゼットに眠ったままのバーキンを1,350,000円で買取しました。",
-    body: [
+    "slug": "20260901-test",
+    "date": "2026.09.01",
+    "cat": "ブランド品",
+    "tag": "JEWELRY",
+    "name": "SANEL",
+    "area": "東京都",
+    "method": "LINE査定",
+    "price": 5000000,
+    "staff": "木下",
+    "title": "テスト投稿 東京都のサミティ様　 K18ネックレス",
+    "excerpt": "サミティさんからネックレスの購入をしました",
+    "body": [
+      "こんにちは、鑑定士の木下です。",
+      "この度、フルヤさんが以前購入されたSANELのネックレスを買取させていただきました。",
+      "購入当時は「これは一生モノです！」とかなり気に入っていたフルヤさんですが、最近はまったく身につけていなかったとのこと。",
+      "状態を確認したところ、大きな傷や汚れもなく非常にきれいな状態でしたので、しっかり査定させていただきました。",
+      "査定金額をお伝えすると、フルヤさんも納得のご様子。\n「このお金で、また新しいブランド品を買います！」と笑顔でお帰りになりました。",
+      "……おそらく数ヶ月後、そのブランド品を査定しているのも私だと思います。",
+      "ブランド品は使わなくなったタイミングも、ひとつの売り時です。\nご自宅に眠っているアクセサリーやバッグなどございましたら、ぜひお気軽にご相談ください。",
+      "鑑定士 木下"
+    ],
+    "images": [
+      "img/posts/20260901-test/2e9a218b-3337-41d1-aa2f-38c5a27cb34d.png"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260715-chanel-matelasse",
+      "20260712-vuitton-wallet"
+    ]
+  },
+  {
+    "images": [
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260715-chanel-matelasse",
+      "20260712-vuitton-wallet"
+    ],
+    "slug": "20260718-hermes-birkin",
+    "date": "2026.07.18",
+    "cat": "ブランド品",
+    "tag": "BAG",
+    "name": "エルメス バーキン",
+    "area": "大阪府",
+    "method": "出張買取",
+    "price": 1350000,
+    "staff": "鑑定士 高橋",
+    "title": "ブランド品買取 大阪府のお客様 エルメス バーキン",
+    "excerpt": "クローゼットに眠ったままのバーキンを1,350,000円で買取しました。",
+    "body": [
       "こんにちは。鑑定士の高橋です。",
       "本日は大阪府のお客様のご自宅へ、出張買取でうかがいました。ご依頼いただいたのはエルメスのバーキンです。",
       "「使う機会がなくて、ずっとクローゼットにしまったままだった」とのことでしたが、保管状態がとても良く、角スレもほとんどありませんでした。",
@@ -27,23 +63,28 @@ const POSTS = [
       "お客様も「思っていたよりずっと高くて驚いた」と大変お喜びいただけました。",
       "エルメスをはじめとしたブランドバッグは、箱や保存袋がなくてもしっかり査定いたします。ご自宅に眠っているバッグがありましたら、ぜひ一度ナニウルへご相談ください。"
     ],
-    images: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=70"],
-    imageFallback: "img/placeholder/item-1.jpg",
-    related: ["20260715-chanel-matelasse", "20260712-vuitton-wallet"]
+    "imageFallback": "img/placeholder/item-1.jpg"
   },
   {
-    slug: "20260715-chanel-matelasse",
-    date: "2026.07.15",
-    cat: "ブランド品",
-    tag: "BAG",
-    name: "シャネル マトラッセ",
-    area: "東京都",
-    method: "店頭買取",
-    price: 380000,
-    staff: "鑑定士 佐々木",
-    title: "ブランド品買取 東京都のお客様 シャネル マトラッセ",
-    excerpt: "初めてのボーナスで購入されたシャネルのバッグを380,000円で買取しました。",
-    body: [
+    "images": [
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260712-vuitton-wallet"
+    ],
+    "slug": "20260715-chanel-matelasse",
+    "date": "2026.07.15",
+    "cat": "ブランド品",
+    "tag": "BAG",
+    "name": "シャネル マトラッセ",
+    "area": "東京都",
+    "method": "店頭買取",
+    "price": 380000,
+    "staff": "鑑定士 佐々木",
+    "title": "ブランド品買取 東京都のお客様 シャネル マトラッセ",
+    "excerpt": "初めてのボーナスで購入されたシャネルのバッグを380,000円で買取しました。",
+    "body": [
       "こんにちは。鑑定士の佐々木です。",
       "本日は八王子の本店に、シャネルのマトラッセをお持ち込みいただきました。",
       "「初めてのボーナスで購入した思い出のバッグ」とのことで、査定だけのつもりでご来店されたそうです。",
@@ -51,23 +92,28 @@ const POSTS = [
       "金額をお聞きになって、その場でご売却いただけることに。思い出のお品物を大切に次の方へお繋ぎいたします。",
       "シャネルはヴィンテージ品も強化買取中です。査定だけのご来店も大歓迎ですので、お気軽にお立ち寄りください。"
     ],
-    images: ["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=70"],
-    imageFallback: "img/placeholder/item-2.jpg",
-    related: ["20260718-hermes-birkin", "20260712-vuitton-wallet"]
+    "imageFallback": "img/placeholder/item-2.jpg"
   },
   {
-    slug: "20260712-vuitton-wallet",
-    date: "2026.07.12",
-    cat: "ブランド品",
-    tag: "WALLET",
-    name: "ルイ・ヴィトン 長財布",
-    area: "東京都",
-    method: "出張買取",
-    price: 73000,
-    staff: "鑑定士 高橋",
-    title: "ブランド品買取 東京都のお客様 ルイ・ヴィトン 長財布",
-    excerpt: "ブランドの好みが変わったとのことで、ヴィトンの財布を73,000円で買取しました。",
-    body: [
+    "images": [
+      "https://images.unsplash.com/photo-1691480288782-142b953cf664?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260715-chanel-matelasse"
+    ],
+    "slug": "20260712-vuitton-wallet",
+    "date": "2026.07.12",
+    "cat": "ブランド品",
+    "tag": "WALLET",
+    "name": "ルイ・ヴィトン 長財布",
+    "area": "東京都",
+    "method": "出張買取",
+    "price": 73000,
+    "staff": "鑑定士 高橋",
+    "title": "ブランド品買取 東京都のお客様 ルイ・ヴィトン 長財布",
+    "excerpt": "ブランドの好みが変わったとのことで、ヴィトンの財布を73,000円で買取しました。",
+    "body": [
       "こんにちは。鑑定士の高橋です。",
       "本日は東京都内のお客様のもとへ出張買取にうかがい、ルイ・ヴィトンの長財布を査定させていただきました。",
       "「ブランドの好みが変わって使わなくなった」とのことでしたが、内側の状態が良く、人気のラインだったこともあり、73,000円をご提示しました。",
@@ -75,23 +121,27 @@ const POSTS = [
       "お客様にも「処分しようか迷っていたので嬉しい」とお喜びいただけました。",
       "使わなくなった財布や小物も、捨てる前にぜひ一度ご相談ください。"
     ],
-    images: ["https://images.unsplash.com/photo-1691480288782-142b953cf664?auto=format&fit=crop&w=900&q=70"],
-    imageFallback: "img/placeholder/item-3.jpg",
-    related: ["20260718-hermes-birkin", "20260715-chanel-matelasse"]
+    "imageFallback": "img/placeholder/item-3.jpg"
   },
   {
-    slug: "20260710-rolex-submariner",
-    date: "2026.07.10",
-    cat: "ロレックス",
-    tag: "WATCH",
-    name: "ロレックス サブマリーナ",
-    area: "東京都",
-    method: "店頭買取",
-    price: 850000,
-    staff: "鑑定士 飯田",
-    title: "ロレックス買取 東京都のお客様 サブマリーナ",
-    excerpt: "腕時計の買い替えにあたり、サブマリーナを850,000円で買取しました。",
-    body: [
+    "images": [
+      "https://images.unsplash.com/photo-1636639818651-d97365346a5c?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260706-cartier-misspasha"
+    ],
+    "slug": "20260710-rolex-submariner",
+    "date": "2026.07.10",
+    "cat": "ロレックス",
+    "tag": "WATCH",
+    "name": "ロレックス サブマリーナ",
+    "area": "東京都",
+    "method": "店頭買取",
+    "price": 850000,
+    "staff": "鑑定士 飯田",
+    "title": "ロレックス買取 東京都のお客様 サブマリーナ",
+    "excerpt": "腕時計の買い替えにあたり、サブマリーナを850,000円で買取しました。",
+    "body": [
       "こんにちは。鑑定士の飯田です。",
       "本日は横山町店にロレックスのサブマリーナをお持ち込みいただきました。腕時計を買い替えたいとのことでのご売却です。",
       "サブマリーナはロレックスの中でも特に相場が安定している人気モデル。ベルトに多少のヨレはありましたが、風防・文字盤の状態が良好でした。",
@@ -99,23 +149,28 @@ const POSTS = [
       "ギャランティーカードや箱がないロレックスでも問題なく査定できます。",
       "買い替えをご検討中の方は、まずはLINE査定で概算金額をご確認ください。"
     ],
-    images: ["https://images.unsplash.com/photo-1636639818651-d97365346a5c?auto=format&fit=crop&w=900&q=70"],
-    imageFallback: "img/placeholder/item-4.jpg",
-    related: ["20260706-cartier-misspasha"]
+    "imageFallback": "img/placeholder/item-4.jpg"
   },
   {
-    slug: "20260706-cartier-misspasha",
-    date: "2026.07.06",
-    cat: "腕時計",
-    tag: "WATCH",
-    name: "カルティエ ミスパシャ",
-    area: "山梨県",
-    method: "出張買取",
-    price: 1400000,
-    staff: "鑑定士 飯田",
-    title: "腕時計買取 山梨県のお客様 カルティエ ミスパシャ",
-    excerpt: "海外移住の資金にと、カルティエのミスパシャを1,400,000円で買取しました。",
-    body: [
+    "images": [
+      "https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260710-rolex-submariner",
+      "20260702-vancleef-necklace"
+    ],
+    "slug": "20260706-cartier-misspasha",
+    "date": "2026.07.06",
+    "cat": "腕時計",
+    "tag": "WATCH",
+    "name": "カルティエ ミスパシャ",
+    "area": "山梨県",
+    "method": "出張買取",
+    "price": 1400000,
+    "staff": "鑑定士 飯田",
+    "title": "腕時計買取 山梨県のお客様 カルティエ ミスパシャ",
+    "excerpt": "海外移住の資金にと、カルティエのミスパシャを1,400,000円で買取しました。",
+    "body": [
       "こんにちは。鑑定士の飯田です。",
       "本日は山梨県まで出張買取にうかがい、カルティエのミスパシャを査定させていただきました。海外移住の資金にされたいとのことです。",
       "ダイヤ付きのモデルで、石の状態・ケースの状態ともに良好。海外バイヤーからの引き合いが強いお品物です。",
@@ -123,23 +178,27 @@ const POSTS = [
       "「遠方なのに来てもらえて、金額にも大満足」とのお言葉をいただき、私どもも嬉しい限りです。",
       "山梨県・神奈川県など近隣エリアへの出張買取も行っております。品物が多くて運べない方も、お気軽にお電話ください。"
     ],
-    images: ["https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?auto=format&fit=crop&w=900&q=70"],
-    imageFallback: "img/placeholder/item-5.jpg",
-    related: ["20260710-rolex-submariner", "20260702-vancleef-necklace"]
+    "imageFallback": "img/placeholder/item-5.jpg"
   },
   {
-    slug: "20260702-vancleef-necklace",
-    date: "2026.07.02",
-    cat: "宝石",
-    tag: "JEWELRY",
-    name: "ヴァンクリーフ ネックレス",
-    area: "神奈川県",
-    method: "出張買取",
-    price: 400000,
-    staff: "鑑定士 佐々木",
-    title: "宝石買取 神奈川県のお客様 ヴァンクリーフ ネックレス",
-    excerpt: "お母さまから譲り受けたヴァンクリーフのネックレスを400,000円で買取しました。",
-    body: [
+    "images": [
+      "https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260706-cartier-misspasha"
+    ],
+    "slug": "20260702-vancleef-necklace",
+    "date": "2026.07.02",
+    "cat": "宝石",
+    "tag": "JEWELRY",
+    "name": "ヴァンクリーフ ネックレス",
+    "area": "神奈川県",
+    "method": "出張買取",
+    "price": 400000,
+    "staff": "鑑定士 佐々木",
+    "title": "宝石買取 神奈川県のお客様 ヴァンクリーフ ネックレス",
+    "excerpt": "お母さまから譲り受けたヴァンクリーフのネックレスを400,000円で買取しました。",
+    "body": [
       "こんにちは。鑑定士の佐々木です。",
       "本日は神奈川県のお客様のご自宅で、ヴァンクリーフ＆アーペルのネックレスを査定させていただきました。お母さまから譲り受けた思い出のお品物です。",
       "ヴァンクリーフはブランドジュエリーの中でも特に人気が高く、地金の価値に加えてデザイン評価をしっかり上乗せできるブランドです。",
@@ -147,15 +206,44 @@ const POSTS = [
       "「母も喜ぶと思います」とのお言葉をいただき、大切なお品物を次の方へ橋渡しできることを光栄に思います。",
       "形見のジュエリーの査定は、ひとつひとつ根拠をご説明しながら丁寧に行います。まずはお気軽にご相談ください。"
     ],
-    images: ["https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=900&q=70"],
-    imageFallback: "img/placeholder/item-6.jpg",
-    related: ["20260706-cartier-misspasha"]
+    "imageFallback": "img/placeholder/item-6.jpg"
   }
 ];
 
-/* お役立ち記事（実績以外のコラム） */
 const COLUMNS = [
-  { date: "2026.07.21", cat: "宝石", title: "八王子で宝石を高く売るなら？相場と優良店の選び方", slug: "20260721-jewelry-hachioji", images: ["https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=800&q=70"], imageFallback: "img/placeholder/col-1.jpg" },
-  { date: "2026.07.20", cat: "貴金属", title: "金歯・金縁メガネも売れます。意外な貴金属アイテム集", slug: "20260720-gold-items", images: ["https://images.unsplash.com/photo-1587925358603-c2eea5305bbc?auto=format&fit=crop&w=800&q=70"], imageFallback: "img/placeholder/col-2.jpg" },
-  { date: "2026.07.14", cat: "切手", title: "中国切手の価値が高い理由と、査定前に確認すべきこと", slug: "20260714-stamp", images: ["img/placeholder/col-3.jpg"] }
+  {
+    "images": [
+      "https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=800&q=70"
+    ],
+    "related": [],
+    "body": [],
+    "date": "2026.07.21",
+    "cat": "宝石",
+    "title": "八王子で宝石を高く売るなら？相場と優良店の選び方",
+    "slug": "20260721-jewelry-hachioji",
+    "imageFallback": "img/placeholder/col-1.jpg"
+  },
+  {
+    "images": [
+      "https://images.unsplash.com/photo-1587925358603-c2eea5305bbc?auto=format&fit=crop&w=800&q=70"
+    ],
+    "related": [],
+    "body": [],
+    "date": "2026.07.20",
+    "cat": "貴金属",
+    "title": "金歯・金縁メガネも売れます。意外な貴金属アイテム集",
+    "slug": "20260720-gold-items",
+    "imageFallback": "img/placeholder/col-2.jpg"
+  },
+  {
+    "images": [
+      "img/placeholder/col-3.jpg"
+    ],
+    "related": [],
+    "body": [],
+    "date": "2026.07.14",
+    "cat": "切手",
+    "title": "中国切手の価値が高い理由と、査定前に確認すべきこと",
+    "slug": "20260714-stamp"
+  }
 ];
