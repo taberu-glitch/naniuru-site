@@ -2,7 +2,7 @@
    ナニウル｜買取実績 × ブログ 共通データ
    ---------------------------------------------------------
    このファイルは admin.html（CMS）から自動生成されています。
-   最終更新: 2026/9/2 12:50:01
+   最終更新: 2026/9/2 16:44:56
 ========================================================= */
 const CATEGORIES = [
   {
@@ -38,7 +38,8 @@ const CATEGORIES = [
       "パネライ",
       "ウブロ",
       "フランク・ミュラー",
-      "ブルガリ"
+      "ブルガリ",
+      "カシオ"
     ]
   },
   {
@@ -130,10 +131,14 @@ const CATEGORIES = [
 
 const POSTS = [
   {
+    "images": [
+      "img/posts/2026kosen/IMG_0621-1-scaled.jpg"
+    ],
+    "related": [],
+    "tag": "",
     "slug": "2026-kosen",
     "date": "2026.09.02",
     "cat": "古銭",
-    "tag": "",
     "name": "古銭おまとめ",
     "area": "東京都",
     "method": "店頭買取",
@@ -143,17 +148,58 @@ const POSTS = [
     "excerpt": "古銭おまとめを買い取らせて頂きました！",
     "body": [
       "古銭はまだ人気です。出張も可能です。"
-    ],
-    "images": [
-      "img/posts/2026kosen/IMG_0621-1-scaled.jpg"
-    ],
-    "related": []
+    ]
   },
   {
+    "slug": "20260902-watch",
+    "date": "2026.09.02",
+    "cat": "腕時計",
+    "tag": "カシオ",
+    "name": "CASIO カシオ MD-700 フェイスのみ",
+    "area": "東京都",
+    "method": "LINE査定",
+    "price": 3000,
+    "staff": "",
+    "title": "カシオの時計、実はお金に変わります！　練馬区のお客様",
+    "excerpt": "カシオの時計、実はお金に変わります！　千葉県のお客様",
+    "body": [
+      "買取した品物のご紹介\n今回は、国産時計ブランド世界中で愛されているカシオ（CASIO）のヴィンテージ・ダイバーズウォッチ「MD-700（キャリバー394）」をお買取いたしました。\n裏蓋には「MD-700」「394」の刻印が刻まれており、昭和の終わりから平成初期にかけて製造された、マニア心をくすぐるオールドカシオのお品です。",
+      "[画像1]",
+      "[画像2]",
+      "状態\n今回お持ち込みいただいたお品物は、長年大切に保管されていたことが伺える、歴史を感じるコンディションでした。\n全体的な状態としては、ケースや裏蓋、ベゼル部分に経年使用に伴う細かな擦れや小傷が見受けられましたが、風防への深い傷はなく、文字盤や針のサビ・劣化も最小限に抑えられており、3時位置のデイデイト（曜日・日付）表示もクリアです。\n現在はベルトがなく本体のみ（フェイスのみ）の状態となっています。",
+      "[画像3]",
+      "査定額\n￥3,000-",
+      "査定ポイント紹介\n一般的に古いクォーツ時計は、電池切れのまま放置されると液漏れを起こして不動品\nになってしまうケースが多々ありますが、今回のお品物は内部ムーブメントへのダメージが少なく、時計としての機能やケース自体の造りはしっかりとしており、メンテナンスを施せばまだまだ現役で活躍できるポテンシャルを残した状態だった点。",
+      "ベゼルやリューズといった外装パーツが当時のままオリジナルで残っていたことはプラス査定となります。",
+      "また、コレクターに人気で自分好みのベルトにカスタムして楽しむ方も多く、フェイス単体であっても十分に需要が見込めます。",
+      "市場での流通数とアンティーク・ヴィンテージモデルである点、そして文字盤のゴールドカラーが美しい人気のデザインである点を総合的に加味し、現在のレトロウォッチ相場に基づいた最大限の査定金額をご提示させていただきました。",
+      "まとめ\n今回ご紹介したカシオ時計「MDシリーズ」のようなオールドクォーツやデジタル時計にも、実はお金に変わる価値が隠れているケースがあります。",
+      "特に1980年代〜1990年代に製造されたモデルは、国内外の時計愛好家から熱い視線が注がれており、動かないジャンク品や本体のみの状態でも喜んでお買取りさせていただきます。\n傷だらけでも、電池が切れていても、査定員がその時計の持つ歴史や価値を丁寧に査定いたします。\n「これって売れるのかな？」と少しでも気になるお品物がございましたら、処分されてしまう前に、ぜひ一度当店の査定へお気軽にご相談ください。"
+    ],
+    "images": [
+      "img/posts/20260902-watch/resize.jpg",
+      "img/posts/20260902-watch/image-71-720x720.jpg",
+      "img/posts/20260902-watch/image-69-720x720.jpg"
+    ],
+    "related": [
+      "2026camera",
+      "20260721-jewelry-hachioji",
+      "20260706-cartier-misspasha"
+    ]
+  },
+  {
+    "images": [
+      "img/posts/20260901-test/2e9a218b-3337-41d1-aa2f-38c5a27cb34d.png"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260715-chanel-matelasse",
+      "20260712-vuitton-wallet"
+    ],
+    "tag": "",
     "slug": "20260901-test",
     "date": "2026.09.01",
     "cat": "ブランド品",
-    "tag": "",
     "name": "SANEL",
     "area": "東京都",
     "method": "LINE査定",
@@ -170,21 +216,20 @@ const POSTS = [
       "……おそらく数ヶ月後、そのブランド品を査定しているのも私だと思います。",
       "ブランド品は使わなくなったタイミングも、ひとつの売り時です。\nご自宅に眠っているアクセサリーやバッグなどございましたら、ぜひお気軽にご相談ください。",
       "鑑定士 木下"
-    ],
-    "images": [
-      "img/posts/20260901-test/2e9a218b-3337-41d1-aa2f-38c5a27cb34d.png"
-    ],
-    "related": [
-      "20260718-hermes-birkin",
-      "20260715-chanel-matelasse",
-      "20260712-vuitton-wallet"
     ]
   },
   {
+    "images": [
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260715-chanel-matelasse",
+      "20260712-vuitton-wallet"
+    ],
+    "tag": "エルメス",
     "slug": "20260718-hermes-birkin",
     "date": "2026.07.18",
     "cat": "ブランド品",
-    "tag": "エルメス",
     "name": "エルメス バーキン",
     "area": "大阪府",
     "method": "出張買取",
@@ -200,20 +245,20 @@ const POSTS = [
       "お客様も「思っていたよりずっと高くて驚いた」と大変お喜びいただけました。",
       "エルメスをはじめとしたブランドバッグは、箱や保存袋がなくてもしっかり査定いたします。ご自宅に眠っているバッグがありましたら、ぜひ一度ナニウルへご相談ください。"
     ],
-    "images": [
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=70"
-    ],
-    "related": [
-      "20260715-chanel-matelasse",
-      "20260712-vuitton-wallet"
-    ],
     "imageFallback": "img/placeholder/item-1.jpg"
   },
   {
+    "images": [
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260712-vuitton-wallet"
+    ],
+    "tag": "シャネル",
     "slug": "20260715-chanel-matelasse",
     "date": "2026.07.15",
     "cat": "ブランド品",
-    "tag": "シャネル",
     "name": "シャネル マトラッセ",
     "area": "東京都",
     "method": "店頭買取",
@@ -229,20 +274,20 @@ const POSTS = [
       "金額をお聞きになって、その場でご売却いただけることに。思い出のお品物を大切に次の方へお繋ぎいたします。",
       "シャネルはヴィンテージ品も強化買取中です。査定だけのご来店も大歓迎ですので、お気軽にお立ち寄りください。"
     ],
-    "images": [
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=70"
-    ],
-    "related": [
-      "20260718-hermes-birkin",
-      "20260712-vuitton-wallet"
-    ],
     "imageFallback": "img/placeholder/item-2.jpg"
   },
   {
+    "images": [
+      "https://images.unsplash.com/photo-1691480288782-142b953cf664?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260715-chanel-matelasse"
+    ],
+    "tag": "ルイ・ヴィトン",
     "slug": "20260712-vuitton-wallet",
     "date": "2026.07.12",
     "cat": "ブランド品",
-    "tag": "ルイ・ヴィトン",
     "name": "ルイ・ヴィトン 長財布",
     "area": "東京都",
     "method": "出張買取",
@@ -258,20 +303,19 @@ const POSTS = [
       "お客様にも「処分しようか迷っていたので嬉しい」とお喜びいただけました。",
       "使わなくなった財布や小物も、捨てる前にぜひ一度ご相談ください。"
     ],
-    "images": [
-      "https://images.unsplash.com/photo-1691480288782-142b953cf664?auto=format&fit=crop&w=900&q=70"
-    ],
-    "related": [
-      "20260718-hermes-birkin",
-      "20260715-chanel-matelasse"
-    ],
     "imageFallback": "img/placeholder/item-3.jpg"
   },
   {
+    "images": [
+      "https://images.unsplash.com/photo-1636639818651-d97365346a5c?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260706-cartier-misspasha"
+    ],
+    "tag": "ロレックス",
     "slug": "20260710-rolex-submariner",
     "date": "2026.07.10",
     "cat": "腕時計",
-    "tag": "ロレックス",
     "name": "ロレックス サブマリーナ",
     "area": "東京都",
     "method": "店頭買取",
@@ -287,19 +331,20 @@ const POSTS = [
       "ギャランティーカードや箱がないロレックスでも問題なく査定できます。",
       "買い替えをご検討中の方は、まずはLINE査定で概算金額をご確認ください。"
     ],
-    "images": [
-      "https://images.unsplash.com/photo-1636639818651-d97365346a5c?auto=format&fit=crop&w=900&q=70"
-    ],
-    "related": [
-      "20260706-cartier-misspasha"
-    ],
     "imageFallback": "img/placeholder/item-4.jpg"
   },
   {
+    "images": [
+      "https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260710-rolex-submariner",
+      "20260702-vancleef-necklace"
+    ],
+    "tag": "カルティエ",
     "slug": "20260706-cartier-misspasha",
     "date": "2026.07.06",
     "cat": "腕時計",
-    "tag": "カルティエ",
     "name": "カルティエ ミスパシャ",
     "area": "山梨県",
     "method": "出張買取",
@@ -315,20 +360,19 @@ const POSTS = [
       "「遠方なのに来てもらえて、金額にも大満足」とのお言葉をいただき、私どもも嬉しい限りです。",
       "山梨県・神奈川県など近隣エリアへの出張買取も行っております。品物が多くて運べない方も、お気軽にお電話ください。"
     ],
-    "images": [
-      "https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?auto=format&fit=crop&w=900&q=70"
-    ],
-    "related": [
-      "20260710-rolex-submariner",
-      "20260702-vancleef-necklace"
-    ],
     "imageFallback": "img/placeholder/item-5.jpg"
   },
   {
+    "images": [
+      "https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=900&q=70"
+    ],
+    "related": [
+      "20260706-cartier-misspasha"
+    ],
+    "tag": "ヴァンクリーフ＆アーペル",
     "slug": "20260702-vancleef-necklace",
     "date": "2026.07.02",
     "cat": "宝石・ジュエリー",
-    "tag": "ヴァンクリーフ＆アーペル",
     "name": "ヴァンクリーフ ネックレス",
     "area": "神奈川県",
     "method": "出張買取",
@@ -344,68 +388,62 @@ const POSTS = [
       "「母も喜ぶと思います」とのお言葉をいただき、大切なお品物を次の方へ橋渡しできることを光栄に思います。",
       "形見のジュエリーの査定は、ひとつひとつ根拠をご説明しながら丁寧に行います。まずはお気軽にご相談ください。"
     ],
-    "images": [
-      "https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=900&q=70"
-    ],
-    "related": [
-      "20260706-cartier-misspasha"
-    ],
     "imageFallback": "img/placeholder/item-6.jpg"
   }
 ];
 
 const COLUMNS = [
   {
-    "slug": "2026camera",
-    "date": "2026.09.02",
-    "cat": "カメラ",
-    "tag": "",
-    "title": "テスト　お役立ち情報",
-    "body": [
-      "簡単なテスト記事です。"
-    ],
     "images": [
       "img/posts/2026camera/IMG_0621-1-scaled.jpg",
       "img/posts/2026camera/IMG_0621-1-scaled-2.jpg"
     ],
-    "related": []
+    "related": [],
+    "tag": "",
+    "body": [
+      "簡単なテスト記事です。"
+    ],
+    "slug": "2026camera",
+    "date": "2026.09.02",
+    "cat": "カメラ",
+    "title": "テスト　お役立ち情報"
   },
   {
-    "slug": "20260721-jewelry-hachioji",
-    "date": "2026.07.21",
-    "cat": "宝石・ジュエリー",
-    "tag": "",
-    "title": "八王子で宝石を高く売るなら？相場と優良店の選び方",
-    "body": [],
     "images": [
       "https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=800&q=70"
     ],
     "related": [],
+    "tag": "",
+    "body": [],
+    "slug": "20260721-jewelry-hachioji",
+    "date": "2026.07.21",
+    "cat": "宝石・ジュエリー",
+    "title": "八王子で宝石を高く売るなら？相場と優良店の選び方",
     "imageFallback": "img/placeholder/col-1.jpg"
   },
   {
-    "slug": "20260720-gold-items",
-    "date": "2026.07.20",
-    "cat": "貴金属",
-    "tag": "",
-    "title": "金歯・金縁メガネも売れます。意外な貴金属アイテム集",
-    "body": [],
     "images": [
       "https://images.unsplash.com/photo-1587925358603-c2eea5305bbc?auto=format&fit=crop&w=800&q=70"
     ],
     "related": [],
+    "tag": "",
+    "body": [],
+    "slug": "20260720-gold-items",
+    "date": "2026.07.20",
+    "cat": "貴金属",
+    "title": "金歯・金縁メガネも売れます。意外な貴金属アイテム集",
     "imageFallback": "img/placeholder/col-2.jpg"
   },
   {
-    "slug": "20260714-stamp",
-    "date": "2026.07.14",
-    "cat": "切手",
-    "tag": "中国切手",
-    "title": "中国切手の価値が高い理由と、査定前に確認すべきこと",
-    "body": [],
     "images": [
       "img/placeholder/col-3.jpg"
     ],
-    "related": []
+    "related": [],
+    "tag": "中国切手",
+    "body": [],
+    "slug": "20260714-stamp",
+    "date": "2026.07.14",
+    "cat": "切手",
+    "title": "中国切手の価値が高い理由と、査定前に確認すべきこと"
   }
 ];
