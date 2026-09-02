@@ -2,10 +2,18 @@
    ナニウル｜買取実績 × ブログ 共通データ
    ---------------------------------------------------------
    このファイルは admin.html（CMS）から自動生成されています。
-   最終更新: 2026/9/1 12:45:57
+   最終更新: 2026/9/2 12:37:16
 ========================================================= */
 const POSTS = [
   {
+    "images": [
+      "img/posts/20260901-test/2e9a218b-3337-41d1-aa2f-38c5a27cb34d.png"
+    ],
+    "related": [
+      "20260718-hermes-birkin",
+      "20260715-chanel-matelasse",
+      "20260712-vuitton-wallet"
+    ],
     "slug": "20260901-test",
     "date": "2026.09.01",
     "cat": "ブランド品",
@@ -26,14 +34,6 @@ const POSTS = [
       "……おそらく数ヶ月後、そのブランド品を査定しているのも私だと思います。",
       "ブランド品は使わなくなったタイミングも、ひとつの売り時です。\nご自宅に眠っているアクセサリーやバッグなどございましたら、ぜひお気軽にご相談ください。",
       "鑑定士 木下"
-    ],
-    "images": [
-      "img/posts/20260901-test/2e9a218b-3337-41d1-aa2f-38c5a27cb34d.png"
-    ],
-    "related": [
-      "20260718-hermes-birkin",
-      "20260715-chanel-matelasse",
-      "20260712-vuitton-wallet"
     ]
   },
   {
@@ -211,6 +211,20 @@ const POSTS = [
 ];
 
 const COLUMNS = [
+  {
+    "slug": "2026camera",
+    "date": "2026.09.02",
+    "cat": "カメラ",
+    "title": "テスト　お役立ち情報",
+    "body": [
+      "簡単なテスト記事です。"
+    ],
+    "images": [
+      "img/posts/2026camera/IMG_0621-1-scaled.jpg",
+      "img/posts/2026camera/IMG_0621-1-scaled-2.jpg"
+    ],
+    "related": []
+  },
   {
     "images": [
       "https://images.unsplash.com/photo-1758995115682-1452a1a9e35b?auto=format&fit=crop&w=800&q=70"
