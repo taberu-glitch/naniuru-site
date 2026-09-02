@@ -82,6 +82,9 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
 .img-card .nm{font-size:9.5px;padding:4px 6px;color:var(--grey);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mont)}
 .img-card .del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(20,20,20,.75);color:#fff;border:none;font-size:11px;line-height:1}
 .img-card .main-tag{position:absolute;top:4px;left:4px;font-size:8.5px;background:var(--green);color:#fff;padding:1px 6px}
+.img-card .ins{display:block;width:100%;border:none;border-top:1px solid var(--line);background:var(--green-soft);color:var(--green);font-size:10px;padding:4px 0;letter-spacing:.06em}
+.img-card .ins:hover{background:var(--green);color:#fff}
+.img-card .num{position:absolute;top:4px;right:28px;font-size:8.5px;background:rgba(20,20,20,.65);color:#fff;padding:1px 6px;font-family:var(--mont)}
 .img-card.pending::after{content:"未公開";position:absolute;bottom:26px;right:4px;font-size:8.5px;background:#D9A54A;color:#fff;padding:1px 6px}
 
 /* related */
@@ -104,7 +107,9 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
 .pv-cat{font-size:10.5px;background:var(--green);color:#fff;padding:3px 10px;display:inline-block;margin-right:10px}
 .pv-date{font-family:var(--mont);font-size:11.5px;color:var(--grey)}
 .pv-title{font-size:20px;font-weight:700;letter-spacing:.06em;line-height:1.7;padding:12px 0 16px;border-bottom:1px solid var(--line);margin-bottom:20px}
-.pv-img{width:100%;max-height:320px;object-fit:cover;border:1px solid var(--line);margin-bottom:20px}
+.pv-img{width:100%;height:auto;border:1px solid var(--line);margin-bottom:20px;display:block}
+.pv-body figure{margin:0 0 1.4em}
+.pv-body figure img{width:100%;height:auto;border:1px solid var(--line);display:block}
 .pv-body p{margin-bottom:1.4em;font-size:14px}
 .pv-price{position:relative;margin:32px 0;padding:30px 24px 26px;text-align:center;
   background:linear-gradient(165deg,#FCF8EE 0%,#F5ECD7 100%);
@@ -182,7 +187,9 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
         1. 記事を編集・作成し「保存」<br>
         2. 「サイトに公開する」で <b>data/posts.js</b> と画像がGitHubへコミットされ、トップの実績スライダー／ブログ一覧／記事ページに自動反映されます。<br>
         3. 「予約投稿」を選ぶと、指定日時までサイト上で非表示になり、日時到来で自動表示されます（公開操作は事前に済ませてください）。<br>
-        4. GitHub未接続でも「JSエクスポート」でposts.jsをダウンロードし、手動アップロードできます。
+        4. GitHub未接続でも「JSエクスポート」でposts.jsをダウンロードし、手動アップロードできます。<br>
+        5. <b>カテゴリ</b>は商品ジャンル、<b>ブランドタグ</b>はブランド名（SEO用）。カテゴリを選ぶとそのジャンルのブランド候補に切り替わります。<br>
+        6. 画像カードの「本文に挿入」で、本文の好きな位置に画像を配置できます（文章→画像→文章…の構成が可能）。
       </div>
     </div>
   </div>
@@ -242,19 +249,27 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
 
         <div class="grid-2">
           <div class="field">
-            <label>スラッグ（URL） <b>*</b></label>
-            <input type="text" id="fSlug" placeholder="20260721-chanel-matelasse">
-            <div class="hint">blog.html?post=<b>スラッグ</b> になります（半角英数とハイフン）</div>
+            <label>スラッグ（URL） <b>*</b> <span id="slugMode" style="font-weight:400;color:var(--green);margin-left:6px">自動生成中</span></label>
+            <div style="display:flex;gap:6px">
+              <input type="text" id="fSlug" placeholder="自動生成されます" style="flex:1">
+              <button type="button" class="btn sm" id="btnSlugAuto" title="日付・カテゴリ・ブランドから再生成">自動</button>
+            </div>
+            <div class="hint">日付・カテゴリ・ブランドタグから自動生成（例: 20260902-watch-rolex）。手入力で上書きも可</div>
           </div>
           <div class="field">
             <label>カテゴリ <b>*</b></label>
             <select id="fCat"></select>
-            <div class="hint">「＋新しいカテゴリを追加…」で候補に追加できます</div>
+            <div class="hint">商品ジャンルを選択（ブランド名はカテゴリに入れず、下の「ブランドタグ」で指定）</div>
           </div>
+        </div>
+        <div class="field">
+          <label>ブランドタグ（SEO用・カテゴリごとに候補が変わります）</label>
+          <select id="fTag"></select>
+          <div class="hint">記事ページとブランド別一覧（blog.html?tag=ブランド名）に使われます。「＋新しいタグを追加…」でこのカテゴリの候補に追加できます</div>
         </div>
 
         <div id="resultFields">
-          <div class="grid-3">
+          <div class="grid-2">
             <div class="field">
               <label>商品名 <b>*</b></label>
               <input type="text" id="fName" placeholder="シャネル マトラッセ">
@@ -262,10 +277,6 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
             <div class="field">
               <label>買取価格（円） <b>*</b></label>
               <input type="number" id="fPrice" placeholder="380000">
-            </div>
-            <div class="field">
-              <label>商品タグ</label>
-              <select id="fTag"></select>
             </div>
           </div>
           <div class="grid-3">
@@ -295,7 +306,7 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
         <div class="field">
           <label>本文 <b>*</b></label>
           <textarea id="fBody" placeholder="こんにちは。鑑定士の◯◯です。&#10;&#10;（空行で段落を区切ります）"></textarea>
-          <div class="hint">空行で段落区切り。「こんにちは。鑑定士の◯◯です。」から始まる一人称スタイル推奨</div>
+          <div class="hint">空行で段落区切り。画像を本文の途中に入れるには、画像カードの「本文に挿入」を押すか <b>[画像2]</b> のように書くとその位置に表示されます（本文で使わなかった画像は本文の後に並びます）</div>
         </div>
 
         <div class="field">
@@ -303,7 +314,7 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
           <div class="img-drop" id="imgDrop">クリックまたはドラッグ＆ドロップで画像を追加（JPG / PNG / WebP）</div>
           <input type="file" id="imgInput" accept="image/jpeg,image/png,image/webp" multiple hidden>
           <div class="img-list" id="imgList"></div>
-          <div class="hint">公開時に img/posts/スラッグ/ 配下へ自動コミットされます。ドラッグで並び替え可。</div>
+          <div class="hint">公開時に img/posts/スラッグ/ 配下へ自動コミットされます。ドラッグで並び替え可。番号は本文の [画像N] に対応します。</div>
         </div>
 
         <div class="field">
@@ -370,6 +381,7 @@ const store = (() => {
 ========================================================= */
 let POSTS = [];        // 実績記事
 let COLUMNS = [];      // コラム
+let CATEGORIES = [];   // カテゴリ→ブランドタグ定義（posts.jsに書き出し）
 let current = null;    // 編集中オブジェクト（コピー）
 let currentType = "result";
 let currentIndex = -1; // -1 = 新規
@@ -403,10 +415,29 @@ async function loadData(){
 }
 
 function parsePostsJs(src){
-  const fn = new Function(src + ";return {POSTS: typeof POSTS!=='undefined'?POSTS:[], COLUMNS: typeof COLUMNS!=='undefined'?COLUMNS:[]}");
+  const fn = new Function(src + ";return {POSTS: typeof POSTS!=='undefined'?POSTS:[], COLUMNS: typeof COLUMNS!=='undefined'?COLUMNS:[], CATEGORIES: typeof CATEGORIES!=='undefined'?CATEGORIES:null}");
   const r = fn();
-  POSTS = (r.POSTS||[]).map(p=>({images:[],related:[],...p}));
-  COLUMNS = (r.COLUMNS||[]).map(c=>({images:[],related:[],body:c.body||[],...c}));
+  POSTS = (r.POSTS||[]).map(p=>({images:[],related:[],tag:"",...p}));
+  COLUMNS = (r.COLUMNS||[]).map(c=>({images:[],related:[],tag:"",body:c.body||[],...c}));
+  CATEGORIES = (r.CATEGORIES && r.CATEGORIES.length) ? r.CATEGORIES.map(c=>({name:c.name,tags:[...(c.tags||[])]})) : JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+  migrateLegacy();
+}
+
+/* 旧データ（カテゴリ「ロレックス」・英字タグ等）を新構成へ自動変換 */
+function migrateLegacy(){
+  const CAT_MAP = {"ロレックス":["腕時計","ロレックス"],"宝石":["宝石・ジュエリー",""],"ダイヤモンド":["宝石・ジュエリー","ダイヤモンド"],"骨董":["骨董・美術品",""]};
+  [...POSTS,...COLUMNS].forEach(p=>{
+    if(CAT_MAP[p.cat]){ const [c,t]=CAT_MAP[p.cat]; p.cat=c; if(t && !p.tag) p.tag=t; }
+    if(/^[A-Z0-9-]+$/.test(p.tag||"")) p.tag="";   // 旧英字コード（BAG/WATCH等）は破棄
+    if(!p.tag) p.tag="";
+  });
+  // 記事で使われているカテゴリ・タグが定義に無ければ追加
+  [...POSTS,...COLUMNS].forEach(p=>{
+    if(!p.cat) return;
+    let c = CATEGORIES.find(x=>x.name===p.cat);
+    if(!c){ c={name:p.cat,tags:[]}; CATEGORIES.push(c); }
+    if(p.tag && !c.tags.includes(p.tag)) c.tags.push(p.tag);
+  });
 }
 
 /* =========================================================
@@ -452,44 +483,146 @@ function renderList(){
   });
 }
 
-const DEFAULT_CATS = ["ブランド品","ロレックス","腕時計","宝石","貴金属","ダイヤモンド","切手","お酒","カメラ","古銭","骨董","その他"];
-const DEFAULT_TAGS = ["BAG","WATCH","JEWELRY","WALLET","GOLD","PLATINUM","DIAMOND","STAMP","LIQUOR","CAMERA","COIN","ANTIQUE","OTHER"];
-let extraCats = [], extraTags = [];
+/* カテゴリ＝商品ジャンル（ブランド名は入れない）／タグ＝ブランド名（SEO用）
+   posts.js に CATEGORIES として書き出され、blog.html のカテゴリ別・ブランド別一覧に使われます */
+const DEFAULT_CATEGORIES = [
+  {name:"ブランド品",     tags:["エルメス","シャネル","ルイ・ヴィトン","グッチ","プラダ","セリーヌ","ディオール","ロエベ","ボッテガ・ヴェネタ","バレンシアガ","フェンディ","コーチ"]},
+  {name:"腕時計",         tags:["ロレックス","オメガ","カルティエ","パテック・フィリップ","オーデマ・ピゲ","グランドセイコー","セイコー","タグ・ホイヤー","ブライトリング","IWC","パネライ","ウブロ","フランク・ミュラー","ブルガリ"]},
+  {name:"宝石・ジュエリー", tags:["カルティエ","ティファニー","ヴァンクリーフ＆アーペル","ブルガリ","ハリー・ウィンストン","ミキモト","4℃","ダイヤモンド","色石"]},
+  {name:"貴金属",         tags:["金（K24・K18等）","プラチナ","インゴット","金貨","銀"]},
+  {name:"お酒",           tags:["山崎","白州","響","竹鶴","イチローズモルト","マッカラン","ヘネシー","レミーマルタン","ドン・ペリニヨン"]},
+  {name:"カメラ",         tags:["ライカ","キヤノン","ニコン","ソニー","富士フイルム","ハッセルブラッド","ローライ","ペンタックス","オリンパス"]},
+  {name:"切手",           tags:["中国切手","日本切手","記念切手","外国切手"]},
+  {name:"古銭",           tags:["大判・小判","記念硬貨","古紙幣","金貨・銀貨","外国コイン"]},
+  {name:"骨董・美術品",   tags:["茶道具","掛け軸","陶磁器","絵画","刀剣・武具"]},
+  {name:"その他",         tags:[]}
+];
+CATEGORIES = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
 
 function renderCatList(){ if(current) renderCatTagOptions($("fCat").value, $("fTag").value); }
 
-function buildSelect(sel, base, extras, used, currentVal, newLabel){
-  const opts = [...new Set([...base, ...extras, ...used, ...(currentVal?[currentVal]:[])].filter(Boolean))];
-  sel.innerHTML = '<option value="">選択してください</option>'
-    + opts.map(o=>`<option value="${o}"${o===currentVal?" selected":""}>${o}</option>`).join("")
+function buildSelect(sel, opts, currentVal, newLabel, emptyLabel){
+  const list = [...new Set([...opts, ...(currentVal?[currentVal]:[])].filter(Boolean))];
+  sel.innerHTML = `<option value="">${emptyLabel}</option>`
+    + list.map(o=>`<option value="${o}"${o===currentVal?" selected":""}>${o}</option>`).join("")
     + `<option value="__new__">＋ ${newLabel}を追加…</option>`;
 }
 
 function renderCatTagOptions(catVal, tagVal){
-  const usedCats = [...POSTS.map(p=>p.cat), ...COLUMNS.map(c=>c.cat)];
-  const usedTags = POSTS.map(p=>p.tag);
-  buildSelect($("fCat"), DEFAULT_CATS, extraCats, usedCats, catVal||"", "新しいカテゴリ");
-  buildSelect($("fTag"), DEFAULT_TAGS, extraTags, usedTags, (tagVal||"").toUpperCase(), "新しいタグ");
+  buildSelect($("fCat"), CATEGORIES.map(c=>c.name), catVal||"", "新しいカテゴリ", "選択してください");
+  const cat = CATEGORIES.find(c=>c.name===(catVal||""));
+  const tags = cat ? cat.tags : [];
+  buildSelect($("fTag"), tags, tagVal||"", "新しいタグ", cat ? "なし（ブランド指定なし）" : "先にカテゴリを選択");
+  $("fTag").disabled = !cat;
 }
 
-function handleNewOption(sel, extras, label, upper){
-  sel.addEventListener("change", ()=>{
-    if(sel.value!=="__new__") return;
-    let v = prompt(label+"を入力してください");
-    v = (v||"").trim(); if(upper) v = v.toUpperCase().replace(/[^A-Z0-9-]/g,"");
-    if(v){ extras.push(v); }
-    renderCatTagOptions(sel.id==="fCat"?v:$("fCat").value, sel.id==="fTag"?v:$("fTag").value);
-    dirty = true; setState("未保存の変更あり");
-  });
-}
-handleNewOption($("fCat"), extraCats, "新しいカテゴリ名", false);
-handleNewOption($("fTag"), extraTags, "新しいタグ（半角英字）", true);
+/* カテゴリ変更 → そのカテゴリのブランドタグ候補に切替 */
+$("fCat").addEventListener("change", ()=>{
+  const v = $("fCat").value;
+  if(v==="__new__"){
+    let n = (prompt("新しいカテゴリ名を入力してください（商品ジャンル。ブランド名は入れないでください）")||"").trim();
+    if(n && !CATEGORIES.some(c=>c.name===n)) CATEGORIES.push({name:n,tags:[]});
+    renderCatTagOptions(n||"", "");
+  } else {
+    const cat = CATEGORIES.find(c=>c.name===v);
+    const keep = cat && cat.tags.includes($("fTag").value) ? $("fTag").value : "";
+    renderCatTagOptions(v, keep);
+  }
+  autoSlug();
+  dirty = true; setState("未保存の変更あり"); renderPreview();
+});
+$("fTag").addEventListener("change", ()=>{
+  if($("fTag").value!=="__new__") return;
+  const catName = $("fCat").value;
+  const cat = CATEGORIES.find(c=>c.name===catName);
+  let n = (prompt(`「${catName}」に追加するブランド名（タグ）を入力してください`)||"").trim();
+  if(n && cat && !cat.tags.includes(n)) cat.tags.push(n);
+  renderCatTagOptions(catName, n||"");
+  autoSlug();
+  dirty = true; setState("未保存の変更あり"); renderPreview();
+});
+$("fTag").addEventListener("change", ()=>{ if($("fTag").value!=="__new__") autoSlug(); });
 
 function togglePubAt(){
   $("pubAtField").style.display = $("fPubMode").value==="scheduled" ? "block" : "none";
 }
 $("fPubMode").addEventListener("change", ()=>{ togglePubAt(); dirty=true; setState("未保存の変更あり"); });
 $("fPublishAt").addEventListener("input", ()=>{ dirty=true; setState("未保存の変更あり"); });
+
+/* =========================================================
+   スラッグ自動生成：日付-カテゴリ-ブランド（英字）＋重複時は -2, -3…
+========================================================= */
+const SLUG_WORDS = {
+  "ブランド品":"brand","腕時計":"watch","宝石・ジュエリー":"jewelry","宝石":"jewelry","貴金属":"gold","お酒":"liquor","カメラ":"camera",
+  "切手":"stamp","古銭":"coin","骨董・美術品":"antique","骨董":"antique","その他":"other","ダイヤモンド":"diamond",
+  "エルメス":"hermes","シャネル":"chanel","ルイ・ヴィトン":"louis-vuitton","グッチ":"gucci","プラダ":"prada","セリーヌ":"celine","ディオール":"dior",
+  "ロエベ":"loewe","ボッテガ・ヴェネタ":"bottega-veneta","バレンシアガ":"balenciaga","フェンディ":"fendi","コーチ":"coach",
+  "ロレックス":"rolex","オメガ":"omega","カルティエ":"cartier","パテック・フィリップ":"patek-philippe","オーデマ・ピゲ":"audemars-piguet",
+  "グランドセイコー":"grand-seiko","セイコー":"seiko","タグ・ホイヤー":"tag-heuer","ブライトリング":"breitling","IWC":"iwc","パネライ":"panerai",
+  "ウブロ":"hublot","フランク・ミュラー":"franck-muller","ブルガリ":"bvlgari",
+  "ティファニー":"tiffany","ヴァンクリーフ＆アーペル":"van-cleef-arpels","ハリー・ウィンストン":"harry-winston","ミキモト":"mikimoto","4℃":"4c","色石":"gemstone",
+  "金（K24・K18等）":"gold","プラチナ":"platinum","インゴット":"ingot","金貨":"gold-coin","銀":"silver",
+  "山崎":"yamazaki","白州":"hakushu","響":"hibiki","竹鶴":"taketsuru","イチローズモルト":"ichiros-malt","マッカラン":"macallan","ヘネシー":"hennessy",
+  "レミーマルタン":"remy-martin","ドン・ペリニヨン":"dom-perignon",
+  "ライカ":"leica","キヤノン":"canon","ニコン":"nikon","ソニー":"sony","富士フイルム":"fujifilm","ハッセルブラッド":"hasselblad","ローライ":"rollei",
+  "ペンタックス":"pentax","オリンパス":"olympus",
+  "中国切手":"china-stamp","日本切手":"japan-stamp","記念切手":"memorial-stamp","外国切手":"foreign-stamp",
+  "大判・小判":"koban","記念硬貨":"memorial-coin","古紙幣":"old-note","金貨・銀貨":"gold-silver-coin","外国コイン":"foreign-coin",
+  "茶道具":"tea-utensils","掛け軸":"kakejiku","陶磁器":"ceramics","絵画":"painting","刀剣・武具":"sword"
+};
+function slugWord(jp){
+  if(!jp) return "";
+  if(SLUG_WORDS[jp]) return SLUG_WORDS[jp];
+  const ascii = jp.normalize("NFKC").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+  return ascii; // 英数字が含まれない日本語は空（→ 省略）
+}
+function buildSlug(){
+  const d = ($("fDate").value||"").replaceAll("-","");
+  if(!d) return "";
+  const cat = $("fCat").value, tag = $("fTag").value;
+  const parts = [d, slugWord(cat==="__new__"?"":cat), slugWord(tag==="__new__"?"":tag)].filter(Boolean);
+  if(parts.length===1) parts.push("post");
+  const base = parts.join("-");
+  const others = [...POSTS,...COLUMNS].filter(x=>x!==(currentIndex>-1?(currentType==="result"?POSTS[currentIndex]:COLUMNS[currentIndex]):null)).map(x=>x.slug);
+  let slug = base, n=1;
+  while(others.includes(slug)) slug = `${base}-${++n}`;
+  return slug;
+}
+/* slugAuto: true=自動生成モード（日付/カテゴリ/タグ変更で追従）。手入力すると false */
+let slugAuto = true;
+function setSlugMode(auto){
+  slugAuto = auto;
+  $("slugMode").textContent = auto ? "自動生成中" : "手動";
+  $("slugMode").style.color = auto ? "var(--green)" : "var(--grey)";
+}
+function applySlug(newSlug){
+  const old = $("fSlug").value;
+  $("fSlug").value = newSlug;
+  if(current && old && old!==newSlug){
+    // 未公開画像のパスを新スラッグに付け替え（公開済み画像はそのまま）
+    current.images = (current.images||[]).map(path=>{
+      if(!pendingImages[path]) return path;
+      const np = path.replace(`img/posts/${old}/`, `img/posts/${newSlug}/`);
+      if(np!==path){ pendingImages[np]=pendingImages[path]; delete pendingImages[path]; }
+      return np;
+    });
+    renderImages();
+  }
+  if(current) current.slug = newSlug;
+}
+function autoSlug(force){
+  if(!force && !slugAuto) return;
+  // 公開済み（保存済み）記事のスラッグはURLが変わるため自動では変えない
+  if(!force && currentIndex>-1) return;
+  const sg = buildSlug(); if(!sg) return;
+  applySlug(sg); $("pvSlug").textContent = sg;
+}
+$("btnSlugAuto").addEventListener("click",()=>{
+  if(currentIndex>-1 && !confirm("公開済み記事のURLが変わります（既存のリンク・検索結果からアクセスできなくなります）。再生成しますか？")) return;
+  setSlugMode(true); autoSlug(true); dirty=true; setState("未保存の変更あり");
+});
+$("fSlug").addEventListener("input",()=>{ setSlugMode(false); });
+$("fDate").addEventListener("change",()=>autoSlug());
 
 /* =========================================================
    編集
@@ -499,14 +632,14 @@ function blankPost(type){
   const d = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,"0")}.${String(today.getDate()).padStart(2,"0")}`;
   return type==="result"
     ? {slug:"",date:d,cat:"",tag:"",name:"",area:"東京都",method:"店頭買取",price:0,staff:"",title:"",excerpt:"",body:[],images:[],related:[]}
-    : {slug:"",date:d,cat:"",title:"",body:[],images:[],related:[]};
+    : {slug:"",date:d,cat:"",tag:"",title:"",body:[],images:[],related:[]};
 }
 
 function newPost(){
   if(dirty && !confirm("未保存の変更があります。破棄して新規作成しますか？")) return;
   currentType="result"; currentIndex=-1;
   current = blankPost("result");
-  fillForm(); renderList(); setState("新規記事");
+  fillForm(); autoSlug(); renderList(); setState("新規記事");
 }
 
 function selectPost(type,i){
@@ -526,6 +659,7 @@ function fillForm(){
   togglePubAt();
   $("fTitle").value = p.title||"";
   $("fSlug").value = p.slug||"";
+  setSlugMode(!p.slug);
   renderCatTagOptions(p.cat, p.tag);
   $("fName").value = p.name||"";
   $("fPrice").value = p.price||"";
@@ -549,12 +683,12 @@ function readForm(){
   }
   p.title = $("fTitle").value.trim();
   p.slug = $("fSlug").value.trim();
-  p.cat = $("fCat").value.trim();
+  p.cat = $("fCat").value.trim(); if(p.cat==="__new__") p.cat="";
+  p.tag = $("fTag").value.trim(); if(p.tag==="__new__") p.tag="";
   p.body = $("fBody").value.split(/\n\s*\n/).map(t=>t.trim()).filter(Boolean);
   if(currentType==="result"){
     p.name = $("fName").value.trim();
     p.price = Number($("fPrice").value)||0;
-    p.tag = $("fTag").value.trim().toUpperCase();
     p.method = $("fMethod").value;
     p.area = $("fArea").value.trim();
     p.staff = $("fStaff").value.trim();
@@ -608,10 +742,10 @@ function deletePost(){
 function dupPost(){
   readForm();
   const copy = JSON.parse(JSON.stringify(current));
-  copy.slug = copy.slug + "-copy";
+  copy.slug = "";
   copy.title = copy.title + "（複製）";
   current = copy; currentIndex=-1;
-  fillForm(); setState("複製（新規・未保存）"); dirty=true;
+  fillForm(); autoSlug(); setState("複製（新規・未保存）"); dirty=true;
 }
 
 /* =========================================================
@@ -630,7 +764,8 @@ $("imgInput").addEventListener("change",e=>{ addImages([...e.target.files]); e.t
 
 async function addImages(files){
   readForm();
-  if(!/^[a-z0-9-]+$/i.test(current.slug||"")){ toast("先にスラッグを入力してください",true); return; }
+  if(!/^[a-z0-9-]+$/i.test(current.slug||"")){ autoSlug(true); readForm(); }
+  if(!/^[a-z0-9-]+$/i.test(current.slug||"")){ toast("先に公開日を入力してください（スラッグを自動生成します）",true); return; }
   for(const f of files){
     if(!/^image\/(jpeg|png|webp)$/.test(f.type)){ toast(f.name+" は非対応形式です",true); continue; }
     const dataUrl = await resizeImage(f, 1600);
@@ -667,12 +802,17 @@ function renderImages(){
     card.draggable = true;
     card.innerHTML = `
       ${i===0?'<span class="main-tag">メイン</span>':""}
+      <span class="num">${i+1}</span>
       <img src="${imgSrc(path)}" alt="">
       <button class="del" title="削除">×</button>
-      <div class="nm">${path.split("/").pop()}</div>`;
+      <div class="nm">${path.split("/").pop()}</div>
+      <button class="ins" title="カーソル位置に [画像${i+1}] を挿入">本文に挿入</button>`;
     card.querySelector(".del").addEventListener("click",()=>{
       current.images.splice(i,1); delete pendingImages[path];
       dirty=true; renderImages(); renderPreview();
+    });
+    card.querySelector(".ins").addEventListener("click",e=>{
+      e.stopPropagation(); insertImageTag(i+1);
     });
     card.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",i));
     card.addEventListener("dragover",e=>e.preventDefault());
@@ -685,6 +825,19 @@ function renderImages(){
     });
     box.appendChild(card);
   });
+}
+
+/* 本文のカーソル位置に [画像N] を段落として挿入 */
+function insertImageTag(n){
+  const ta = $("fBody");
+  const v = ta.value, s = ta.selectionStart ?? v.length, e = ta.selectionEnd ?? s;
+  const before = v.slice(0,s).replace(/\s+$/,""), after = v.slice(e).replace(/^\s+/,"");
+  const tag = `[画像${n}]`;
+  ta.value = (before ? before + "\n\n" : "") + tag + (after ? "\n\n" + after : "\n\n");
+  const pos = (before ? before.length + 2 : 0) + tag.length + 2;
+  ta.focus(); ta.setSelectionRange(pos,pos);
+  dirty=true; setState("未保存の変更あり"); renderPreview();
+  toast(`${tag} を本文に挿入しました`);
 }
 
 /* =========================================================
@@ -718,18 +871,33 @@ function renderPreview(){
   readForm();
   const p = current;
   $("pvSlug").textContent = p.slug||"…";
-  const mainImg = p.images?.[0] ? `<img class="pv-img" src="${imgSrc(p.images[0])}" alt="">` : "";
-  const gallery = (p.images||[]).slice(1).map(x=>`<img class="pv-img" style="max-height:200px" src="${imgSrc(x)}" alt="">`).join("");
+  const imgs = p.images||[];
+  const used = new Set();
+  const re = /\[(?:画像|img|IMG)\s*(\d+)\]/g;
+  const bodyHtml = (p.body||[]).map(para=>{
+    let out="", last=0, m; re.lastIndex=0;
+    while((m=re.exec(para))){
+      const t=para.slice(last,m.index).trim(); if(t) out+=`<p>${t.replace(/\n/g,"<br>")}</p>`;
+      const n=Number(m[1]);
+      if(imgs[n-1]){ used.add(n); out+=`<figure><img src="${imgSrc(imgs[n-1])}" alt=""></figure>`; }
+      else out+=`<p style="color:var(--red)">［画像${n} は存在しません］</p>`;
+      last=m.index+m[0].length;
+    }
+    const rest=para.slice(last).trim(); if(rest) out+=`<p>${rest.replace(/\n/g,"<br>")}</p>`;
+    return out;
+  }).join("");
+  const mainImg = (imgs[0] && !used.has(1)) ? `<img class="pv-img" src="${imgSrc(imgs[0])}" alt="">` : "";
+  const gallery = imgs.map((x,i)=>i+1).filter(n=>n>1 && !used.has(n)).map(n=>`<img class="pv-img" src="${imgSrc(imgs[n-1])}" alt="">`).join("");
   const relHtml = (p.related||[]).map(s=>{
     const t=[...POSTS,...COLUMNS].find(x=>x.slug===s);
     return t?`<a href="#">› ${t.title}</a>`:"";
   }).join("");
   $("pvIn").innerHTML = `
     ${(p.publishAt && new Date(p.publishAt)>new Date())?`<div style="background:#FBF3E2;border:1px solid #D9A54A;color:#8A6520;font-size:11.5px;padding:8px 14px;margin-bottom:14px">◷ 予約投稿：${p.publishAt.replace("T"," ")} に自動公開されます</div>`:""}
-    <div><span class="pv-cat">${p.cat||"カテゴリ"}</span><span class="pv-date">${p.date||""}${currentType==="result"?`　${p.method||""}｜${p.area||""}のお客様`:""}</span></div>
+    <div><span class="pv-cat">${p.cat||"カテゴリ"}</span>${p.tag?`<span class="pv-cat" style="background:#fff;color:#A8874B;border:1px solid #D8C79C">${p.tag}</span>`:""}<span class="pv-date">${p.date||""}${currentType==="result"?`　${p.method||""}｜${p.area||""}のお客様`:""}</span></div>
     <div class="pv-title">${p.title||"（タイトル未入力）"}</div>
     ${mainImg}
-    <div class="pv-body">${(p.body||[]).map(t=>`<p>${t}</p>`).join("")||"<p style='color:var(--grey)'>（本文未入力）</p>"}</div>
+    <div class="pv-body">${bodyHtml||"<p style='color:var(--grey)'>（本文未入力）</p>"}</div>
     ${gallery}
     ${currentType==="result"?`<div class="pv-price"><span class="pp-label">PURCHASE PRICE ─ 今回の買取価格</span><b class="pp-name">${p.name||""}</b><span class="v">¥${yen(p.price)}<small>円</small></span></div>`:""}
     ${relHtml?`<div class="pv-rel"><h4>関連記事</h4>${relHtml}</div>`:""}`;
@@ -746,6 +914,7 @@ function buildPostsJs(){
    最終更新: ${new Date().toLocaleString("ja-JP")}
 ========================================================= */\n`;
   return header
+    + "const CATEGORIES = " + JSON.stringify(CATEGORIES,null,2) + ";\n\n"
     + "const POSTS = " + JSON.stringify(POSTS,null,2) + ";\n\n"
     + "const COLUMNS = " + JSON.stringify(COLUMNS,null,2) + ";\n";
 }
@@ -888,21 +1057,15 @@ $("fType").addEventListener("change",()=>{
   if(currentIndex>-1){ toast("保存済み記事のタイプは変更できません。複製をご利用ください",true); $("fType").value=currentType; return; }
   readForm();
   currentType=$("fType").value;
-  const keep={slug:current.slug,date:current.date,cat:current.cat,title:current.title,body:current.body,images:current.images,related:current.related};
+  const keep={slug:current.slug,date:current.date,cat:current.cat,tag:current.tag,title:current.title,body:current.body,images:current.images,related:current.related};
   current={...blankPost(currentType),...keep};
   fillForm(); dirty=true;
 });
 
 /* フォーム変更検知 */
-["fDate","fTitle","fSlug","fCat","fName","fPrice","fTag","fMethod","fArea","fStaff","fExcerpt","fBody"]
+["fDate","fTitle","fSlug","fName","fPrice","fMethod","fArea","fStaff","fExcerpt","fBody"]
   .forEach(id=>$(id).addEventListener("input",()=>{dirty=true; setState("未保存の変更あり");}));
-
-/* タイトルからスラッグ補助（新規時のみ） */
-$("fDate").addEventListener("change",()=>{
-  if(currentIndex===-1 && !$("fSlug").value && $("fDate").value){
-    $("fSlug").value = $("fDate").value.replaceAll("-","")+"-";
-  }
-});
+$("fBody").addEventListener("input",()=>{ clearTimeout(window._pvTm); window._pvTm=setTimeout(renderPreview,400); });
 
 $("btnNew").addEventListener("click",newPost);
 $("btnSave").addEventListener("click",savePost);

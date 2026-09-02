@@ -1053,7 +1053,7 @@ function renderReviews(data){
     a.innerHTML = `
       <div class="res-img">
         <div class="res-tags"><span>${r.method}</span><span>${r.area}</span></div>
-        ${r.image?`<img src="${r.image}" alt="${r.name}" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${r.fallback}">`:`<span class="ph">${r.tag}</span>`}
+        ${r.image?`<img src="${r.image}" alt="${r.name}" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${r.fallback}">`:`<span class="ph">${r.tag||r.name}</span>`}
       </div>
       <div class="res-body">
         <h3>${r.name}</h3>

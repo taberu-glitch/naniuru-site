@@ -80,10 +80,24 @@ h1.post-title{font-family:var(--serif);font-size:clamp(21px,2.6vw,28px);font-wei
 .post-photo .ph{font-family:var(--mont);font-size:14px;letter-spacing:.34em;color:var(--green)}
 .post-photo .nm{font-family:var(--serif);font-size:17px;letter-spacing:.1em}
 .post-photo-cap{font-size:11.5px;color:var(--grey);text-align:center;margin-bottom:34px}
-.post-photo.has-img{height:auto;padding:0;background:none}
-.post-photo.has-img img{width:100%;max-height:460px;object-fit:cover}
-.post-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 30px}
-.post-gallery img{width:100%;height:140px;object-fit:cover;border:1px solid var(--line)}
+.post-photo.has-img{height:auto;padding:0;background:#fff}
+.post-photo.has-img img{width:100%;height:auto;max-height:none;object-fit:contain}
+/* 本文中の画像（[画像N] で差し込み）・本文末尾の残り画像：トリミングせず原寸比率で表示 */
+.post-body figure.post-img{margin:0 0 1.6em}
+.post-body figure.post-img img{width:100%;height:auto;border:1px solid var(--line);background:#fff}
+.post-body figure.post-img figcaption{font-size:11.5px;color:var(--grey);text-align:center;margin-top:8px}
+.post-gallery{display:grid;grid-template-columns:1fr;gap:16px;margin:0 0 30px}
+.post-gallery img{width:100%;height:auto;border:1px solid var(--line);background:#fff}
+.post-tag{font-size:11px;letter-spacing:.08em;color:var(--gold-deep);border:1px solid var(--gold-lt);padding:3px 10px;transition:.3s}
+.post-tag:hover{background:var(--gold-pale)}
+.filter-head{font-family:var(--mont);font-size:11px;letter-spacing:.3em;color:var(--gold-deep);margin-bottom:6px}
+.filter-desc{font-size:13px;color:var(--grey);margin:-14px 0 22px}
+.filter-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.filter-tags a{font-size:12px;border:1px solid var(--line);padding:5px 12px;transition:.3s}
+.filter-tags a:hover,.filter-tags a.on{border-color:var(--gold-deep);color:var(--gold-deep);background:var(--gold-pale)}
+.list-grid .tag{font-size:11px;color:var(--gold-deep);border:1px solid var(--gold-lt);padding:2px 6px}
+aside .box li a.on{color:var(--gold-deep);font-weight:700}
+.tag-cloud a.on{border-color:var(--gold-deep);color:var(--gold-deep);background:var(--gold-pale)}
 .related{margin-top:44px;border-top:1px solid var(--line);padding-top:30px}
 .related h2{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.14em;margin-bottom:18px;padding-left:14px;border-left:3px solid var(--gold)}
 .related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
@@ -172,7 +186,6 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.85);padding:44px 0 3
   .head-in{height:62px}
   .logo img{height:34px}
   .page-head{padding:38px 0 34px}
-  .post-photo.has-img img{max-height:280px}
   .post-price{padding:30px 18px 26px}
   .post-price .v{font-size:40px}
   .post-cta{padding:28px 18px}
@@ -277,57 +290,127 @@ document.write('<script src="data/posts.js?v=' + Date.now() + '"><\/script>');
 </script>
 <script>
 const yen = n => Number(n).toLocaleString("ja-JP");
+const esc = s => String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const params = new URLSearchParams(location.search);
 const slug = params.get("post");
+const fCat = params.get("cat") || "";
+const fTag = params.get("tag") || "";
+const fMonth = params.get("month") || "";
 const isLive = p => !p.publishAt || new Date(String(p.publishAt).replace(" ","T")) <= new Date();
 const ALL = [...POSTS, ...COLUMNS].filter(isLive).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+const CATS = (typeof CATEGORIES!=="undefined" && Array.isArray(CATEGORIES)) ? CATEGORIES : [];
 const idx = ALL.findIndex(p => p.slug === slug);
 const post = idx >= 0 ? ALL[idx] : null;
 const isResult = post && POSTS.some(p=>p.slug===post.slug);
+const catUrl = c => `blog.html?cat=${encodeURIComponent(c)}`;
+const tagUrl = (t,c) => `blog.html?tag=${encodeURIComponent(t)}${c?`&cat=${encodeURIComponent(c)}`:""}`;
+
+/* 絞り込み対象 */
+const isFiltered = !post && (fCat || fTag || fMonth);
+const FILTERED = ALL.filter(p =>
+  (!fCat || p.cat===fCat) && (!fTag || p.tag===fTag) && (!fMonth || (p.date||"").startsWith(fMonth)));
+const monthLabel = m => { const [y,mo]=m.split("."); return mo?`${y}年${Number(mo)}月`:m; };
+const filterLabel = [fTag, fCat, fMonth?monthLabel(fMonth):""].filter(Boolean).join(" × ");
+
+/* ---------- 本文レンダリング（[画像N] で本文中に差し込み） ----------
+   本文の段落に「[画像2]」のように書くと、その位置に2枚目の画像を表示。
+   本文で使われなかった画像（2枚目以降）は本文の後に原寸比率で並べる。 */
+function renderBody(p){
+  const imgs = p.images || [];
+  const fb = p.imageFallback || "";
+  const fbAttr = `onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${esc(fb)}"`;
+  const used = new Set();
+  const fig = n => {
+    const src = imgs[n-1]; if(!src) return "";
+    used.add(n);
+    return `<figure class="post-img"><img src="${esc(src)}" alt="${esc(p.name||p.title)} ${n}" loading="lazy" ${fbAttr}></figure>`;
+  };
+  const re = /\[(?:画像|img|IMG)\s*(\d+)\]/g;
+  const html = (p.body||[]).map(para=>{
+    let out="", last=0, m;
+    re.lastIndex=0;
+    while((m=re.exec(para))){
+      const t = para.slice(last,m.index).trim();
+      if(t) out += `<p>${esc(t).replace(/\n/g,"<br>")}</p>`;
+      out += fig(Number(m[1]));
+      last = m.index + m[0].length;
+    }
+    const rest = para.slice(last).trim();
+    if(rest) out += `<p>${esc(rest).replace(/\n/g,"<br>")}</p>`;
+    return out;
+  }).join("");
+  const heroInBody = used.has(1);
+  const rest = imgs.map((x,i)=>i+1).filter(n=>n>1 && !used.has(n));
+  return { html, heroInBody, restHtml: rest.length
+    ? `<div class="post-gallery">${rest.map(n=>`<img src="${esc(imgs[n-1])}" alt="${esc(p.name||p.title)} ${n}" loading="lazy" ${fbAttr}>`).join("")}</div>` : "" };
+}
 
 /* ---------- パンくず ---------- */
 (function crumb(){
   const c = document.getElementById("crumb");
   let html = `<span><a href="index.html">HOME</a></span><span><a href="blog.html">買取お役立ちブログ</a></span>`;
   if(post){
-    html += `<span><a href="blog.html">${post.cat}</a></span><span>${post.title}</span>`;
+    html += `<span><a href="${catUrl(post.cat)}">${esc(post.cat)}</a></span>`;
+    if(post.tag) html += `<span><a href="${tagUrl(post.tag,post.cat)}">${esc(post.tag)}</a></span>`;
+    html += `<span>${esc(post.title)}</span>`;
+  } else if(isFiltered){
+    if(fCat) html += `<span>${fTag?`<a href="${catUrl(fCat)}">${esc(fCat)}</a>`:esc(fCat)}</span>`;
+    if(fTag) html += `<span>${esc(fTag)}</span>`;
+    if(fMonth) html += `<span>${esc(monthLabel(fMonth))}</span>`;
   }
   c.innerHTML = html;
 })();
 
+/* ---------- 一覧行 ---------- */
+const listRow = p => `<a href="blog.html?post=${esc(p.slug)}"><time>${esc(p.date)}</time><span class="cat">${esc(p.cat)}</span>${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}<span>${esc(p.title)}</span></a>`;
+
 /* ---------- 本文 ---------- */
 (function render(){
   const area = document.getElementById("postArea");
+  const setDesc = t => { const m=document.querySelector('meta[name="description"]'); if(m) m.content=t; };
 
   if(!post){
-    /* 一覧モード（buy実績＋コラムを日付順に） */
-    document.title = "買取お役立ちブログ 一覧｜ナニウル";
-    const all = ALL.map(p=>({date:p.date,cat:p.cat,title:p.title,href:`blog.html?post=${p.slug}`}));
-    area.innerHTML = `<h1 class="post-title">記事一覧</h1><div class="list-grid">` +
-      all.map(p=>`<a href="${p.href}"><time>${p.date}</time><span class="cat">${p.cat}</span><span>${p.title}</span></a>`).join("") +
+    /* 一覧モード（buy実績＋コラムを日付順・絞り込み対応） */
+    const list = isFiltered ? FILTERED : ALL;
+    const h1 = isFiltered ? `${filterLabel}の買取実績・記事一覧` : "記事一覧";
+    document.title = (isFiltered ? `${filterLabel}の買取実績・記事一覧` : "買取お役立ちブログ 一覧") + "｜ナニウル";
+    if(isFiltered) setDesc(`八王子の買取専門店ナニウルによる「${filterLabel}」の買取実績・お役立ち記事一覧。${fTag?`${fTag}の買取価格や高く売るコツを鑑定士がご紹介します。`:""}`);
+    /* カテゴリ絞り込み時：そのカテゴリのブランドタグを表示 */
+    let tagBar = "";
+    if(fCat){
+      const def = (CATS.find(c=>c.name===fCat)||{}).tags||[];
+      const usedTags = ALL.filter(p=>p.cat===fCat && p.tag).map(p=>p.tag);
+      const tags = [...new Set([...usedTags, ...def.filter(t=>usedTags.includes(t))])];
+      if(tags.length) tagBar = `<div class="filter-tags"><a href="${catUrl(fCat)}" class="${fTag?"":"on"}">すべて</a>${tags.map(t=>`<a href="${tagUrl(t,fCat)}" class="${t===fTag?"on":""}">${esc(t)}</a>`).join("")}</div>`;
+    }
+    area.innerHTML = (isFiltered?`<p class="filter-head">${fTag?"BRAND":fCat?"CATEGORY":"ARCHIVE"}</p>`:"") +
+      `<h1 class="post-title">${esc(h1)}</h1>` +
+      (isFiltered?`<p class="filter-desc">${list.length}件の記事${(fCat||fTag)?"　<a href=\"blog.html\" style=\"color:var(--gold-deep)\">› すべての記事を見る</a>":""}</p>`:"") +
+      tagBar +
+      `<div class="list-grid">` +
+      (list.length ? list.map(listRow).join("") : `<p style="padding:30px 10px;color:var(--grey)">該当する記事はまだありません。</p>`) +
       `</div>`;
     return;
   }
 
   document.title = post.title + "｜ナニウル 買取お役立ちブログ";
+  setDesc((post.excerpt || (post.body||[])[0] || post.title).replace(/\[(?:画像|img|IMG)\s*\d+\]/g,"").slice(0,110));
 
-  const bodyHtml = post.body.map(p=>`<p>${p}</p>`).join("");
+  const body = renderBody(post);
   const prev = ALL[idx+1]; /* 日付降順のため次=古い記事 */
   const next = ALL[idx-1];
 
   const imgs = post.images || [];
   const fb = post.imageFallback || "";
-  const fbAttr = `onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${fb}"`;
+  const fbAttr = `onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${esc(fb)}"`;
   const photoHtml = imgs.length
-    ? `<figure class="post-photo has-img"><img src="${imgs[0]}" alt="${post.name||post.title}" ${fbAttr}></figure>
-       <p class="post-photo-cap">▲ お買取りした ${post.name||""}</p>`
+    ? (body.heroInBody ? "" :
+       `<figure class="post-photo has-img"><img src="${esc(imgs[0])}" alt="${esc(post.name||post.title)}" ${fbAttr}></figure>
+        ${isResult?`<p class="post-photo-cap">▲ お買取りした ${esc(post.name||"")}</p>`:`<p class="post-photo-cap"></p>`}`)
     : (isResult
-        ? `<figure class="post-photo"><span class="ph">${post.tag||""}</span><span class="nm">${post.name||""}</span></figure>
-           <p class="post-photo-cap">▲ お買取りした ${post.name||""}</p>`
+        ? `<figure class="post-photo"><span class="ph">${esc(post.tag||post.cat||"")}</span><span class="nm">${esc(post.name||"")}</span></figure>
+           <p class="post-photo-cap">▲ お買取りした ${esc(post.name||"")}</p>`
         : "");
-  const galleryHtml = imgs.length > 1
-    ? `<div class="post-gallery">${imgs.slice(1).map(x=>`<img src="${x}" alt="">`).join("")}</div>`
-    : "";
   const relSlugs = post.related || [];
   const relPosts = relSlugs.map(s2 => ALL.find(p => p.slug === s2)).filter(Boolean);
   const relatedHtml = relPosts.length ? `
@@ -336,33 +419,34 @@ const isResult = post && POSTS.some(p=>p.slug===post.slug);
       <div class="related-grid">
         ${relPosts.map(r=>{
           const rimg = (r.images&&r.images[0])
-            ? `<img src="${r.images[0]}" alt="" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${r.imageFallback||''}">`
-            : `<span class="ph">${r.tag||r.cat}</span>`;
-          return `<a href="blog.html?post=${r.slug}">
+            ? `<img src="${esc(r.images[0])}" alt="" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${esc(r.imageFallback||'')}">`
+            : `<span class="ph">${esc(r.tag||r.cat)}</span>`;
+          return `<a href="blog.html?post=${esc(r.slug)}">
             <div class="rimg">${rimg}</div>
-            <div class="rmeta"><span class="rcat">${r.cat}</span><time>${r.date}</time></div>
-            <div class="rtitle">${r.title}</div>
+            <div class="rmeta"><span class="rcat">${esc(r.cat)}</span><time>${esc(r.date)}</time></div>
+            <div class="rtitle">${esc(r.title)}</div>
           </a>`;}).join("")}
       </div>
     </section>` : "";
 
   area.innerHTML = `
     <div class="post-meta">
-      <span class="post-cat">${post.cat}</span>
-      <time class="post-date">${post.date}</time>
-      ${isResult?`<span class="post-date">${post.method}｜${post.area}のお客様</span>`:""}
+      <a class="post-cat" href="${catUrl(post.cat)}">${esc(post.cat)}</a>
+      ${post.tag?`<a class="post-tag" href="${tagUrl(post.tag,post.cat)}">${esc(post.tag)}</a>`:""}
+      <time class="post-date">${esc(post.date)}</time>
+      ${isResult?`<span class="post-date">${esc(post.method)}｜${esc(post.area)}のお客様</span>`:""}
     </div>
-    <h1 class="post-title">${post.title}</h1>
+    <h1 class="post-title">${esc(post.title)}</h1>
 
     ${photoHtml}
 
-    <div class="post-body">${bodyHtml}</div>
+    <div class="post-body">${body.html}</div>
 
-    ${galleryHtml}
+    ${body.restHtml}
 
     ${isResult?`<div class="post-price">
       <span class="pp-label">PURCHASE PRICE ─ 今回の買取価格</span>
-      <b class="pp-name">${post.name}</b>
+      <b class="pp-name">${esc(post.name)}</b>
       <span class="v">¥${yen(post.price)}<small>円</small></span>
     </div>`:""}
 
@@ -379,41 +463,48 @@ const isResult = post && POSTS.some(p=>p.slug===post.slug);
 
     <nav class="post-nav" aria-label="前後の記事">
       ${next
-        ? `<a href="blog.html?post=${next.slug}"><span class="dir">← NEWER</span><span>${next.title}</span></a>`
+        ? `<a href="blog.html?post=${esc(next.slug)}"><span class="dir">← NEWER</span><span>${esc(next.title)}</span></a>`
         : `<a class="disabled"><span class="dir">← NEWER</span><span>最新の記事です</span></a>`}
       ${prev
-        ? `<a href="blog.html?post=${prev.slug}" style="text-align:right"><span class="dir">OLDER →</span><span>${prev.title}</span></a>`
+        ? `<a href="blog.html?post=${esc(prev.slug)}" style="text-align:right"><span class="dir">OLDER →</span><span>${esc(prev.title)}</span></a>`
         : `<a class="disabled" style="text-align:right"><span class="dir">OLDER →</span><span>これ以上古い記事はありません</span></a>`}
     </nav>`;
 })();
 
 /* ---------- サイドバー ---------- */
 (function sidebar(){
-  /* カテゴリー */
-  const cats = [...new Set([...POSTS.map(p=>p.cat), ...COLUMNS.map(c=>c.cat)])];
+  const curCat = post ? post.cat : fCat;
+  const curTag = post ? post.tag : fTag;
+
+  /* カテゴリー（定義順 → 定義外は末尾）※ブランド名はカテゴリに含めない */
+  const usedCats = [...new Set(ALL.map(p=>p.cat).filter(Boolean))];
+  const cats = [...CATS.map(c=>c.name).filter(c=>usedCats.includes(c)), ...usedCats.filter(c=>!CATS.some(d=>d.name===c))];
   document.getElementById("sideCats").innerHTML =
-    cats.map(c=>`<li><a href="blog.html">${c}</a></li>`).join("");
+    cats.map(c=>`<li><a href="${catUrl(c)}" class="${c===curCat?"on":""}">${esc(c)}<span style="float:right;color:var(--grey);font-family:var(--mont);font-size:11px">${ALL.filter(p=>p.cat===c).length}</span></a></li>`).join("");
 
   /* 最近の投稿 */
   document.getElementById("sideRecent").innerHTML =
     ALL.slice(0,5).map(p=>
-      `<li><a href="blog.html?post=${p.slug}"><time>${p.date}</time>${p.title}</a></li>`).join("");
+      `<li><a href="blog.html?post=${esc(p.slug)}"><time>${esc(p.date)}</time>${esc(p.title)}</a></li>`).join("");
 
   /* アーカイブ */
   const months = [...new Set(ALL.map(p=>(p.date||"").slice(0,7)).filter(Boolean))];
   const sel = document.getElementById("sideArchive");
   months.forEach(m=>{
-    const [y,mo] = m.split(".");
     const op = document.createElement("option");
-    op.value = m; op.textContent = `${y}年${Number(mo)}月`;
+    op.value = m; op.textContent = monthLabel(m);
+    if(m===fMonth) op.selected = true;
     sel.appendChild(op);
   });
-  sel.addEventListener("change",()=>{ if(sel.value) location.href = "blog.html"; });
+  sel.addEventListener("change",()=>{ location.href = sel.value ? `blog.html?month=${encodeURIComponent(sel.value)}` : "blog.html"; });
 
-  /* タグ */
-  const tags = ["高価買取","八王子","出張買取","LINE査定","ロレックス","エルメス","シャネル","ヴィトン","金・プラチナ","形見・遺品"];
-  document.getElementById("sideTags").innerHTML =
-    tags.map(t=>`<a href="blog.html">${t}</a>`).join("");
+  /* タグ（ブランド名）：実際に記事で使われているものを件数順に */
+  const cnt = {};
+  ALL.forEach(p=>{ if(p.tag) cnt[p.tag]=(cnt[p.tag]||0)+1; });
+  const tags = Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
+  document.getElementById("sideTags").innerHTML = tags.length
+    ? tags.map(t=>`<a href="${tagUrl(t)}" class="${t===curTag?"on":""}">${esc(t)}</a>`).join("")
+    : `<span style="font-size:12px;color:var(--grey)">タグはまだありません</span>`;
 })();
 </script>
 </body>
