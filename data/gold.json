@@ -1,47 +1,47 @@
 {
-  "updated": "2026-09-08 10:00",
-  "source": "田中貴金属 店頭買取価格ベース（自動取得・公表 2026-09-08 09:30）",
+  "updated": "2026-09-09 10:00",
+  "source": "田中貴金属 店頭買取価格ベース（自動取得・公表 2026-09-09 09:30）",
   "unit": "円/g",
   "metals": {
     "K24": {
       "label": "K24（純金）",
-      "price": 23821
+      "price": 23374
     },
     "K22": {
       "label": "K22",
-      "price": 21796
+      "price": 21387
     },
     "K18": {
       "label": "K18",
-      "price": 17747
+      "price": 17414
     },
     "K14": {
       "label": "K14",
-      "price": 13697
+      "price": 13440
     },
     "K10": {
       "label": "K10",
-      "price": 9695
+      "price": 9513
     },
     "PT1000": {
       "label": "Pt1000",
-      "price": 9789
+      "price": 9654
     },
     "PT950": {
       "label": "Pt950",
-      "price": 9251
+      "price": 9123
     },
     "PT900": {
       "label": "Pt900",
-      "price": 8761
+      "price": 8640
     },
     "PT850": {
       "label": "Pt850",
-      "price": 8223
+      "price": 8109
     },
     "SILVER": {
       "label": "銀（シルバー）",
-      "price": 356
+      "price": 352
     }
   }
 }
