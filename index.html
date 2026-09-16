@@ -167,28 +167,14 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 .g-note{text-align:center;font-size:11.5px;color:var(--grey);margin-top:8px;letter-spacing:.06em}
 
 /* ---------- gold ---------- */
-.gold-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));border:1px solid var(--line-dk)}
-.gold-table-side{padding:44px 46px;border-right:1px solid var(--line-dk);border-bottom:1px solid var(--line-dk);margin-bottom:-1px}
-.gold-calc-side{padding:44px 46px;background:rgba(0,0,0,.18)}
+.gold-panel{max-width:780px;margin:0 auto;border:1px solid var(--line-dk)}
+.gold-table-side{padding:44px 46px}
 .updated-tag{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--gold-lt);border:1px solid rgba(216,199,156,.55);padding:7px 15px;margin-bottom:26px;font-family:var(--mont)}
 .updated-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold-lt);animation:pl 2s infinite}
 @keyframes pl{0%,100%{opacity:1}50%{opacity:.25}}
 table.metal{width:100%;border-collapse:collapse}
 table.metal th,table.metal td{padding:13px 6px;border-bottom:1px solid rgba(255,255,255,.18);text-align:left;font-weight:500;font-size:14.5px}
 table.metal td.price{text-align:right;font-family:var(--didone);font-size:22px;font-weight:600;letter-spacing:.03em;color:var(--gold-lt)}
-.calc-title{font-family:var(--serif);font-size:20px;letter-spacing:.16em;margin-bottom:8px}
-.calc-note{font-size:13px;color:rgba(255,255,255,.88);line-height:1.9;margin-bottom:24px}
-.field{margin-bottom:16px}
-.field label{display:block;font-size:11.5px;letter-spacing:.22em;color:var(--gold-lt);margin-bottom:7px;font-family:var(--mont);font-weight:600}
-.field select,.field input{width:100%;padding:12px 14px;background:rgba(255,255,255,.07);border:1px solid var(--line-dk);color:#fff;font-size:15px;font-family:var(--sans)}
-.field select:focus,.field input:focus{outline:2px solid #fff;outline-offset:1px}
-.field select option{color:var(--black)}
-.field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-.calc-result{margin-top:22px;padding-top:22px;border-top:1px solid var(--line-dk)}
-.calc-result .lbl{font-size:11px;letter-spacing:.26em;color:rgba(255,255,255,.8);font-family:var(--mont)}
-.calc-result .amt{font-family:var(--didone);font-size:46px;font-weight:600;line-height:1.25;letter-spacing:.02em;color:var(--gold-lt)}
-.calc-result .amt small{font-size:18px;font-family:var(--serif);margin-left:6px}
-.calc-formula{font-size:11.5px;color:rgba(255,255,255,.7);margin-top:8px}
 .gold-cta{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap}
 .calc-notes{margin-top:30px;padding:22px 26px;border:1px solid var(--line-dk);background:rgba(0,0,0,.14)}
 .calc-notes li{font-size:12.5px;color:rgba(255,255,255,.9);line-height:2.1;padding-left:1.2em;text-indent:-1.2em}
@@ -327,13 +313,11 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   .eyebrow{font-size:10px;letter-spacing:.32em}
 
   /* 金相場パネル */
-  .gold-table-side,.gold-calc-side{padding:28px 20px}
+  .gold-table-side{padding:28px 20px}
   table.metal td.price{font-size:18px}
-  .calc-result .amt{font-size:38px}
   .calc-notes{padding:16px 16px}
   /* iOSのフォーカスズーム防止（16px未満は自動拡大されるため） */
-  .field select,.field input{font-size:16px}
-
+  
   /* 実績スライダー */
   .res-card{flex-basis:82vw}
 
@@ -522,7 +506,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   </div>
 </section>
 
-<!-- ============ GOLD PRICE + CALCULATOR ============ -->
+<!-- ============ GOLD PRICE ============ -->
 <section class="dark" id="gold">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -541,45 +525,6 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
         <p style="font-size:11.5px;color:rgba(255,255,255,.65);margin-top:16px" id="goldSource"></p>
       </div>
 
-      <div class="gold-calc-side">
-        <h3 class="calc-title">金相場 自動算出ツール</h3>
-        <p class="calc-note">素材・重量・色石・デザイン評価を選ぶと、本日のレートで買取参考価格を自動計算します。</p>
-        <div class="field">
-          <label for="calcMetal">素材（刻印）</label>
-          <select id="calcMetal"></select>
-        </div>
-        <div class="field">
-          <label for="calcWeight">重量（g）</label>
-          <input type="number" id="calcWeight" min="0" step="0.1" placeholder="例）12.5" inputmode="decimal">
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="calcStone">色石</label>
-            <select id="calcStone">
-              <option value="1.00">なし（×1.00）</option>
-              <option value="1.05">色石あり（×1.05〜）</option>
-              <option value="1.10">高品質色石（×1.10〜）</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="calcDesign">デザイン</label>
-            <select id="calcDesign">
-              <option value="1.00">一般（×1.00）</option>
-              <option value="1.05">良好（×1.05〜）</option>
-              <option value="1.10">ブランド・優良（×1.10〜）</option>
-            </select>
-          </div>
-        </div>
-        <div class="calc-result" aria-live="polite">
-          <span class="lbl">買取参考価格</span>
-          <div class="amt"><span id="calcAmt">0</span><small>円</small></div>
-          <p class="calc-formula" id="calcFormula">素材と重量を入力してください。</p>
-        </div>
-        <div class="gold-cta">
-          <a class="btn gold" href="line/">この金額でLINE査定する</a>
-          <a class="btn ghost-w" href="tel:0426205615">電話で相談する</a>
-        </div>
-      </div>
     </div>
 
     <ul class="calc-notes reveal">
@@ -588,6 +533,11 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
       <li>※K18、K14等の刻印がある製品でも、メッキ品の場合がございますので、その場合は金価格の対象外となります</li>
       <li>※石付きに関しては色石・パールは別途別査定いたします</li>
     </ul>
+
+    <div class="gold-cta reveal" style="justify-content:center;margin-top:34px">
+      <a class="btn gold" href="line/">LINEで無料査定する</a>
+      <a class="btn ghost-w" href="tel:0426205615">電話で相談する</a>
+    </div>
   </div>
 </section>
 
@@ -920,7 +870,7 @@ const BLOGS = [
 const yen = n => Number(n).toLocaleString("ja-JP");
 
 /* =========================================================
-   金相場：表示＋自動算出ツール（1g単価×重量×色石×デザイン）
+   金相場：本日の買取価格表（GAS自動更新のgold.jsonを表示）
 ========================================================= */
 let goldData = DEFAULT_GOLD;
 
@@ -935,45 +885,14 @@ async function loadGold(){
 function renderGold(){
   document.getElementById("goldUpdated").textContent = (goldData.updated||"") + " 更新";
   document.getElementById("goldSource").textContent = "※" + (goldData.source||"") + "。実際の買取価格はお品物の状態により変動します。";
-
   const tb = document.querySelector("#metalTable tbody");
   tb.innerHTML = "";
-  const sel = document.getElementById("calcMetal");
-  sel.innerHTML = "";
-
   Object.entries(goldData.metals).forEach(([key,m])=>{
     const tr = document.createElement("tr");
-    tr.innerHTML = `<th>${m.label}</th><td class="price">¥${yen(m.price)}</td>`;
+    tr.innerHTML = `<th>${m.label}</th><td class="price">¥${yen(m.price)}</td><td class="unit">/ g</td>`;
     tb.appendChild(tr);
-
-    const op = document.createElement("option");
-    op.value = key;
-    op.textContent = `${m.label}（¥${yen(m.price)}/g）`;
-    sel.appendChild(op);
   });
-  calc();
 }
-
-function calc(){
-  const key = document.getElementById("calcMetal").value;
-  const w = parseFloat(document.getElementById("calcWeight").value);
-  const stone = parseFloat(document.getElementById("calcStone").value);
-  const design = parseFloat(document.getElementById("calcDesign").value);
-  const m = goldData.metals[key];
-  const amtEl = document.getElementById("calcAmt");
-  const fEl = document.getElementById("calcFormula");
-  if(!m || !w || w<=0){
-    amtEl.textContent = "0";
-    fEl.textContent = "素材と重量を入力してください。";
-    return;
-  }
-  const total = Math.round(m.price * w * stone * design);
-  amtEl.textContent = yen(total);
-  fEl.textContent = `¥${yen(m.price)}/g × ${w}g × 色石${stone.toFixed(2)} × デザイン${design.toFixed(2)} ＝ 買取参考価格`;
-}
-["calcMetal","calcStone","calcDesign"].forEach(id=>
-  document.getElementById(id).addEventListener("change",calc));
-document.getElementById("calcWeight").addEventListener("input",calc);
 
 /* =========================================================
    Googleレビュー：★4以上のみ表示
@@ -1053,7 +972,7 @@ function renderReviews(data){
     a.innerHTML = `
       <div class="res-img">
         <div class="res-tags"><span>${r.method}</span><span>${r.area}</span></div>
-        ${r.image?`<img src="${r.image}" alt="${r.name}" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${r.fallback}">`:`<span class="ph">${r.tag||r.name}</span>`}
+        ${r.image?`<img src="${r.image}" alt="${r.name}" loading="lazy" onerror="this.onerror=null;if(this.dataset.fb)this.src=this.dataset.fb" data-fb="${r.fallback}">`:`<span class="ph">${r.tag}</span>`}
       </div>
       <div class="res-body">
         <h3>${r.name}</h3>
