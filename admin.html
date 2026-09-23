@@ -420,6 +420,13 @@ function parsePostsJs(src){
   POSTS = (r.POSTS||[]).map(p=>({images:[],related:[],tag:"",...p}));
   COLUMNS = (r.COLUMNS||[]).map(c=>({images:[],related:[],tag:"",body:c.body||[],...c}));
   CATEGORIES = (r.CATEGORIES && r.CATEGORIES.length) ? r.CATEGORIES.map(c=>({name:c.name,tags:[...(c.tags||[])]})) : JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+  /* 商品ページ用に追加した既定カテゴリが未登録なら補う（「その他」の直前に挿入） */
+  DEFAULT_CATEGORIES.forEach(d=>{
+    if(CATEGORIES.some(c=>c.name===d.name)) return;
+    const i = CATEGORIES.findIndex(c=>c.name==="その他");
+    const add = {name:d.name,tags:[...d.tags]};
+    if(i<0) CATEGORIES.push(add); else CATEGORIES.splice(i,0,add);
+  });
   migrateLegacy();
 }
 
@@ -495,6 +502,12 @@ const DEFAULT_CATEGORIES = [
   {name:"切手",           tags:["中国切手","日本切手","記念切手","外国切手"]},
   {name:"古銭",           tags:["大判・小判","記念硬貨","古紙幣","金貨・銀貨","外国コイン"]},
   {name:"骨董・美術品",   tags:["茶道具","掛け軸","陶磁器","絵画","刀剣・武具"]},
+  {name:"ライター",       tags:["デュポン","ダンヒル","カルティエ","ジッポー"]},
+  {name:"食器",           tags:["マイセン","ヘレンド","ロイヤルコペンハーゲン","ウェッジウッド","バカラ","銀食器"]},
+  {name:"万年筆・ペン",   tags:["モンブラン","ペリカン","パーカー","パイロット","セーラー"]},
+  {name:"シルバー・メッキ", tags:["シルバー925","シルバー1000","ティファニー","メッキ"]},
+  {name:"テレカ",         tags:[]},
+  {name:"スマホ・PC",     tags:["iPhone","Android","iPad","Mac","Windows"]},
   {name:"その他",         tags:[]}
 ];
 CATEGORIES = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));

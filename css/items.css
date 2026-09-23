@@ -1,0 +1,51 @@
+/* ナニウル 商品ページ専用スタイル（site.css の後に読み込み） */
+
+/* パンくず */
+.crumb{background:var(--ivory);border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.06em;color:var(--grey)}
+.crumb ol{display:flex;flex-wrap:wrap;gap:6px 0;list-style:none;padding:12px 0}
+.crumb li+li::before{content:"›";margin:0 10px;color:var(--gold-deep)}
+.crumb a:hover{color:var(--green);text-decoration:underline}
+
+/* ページヘッダー */
+.item-hero{position:relative;background:var(--green);color:#fff;overflow:hidden;padding:84px 0 76px}
+.item-hero::before{content:"";position:absolute;inset:0;background:
+ radial-gradient(900px 420px at 85% 10%,rgba(255,255,255,.08),transparent 60%),
+ radial-gradient(700px 380px at 5% 100%,rgba(0,0,0,.24),transparent 60%)}
+.item-hero .wrap{position:relative;z-index:1;text-align:center}
+.item-hero .eyebrow{margin-bottom:16px}
+.item-hero h1{font-family:var(--serif);font-size:clamp(22px,3.2vw,34px);font-weight:700;letter-spacing:.08em;line-height:1.7}
+.item-hero .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),transparent)}
+
+/* 説明文 */
+.item-intro{max-width:820px;margin:0 auto}
+.item-intro p{font-size:15.5px;line-height:2.15;color:#2A2925}
+.item-intro p+p{margin-top:1.4em}
+.item-intro .note{margin-top:28px;padding:16px 20px;border:1px solid var(--line);background:var(--ivory);font-size:13px;color:var(--grey);line-height:1.95}
+
+/* 実績が0件のとき */
+.res-empty{max-width:640px;margin:0 auto;text-align:center;border:1px dashed var(--gold-lt);background:var(--gold-pale);padding:34px 24px;font-size:14px;color:var(--grey);line-height:2}
+.res-empty a{color:var(--green);text-decoration:underline}
+
+/* ご相談 */
+.consult{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:860px;margin:0 auto}
+.consult a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:34px 20px;text-align:center;transition:.3s;box-shadow:0 12px 28px rgba(20,20,20,.12)}
+.consult a:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(20,20,20,.18)}
+.consult .c-tel{background:var(--black);color:#fff}
+.consult .c-tel:hover{background:#000}
+.consult .c-line{background:var(--green);color:#fff}
+.consult .c-line:hover{background:var(--green-deep)}
+.consult .c-en{font-family:var(--mont);font-size:10.5px;letter-spacing:.36em;color:var(--gold-lt)}
+.consult .c-main{font-size:20px;font-weight:700;letter-spacing:.14em}
+.consult .c-sub{font-family:var(--mont);font-size:15px;letter-spacing:.1em;color:rgba(255,255,255,.85)}
+.consult-note{text-align:center;margin-top:18px;font-size:12.5px;color:var(--grey)}
+
+/* ほかの買取可能商品 */
+.item-grid a.on{border-color:var(--green);background:var(--green-soft);pointer-events:none}
+
+@media(max-width:600px){
+  .item-hero{padding:56px 0 50px}
+  .item-intro p{font-size:14.5px;line-height:2.05}
+  .consult{grid-template-columns:1fr;gap:14px}
+  .consult a{padding:24px 16px}
+  .consult .c-main{font-size:18px}
+}
