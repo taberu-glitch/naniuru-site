@@ -167,8 +167,26 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 .g-note{text-align:center;font-size:11.5px;color:var(--grey);margin-top:8px;letter-spacing:.06em}
 
 /* ---------- gold ---------- */
-.gold-panel{max-width:780px;margin:0 auto;border:1px solid var(--line-dk)}
-.gold-table-side{padding:44px 46px}
+.gold-head{text-align:center}
+.gold-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;max-width:1140px;margin:0 auto}
+.gold-col{border:1px solid var(--line-dk);background:rgba(0,0,0,.12);padding:30px 26px 18px;display:flex;flex-direction:column}
+.gc-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:14px;border-bottom:1px solid rgba(216,199,156,.45)}
+.gc-head h3{font-size:17px;font-weight:600;letter-spacing:.14em}
+.gc-head .en{font-family:var(--mont);font-size:10.5px;letter-spacing:.36em;color:var(--gold-lt)}
+.gc-ig{margin:18px 0 8px;padding:18px 18px 16px;background:linear-gradient(135deg,rgba(216,199,156,.16),rgba(216,199,156,.04));border:1px solid rgba(216,199,156,.5)}
+.gc-ig .lb{display:flex;align-items:baseline;gap:8px;font-family:var(--mont);font-size:13px;font-weight:600;letter-spacing:.1em}
+.gc-ig .lb small{font-family:var(--sans);font-size:11px;font-weight:400;color:rgba(255,255,255,.7);letter-spacing:.08em}
+.gc-ig .pr{font-family:var(--didone);font-size:32px;font-weight:600;color:var(--gold-lt);letter-spacing:.02em;line-height:1.25;margin-top:6px;white-space:nowrap}
+.gc-ig .pr small{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);margin-left:4px}
+.gc-ig .chg{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.75)}
+.gc-ig .chg b{font-family:var(--mont);font-size:14px;font-weight:600;letter-spacing:.02em}
+.chg.up b{color:#F4A8A0}.chg.down b{color:#9FCBF2}.chg.flat b{color:rgba(255,255,255,.85)}
+.gold-col table.metal th,.gold-col table.metal td{padding:11px 4px;white-space:nowrap}
+.gold-col table.metal tr:last-child th,.gold-col table.metal tr:last-child td{border-bottom:none}
+.gold-col table.metal td.price{font-size:20px}
+.gold-col table.metal td.unit{width:2.6em;text-align:right;font-size:12px;color:rgba(255,255,255,.7)}
+.gold-meta{max-width:1140px;margin:14px auto 0;font-size:11.5px;color:rgba(255,255,255,.65);text-align:center}
+@media(max-width:960px){.gold-cols{grid-template-columns:1fr;max-width:520px;gap:18px}}
 .updated-tag{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--gold-lt);border:1px solid rgba(216,199,156,.55);padding:7px 15px;margin-bottom:26px;font-family:var(--mont)}
 .updated-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold-lt);animation:pl 2s infinite}
 @keyframes pl{0%,100%{opacity:1}50%{opacity:.25}}
@@ -313,7 +331,8 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   .eyebrow{font-size:10px;letter-spacing:.32em}
 
   /* 金相場パネル */
-  .gold-table-side{padding:28px 20px}
+  .gold-col{padding:24px 18px 12px}
+  .gc-ig .pr{font-size:28px}
   table.metal td.price{font-size:18px}
   .calc-notes{padding:16px 16px}
   /* iOSのフォーカスズーム防止（16px未満は自動拡大されるため） */
@@ -516,16 +535,11 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
       <div class="rule"></div>
     </div>
 
-    <div class="gold-panel reveal">
-      <div class="gold-table-side">
-        <span class="updated-tag"><span class="pulse"></span><span id="goldUpdated">読み込み中…</span>｜毎朝 10:00 更新</span>
-        <table class="metal" id="metalTable">
-          <tbody></tbody>
-        </table>
-        <p style="font-size:11.5px;color:rgba(255,255,255,.65);margin-top:16px" id="goldSource"></p>
-      </div>
-
+    <div class="gold-head reveal">
+      <span class="updated-tag"><span class="pulse"></span><span id="goldUpdated">読み込み中…</span>｜毎朝 10:00 更新</span>
     </div>
+    <div class="gold-cols reveal" id="goldCols"></div>
+    <p class="gold-meta reveal" id="goldSource"></p>
 
     <ul class="calc-notes reveal">
       <li>※金相場情報及びプラチナの価格は平日10：00に変更</li>
@@ -792,51 +806,200 @@ const CONFIG = {
   MIN_STARS: 4
 };
 
-/* フォールバック（fetch不可のローカル閲覧時用・前日比なし） */
+/* フォールバック（fetch不可のローカル閲覧時用。本番は data/gold.json を表示） */
 const DEFAULT_GOLD = {
-  "updated": "2026-09-01 10:00",
-  "source": "田中貴金属 店頭買取価格ベース（自動取得・公表 2026-08-31 17:00）",
+  "updated": "2026-09-23 10:00",
+  "published": "2026-09-18 17:00",
+  "source": "田中貴金属 店頭買取価格（税込）ベース（自動取得・公表 2026-09-18 17:00）",
   "unit": "円/g",
+  "groups": [
+    {
+      "key": "gold",
+      "title": "金",
+      "en": "GOLD",
+      "digits": 0,
+      "ig": {
+        "key": "K24IG",
+        "label": "K24 IG",
+        "sub": "インゴット",
+        "price": 24247,
+        "change": 747
+      },
+      "items": [
+        {
+          "key": "K24",
+          "label": "K24",
+          "price": 24225
+        },
+        {
+          "key": "K22",
+          "label": "K22",
+          "price": 22264
+        },
+        {
+          "key": "K20",
+          "label": "K20",
+          "price": 19907
+        },
+        {
+          "key": "K18",
+          "label": "K18",
+          "price": 18745
+        },
+        {
+          "key": "K14",
+          "label": "K14",
+          "price": 13898
+        },
+        {
+          "key": "K10",
+          "label": "K10",
+          "price": 10043
+        },
+        {
+          "key": "K9",
+          "label": "K9",
+          "price": 8971
+        }
+      ]
+    },
+    {
+      "key": "platinum",
+      "title": "プラチナ",
+      "en": "PLATINUM",
+      "digits": 0,
+      "ig": {
+        "key": "Pt1000IG",
+        "label": "Pt1000 IG",
+        "sub": "インゴット",
+        "price": 9910,
+        "change": 362
+      },
+      "items": [
+        {
+          "key": "Pt1000",
+          "label": "Pt1000",
+          "price": 9862
+        },
+        {
+          "key": "Pt950",
+          "label": "Pt950",
+          "price": 9320
+        },
+        {
+          "key": "Pt900",
+          "label": "Pt900",
+          "price": 10128
+        },
+        {
+          "key": "Pt850",
+          "label": "Pt850",
+          "price": 9712
+        }
+      ]
+    },
+    {
+      "key": "silver",
+      "title": "シルバー",
+      "en": "SILVER",
+      "digits": 2,
+      "ig": {
+        "key": "SV1000IG",
+        "label": "SV1000 IG",
+        "sub": "インゴット",
+        "price": 362.45,
+        "change": 15.29
+      },
+      "items": [
+        {
+          "key": "SV1000",
+          "label": "SV1000",
+          "price": 350.49
+        },
+        {
+          "key": "SV925",
+          "label": "SV925",
+          "price": 316.42
+        },
+        {
+          "key": "SV",
+          "label": "SV",
+          "price": 293.58
+        }
+      ]
+    }
+  ],
   "metals": {
+    "K24IG": {
+      "label": "K24 IG",
+      "price": 24247,
+      "change": 747
+    },
     "K24": {
-      "label": "K24（純金）",
-      "price": 24868
+      "label": "K24",
+      "price": 24225
     },
     "K22": {
       "label": "K22",
-      "price": 22754
+      "price": 22264
+    },
+    "K20": {
+      "label": "K20",
+      "price": 19907
     },
     "K18": {
       "label": "K18",
-      "price": 18527
+      "price": 18745
     },
     "K14": {
       "label": "K14",
-      "price": 14299
+      "price": 13898
     },
     "K10": {
       "label": "K10",
-      "price": 10121
+      "price": 10043
     },
-    "PT1000": {
+    "K9": {
+      "label": "K9",
+      "price": 8971
+    },
+    "Pt1000IG": {
+      "label": "Pt1000 IG",
+      "price": 9910,
+      "change": 362
+    },
+    "Pt1000": {
       "label": "Pt1000",
-      "price": 9936
+      "price": 9862
     },
-    "PT950": {
+    "Pt950": {
       "label": "Pt950",
-      "price": 9390
+      "price": 9320
     },
-    "PT900": {
+    "Pt900": {
       "label": "Pt900",
-      "price": 8893
+      "price": 10128
     },
-    "PT850": {
+    "Pt850": {
       "label": "Pt850",
-      "price": 8346
+      "price": 9712
     },
-    "SILVER": {
-      "label": "銀（シルバー）",
-      "price": 362
+    "SV1000IG": {
+      "label": "SV1000 IG",
+      "price": 362.45,
+      "change": 15.29
+    },
+    "SV1000": {
+      "label": "SV1000",
+      "price": 350.49
+    },
+    "SV925": {
+      "label": "SV925",
+      "price": 316.42
+    },
+    "SV": {
+      "label": "SV",
+      "price": 293.58
     }
   }
 };
@@ -884,14 +1047,33 @@ async function loadGold(){
 
 function renderGold(){
   document.getElementById("goldUpdated").textContent = (goldData.updated||"") + " 更新";
-  document.getElementById("goldSource").textContent = "※" + (goldData.source||"") + "。実際の買取価格はお品物の状態により変動します。";
-  const tb = document.querySelector("#metalTable tbody");
-  tb.innerHTML = "";
-  Object.entries(goldData.metals).forEach(([key,m])=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<th>${m.label}</th><td class="price">¥${yen(m.price)}</td><td class="unit">/ g</td>`;
-    tb.appendChild(tr);
-  });
+  document.getElementById("goldSource").textContent = "※" + (goldData.source||"") + "。価格は1gあたり・税込。実際の買取価格はお品物の状態により変動します。";
+  const box = document.getElementById("goldCols");
+  const esc = t => String(t==null?"":t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const fmt = (n,d) => Number(n).toLocaleString("ja-JP",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+  /* 旧形式（metals のみ）のJSONが来た場合も1列で表示できるよう変換 */
+  const groups = goldData.groups || [{title:"貴金属", en:"PRICE", digits:0, ig:null,
+    items:Object.values(goldData.metals||{}).map(m=>({label:m.label, price:m.price}))}];
+  box.innerHTML = groups.map(g => {
+    const d = g.digits||0;
+    let ig = "";
+    if(g.ig){
+      const c = g.ig.change;
+      const cls = c==null ? "flat" : c>0 ? "up" : c<0 ? "down" : "flat";
+      const ctext = c==null ? "—" : c==0 ? "±0円" : (c>0?"+":"−") + fmt(Math.abs(c),d) + "円";
+      ig = `<div class="gc-ig">
+        <div class="lb">${esc(g.ig.label)}<small>${esc(g.ig.sub||"")}</small></div>
+        <div class="pr">¥${fmt(g.ig.price,d)}<small>/ g</small></div>
+        <div class="chg ${cls}">前日比 <b>${ctext}</b></div>
+      </div>`;
+    }
+    const rows = (g.items||[]).map(it => `<tr><th>${esc(it.label)}</th><td class="price">¥${fmt(it.price,d)}</td><td class="unit">/ g</td></tr>`).join("");
+    return `<div class="gold-col">
+      <div class="gc-head"><h3>${esc(g.title)}</h3><span class="en">${esc(g.en||"")}</span></div>
+      ${ig}
+      <table class="metal"><tbody>${rows}</tbody></table>
+    </div>`;
+  }).join("");
 }
 
 /* =========================================================
