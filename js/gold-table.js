@@ -217,32 +217,40 @@ async function loadGold(){
 
 function renderGold(){
   document.getElementById("goldUpdated").textContent = (goldData.updated||"") + " 更新";
-  document.getElementById("goldSource").textContent = "※" + (goldData.source||"") + "。価格は1gあたり・税込。実際の買取価格はお品物の状態により変動します。";
+  document.getElementById("goldSource").textContent = "※価格は1gあたり・税込。実際の買取価格はお品物の状態により変動します。";
   const box = document.getElementById("goldCols");
   const esc = t => String(t==null?"":t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const fmt = (n,d) => Number(n).toLocaleString("ja-JP",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
   /* 旧形式（metals のみ）のJSONが来た場合も1列で表示できるよう変換 */
   const groups = goldData.groups || [{title:"貴金属", en:"PRICE", digits:0, ig:null,
     items:Object.values(goldData.metals||{}).map(m=>({label:m.label, price:m.price}))}];
-  box.innerHTML = groups.map(g => {
-    const d = g.digits||0;
-    let ig = "";
-    if(g.ig){
-      const c = g.ig.change;
-      const cls = c==null ? "flat" : c>0 ? "up" : c<0 ? "down" : "flat";
-      const ctext = c==null ? "—" : c==0 ? "±0円" : (c>0?"+":"−") + fmt(Math.abs(c),d) + "円";
-      ig = `<div class="gc-ig">
+  const head = g => `<div class="gc-head"><h3>${esc(g.title)}</h3><span class="en">${esc(g.en||"")}</span></div>`;
+  const igCard = g => {
+    const d = g.digits||0, c = g.ig.change;
+    const cls = c==null ? "flat" : c>0 ? "up" : c<0 ? "down" : "flat";
+    const ctext = c==null ? "—" : c==0 ? "±0円" : (c>0?"+":"−") + fmt(Math.abs(c),d) + "円";
+    return `<div class="gold-col gc-igcard">
+      ${head(g)}
+      <div class="gc-ig">
         <div class="lb">${esc(g.ig.label)}<small>${esc(g.ig.sub||"")}</small></div>
         <div class="pr">¥${fmt(g.ig.price,d)}<small>/ g</small></div>
         <div class="chg ${cls}">前日比 <b>${ctext}</b></div>
-      </div>`;
-    }
-    const rows = (g.items||[]).map(it => `<tr><th>${esc(it.label)}</th><td class="price">¥${fmt(it.price,d)}</td><td class="unit">/ g</td></tr>`).join("");
-    return `<div class="gold-col">
-      <div class="gc-head"><h3>${esc(g.title)}</h3><span class="en">${esc(g.en||"")}</span></div>
-      ${ig}
-      <table class="metal"><tbody>${rows}</tbody></table>
+      </div>
     </div>`;
-  }).join("");
+  };
+  const table = g => {
+    const d = g.digits||0;
+    const rows = (g.items||[]).map(it => `<tr><th>${esc(it.label)}</th><td class="price">¥${fmt(it.price,d)}</td><td class="unit">/ g</td></tr>`).join("");
+    return `<div class="gc-sec">${head(g)}<table class="metal"><tbody>${rows}</tbody></table></div>`;
+  };
+  /* 上段：各金種のIG（前日比つき）を3列 ／ 下段：左＝金、右＝プラチナ＋シルバーの2列 */
+  const igs = groups.filter(g => g.ig);
+  const first = groups[0], rest = groups.slice(1);
+  box.innerHTML =
+    (igs.length ? `<div class="gold-igs" style="--n:${igs.length}">${igs.map(igCard).join("")}</div>` : "") +
+    `<div class="gold-tables${rest.length ? "" : " single"}">
+      <div class="gold-col">${table(first)}</div>
+      ${rest.length ? `<div class="gold-col">${rest.map(table).join("")}</div>` : ""}
+    </div>`;
 }
 

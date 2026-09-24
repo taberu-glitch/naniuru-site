@@ -156,7 +156,13 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 
 /* ---------- gold ---------- */
 .gold-head{text-align:center}
-.gold-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;max-width:1140px;margin:0 auto}
+.gold-cols{display:flex;flex-direction:column;gap:22px;max-width:1140px;margin:0 auto}
+.gold-igs{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:22px}
+.gold-tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}
+.gold-tables.single{grid-template-columns:1fr}
+.gc-igcard{padding-bottom:26px}
+.gc-igcard .gc-ig{margin-bottom:0;flex:1}
+.gc-sec+.gc-sec{margin-top:26px}
 .gold-col{border:1px solid var(--line-dk);background:rgba(0,0,0,.12);padding:30px 26px 18px;display:flex;flex-direction:column}
 .gc-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:14px;border-bottom:1px solid rgba(216,199,156,.45)}
 .gc-head h3{font-size:17px;font-weight:600;letter-spacing:.14em}
@@ -174,7 +180,8 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 .gold-col table.metal td.price{font-size:20px}
 .gold-col table.metal td.unit{width:2.6em;text-align:right;font-size:12px;color:rgba(255,255,255,.7)}
 .gold-meta{max-width:1140px;margin:14px auto 0;font-size:11.5px;color:rgba(255,255,255,.65);text-align:center}
-@media(max-width:960px){.gold-cols{grid-template-columns:1fr;max-width:520px;gap:18px}}
+@media(max-width:960px){.gold-cols{gap:18px}.gold-igs,.gold-tables{gap:14px}.gold-col{padding:24px 18px 14px}.gc-ig{padding:14px 14px 12px}.gc-ig .pr{font-size:25px}.gc-ig .pr small{font-size:11px}}
+@media(max-width:760px){.gold-cols{max-width:520px}.gold-igs,.gold-tables{grid-template-columns:1fr}.gc-ig .pr{font-size:28px}}
 .updated-tag{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--gold-lt);border:1px solid rgba(216,199,156,.55);padding:7px 15px;margin-bottom:26px;font-family:var(--mont)}
 .updated-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold-lt);animation:pl 2s infinite}
 @keyframes pl{0%,100%{opacity:1}50%{opacity:.25}}
