@@ -206,6 +206,8 @@ const DEFAULT_GOLD = {
    金相場：本日の買取価格表（GAS自動更新のgold.jsonを表示）
 ========================================================= */
 let goldData = DEFAULT_GOLD;
+/* 小数点以下を切り捨てて表示する金種（key）。前日比は「切り捨て後の本日価格 − 切り捨て後の前日価格」で表示 */
+const TRUNCATE_KEYS = ["silver"];
 
 async function loadGold(){
   try{
@@ -224,23 +226,28 @@ function renderGold(){
   /* 旧形式（metals のみ）のJSONが来た場合も1列で表示できるよう変換 */
   const groups = goldData.groups || [{title:"貴金属", en:"PRICE", digits:0, ig:null,
     items:Object.values(goldData.metals||{}).map(m=>({label:m.label, price:m.price}))}];
+  const trunc = g => TRUNCATE_KEYS.includes(g.key);
+  const dg = g => trunc(g) ? 0 : (g.digits||0);
+  const val = (g, n) => trunc(g) ? Math.floor(Number(n) + 1e-9) : n;
   const head = g => `<div class="gc-head"><h3>${esc(g.title)}</h3><span class="en">${esc(g.en||"")}</span></div>`;
   const igCard = g => {
-    const d = g.digits||0, c = g.ig.change;
+    const d = dg(g), p = val(g, g.ig.price);
+    const c = g.ig.change==null ? null
+      : trunc(g) ? p - Math.floor(g.ig.price - g.ig.change + 1e-9) : g.ig.change;
     const cls = c==null ? "flat" : c>0 ? "up" : c<0 ? "down" : "flat";
     const ctext = c==null ? "—" : c==0 ? "±0円" : (c>0?"+":"−") + fmt(Math.abs(c),d) + "円";
     return `<div class="gold-col gc-igcard">
       ${head(g)}
       <div class="gc-ig">
         <div class="lb">${esc(g.ig.label)}<small>${esc(g.ig.sub||"")}</small></div>
-        <div class="pr">¥${fmt(g.ig.price,d)}<small>/ g</small></div>
+        <div class="pr">¥${fmt(p,d)}<small>/ g</small></div>
         <div class="chg ${cls}">前日比 <b>${ctext}</b></div>
       </div>
     </div>`;
   };
   const table = g => {
-    const d = g.digits||0;
-    const rows = (g.items||[]).map(it => `<tr><th>${esc(it.label)}</th><td class="price">¥${fmt(it.price,d)}</td><td class="unit">/ g</td></tr>`).join("");
+    const d = dg(g);
+    const rows = (g.items||[]).map(it => `<tr><th>${esc(it.label)}</th><td class="price">¥${fmt(val(g,it.price),d)}</td><td class="unit">/ g</td></tr>`).join("");
     return `<div class="gc-sec">${head(g)}<table class="metal"><tbody>${rows}</tbody></table></div>`;
   };
   /* 上段：各金種のIG（前日比つき）を3列 ／ 下段：左＝金、右＝プラチナ＋シルバーの2列 */
