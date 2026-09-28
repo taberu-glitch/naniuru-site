@@ -26,6 +26,21 @@
 .res-empty{max-width:640px;margin:0 auto;text-align:center;border:1px dashed var(--gold-lt);background:var(--gold-pale);padding:34px 24px;font-size:14px;color:var(--grey);line-height:2}
 .res-empty a{color:var(--green);text-decoration:underline}
 
+/* おすすめ記事 */
+.rec-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.rec-card{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;transition:.3s}
+.rec-card:hover{border-color:var(--green);box-shadow:0 16px 32px rgba(20,20,20,.1);transform:translateY(-3px)}
+.rec-img{height:170px;background:linear-gradient(150deg,var(--ivory),#fff);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.rec-img img{width:100%;height:100%;object-fit:cover}
+.rec-img .ph{font-family:var(--mont);font-size:12px;letter-spacing:.3em;color:var(--green)}
+.rec-body{padding:16px 18px 20px}
+.rec-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:var(--grey);margin-bottom:8px}
+.rec-type{color:var(--green);border:1px solid var(--green);padding:1px 8px;letter-spacing:.08em}
+.rec-meta time{font-family:var(--mont)}
+.rec-card h3{font-size:14.5px;font-weight:700;line-height:1.75;letter-spacing:.04em}
+@media(max-width:960px){.rec-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.rec-grid{grid-template-columns:1fr;gap:14px}.rec-img{height:150px}}
+
 /* ご相談 */
 .consult{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:860px;margin:0 auto}
 .consult a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:34px 20px;text-align:center;transition:.3s;box-shadow:0 12px 28px rgba(20,20,20,.12)}
