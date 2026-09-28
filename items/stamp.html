@@ -103,29 +103,6 @@
   </div>
 </section>
 
-<!-- ============ 貴金属の相場情報（トップページと同じ gold.json を自動表示） ============ -->
-<section class="dark" id="gold">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="en">Today's Gold Price</p>
-      <h2>貴金属の相場情報</h2>
-      <p class="lead">ご売却の際に手数料はかかりません。<br>買取価格 ＝ 1g単価 × 重量 × 色石 × デザイン</p>
-      <div class="rule"></div>
-    </div>
-    <div class="gold-head reveal">
-      <span class="updated-tag"><span class="pulse"></span><span id="goldUpdated">読み込み中…</span>｜毎朝 10:00 更新</span>
-    </div>
-    <div class="gold-cols reveal" id="goldCols"></div>
-    <p class="gold-meta reveal" id="goldSource"></p>
-    <ul class="calc-notes reveal">
-      <li>※金相場情報及びプラチナの価格は平日10：00に変更</li>
-      <li>※相場が著しく変動した場合は、上記の時間帯、公表価格に関わらず、当社独自の相場を算出させていただきます</li>
-      <li>※K18、K14等の刻印がある製品でも、メッキ品の場合がございますので、その場合は金価格の対象外となります</li>
-      <li>※石付きに関しては色石・パールは別途別査定いたします</li>
-    </ul>
-  </div>
-</section>
-
 <!-- ============ 買取実績（このカテゴリのみ → ブログ記事へ） ============ -->
 <section id="results">
   <div class="wrap">
@@ -282,7 +259,6 @@ window.ITEM = {label:"切手・テレカ", cats:["切手", "テレカ"], tags:[]
 /* 記事データはキャッシュを避けて毎回最新を読み込む */
 document.write('<script src="../data/posts.js?v=' + Date.now() + '"><\/script>');
 </script>
-<script src="../js/gold-table.js"></script>
 <script src="../js/items.js"></script>
 </body>
 </html>
