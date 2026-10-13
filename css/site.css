@@ -270,7 +270,9 @@ table.metal td.price{text-align:right;font-family:var(--didone);font-size:22px;f
 
 /* ---------- footer ---------- */
 footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 36px;font-size:13px}
-.shops{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:22px;margin-bottom:64px}
+.shops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin-bottom:64px}
+@media(max-width:1100px){.shops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.shops{grid-template-columns:1fr}}
 .shop{border:1px solid var(--line-dk);padding:26px 22px}
 .shop h3{font-family:var(--serif);font-size:16px;color:var(--gold-lt);letter-spacing:.1em;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(216,199,156,.35)}
 .shop p{font-size:12.5px;line-height:2.05;color:rgba(255,255,255,.88)}
