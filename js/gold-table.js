@@ -235,7 +235,7 @@ function renderGold(){
     const c = g.ig.change==null ? null
       : trunc(g) ? p - Math.floor(g.ig.price - g.ig.change + 1e-9) : g.ig.change;
     const cls = c==null ? "flat" : c>0 ? "up" : c<0 ? "down" : "flat";
-    const ctext = c==null ? "—" : c==0 ? "±0円" : (c>0?"+":"−") + fmt(Math.abs(c),d) + "円";
+    const ctext = c==null ? "—" : c==0 ? "±¥0" : (c>0?"+":"−") + "¥" + fmt(Math.abs(c),d);
     return `<div class="gold-col gc-igcard">
       ${head(g)}
       <div class="gc-ig">
