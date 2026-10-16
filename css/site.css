@@ -184,6 +184,7 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 @media(max-width:960px){.gold-cols{gap:18px}.gold-igs,.gold-tables{gap:14px}.gold-col{padding:24px 18px 14px}.gc-ig{padding:14px 14px 12px}.gc-ig .pr{font-size:25px}}
 @media(max-width:760px){.gold-cols{max-width:520px}.gold-igs,.gold-tables{grid-template-columns:1fr}.gc-ig .pr{font-size:28px}}
 .updated-tag{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--gold-lt);border:1px solid rgba(216,199,156,.55);padding:7px 15px;margin-bottom:26px;font-family:var(--mont)}
+.gold-notice{max-width:40em;margin:-12px auto 26px;font-size:12px;line-height:1.8;color:rgba(255,255,255,.8);text-align:center}
 .updated-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold-lt);animation:pl 2s infinite}
 @keyframes pl{0%,100%{opacity:1}50%{opacity:.25}}
 table.metal{width:100%;border-collapse:collapse}
@@ -326,10 +327,14 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   .head-in{height:64px}
   .logo img{height:36px}
 
-  /* ヒーロー：文字量に耐える高さと余白 */
-  .slides{min-height:640px}
-  .slide{align-items:flex-start}
-  .slide .wrap{padding-top:56px}
+  /* ヒーロー：固定高さをやめ、全スライドを同じセルに重ねて
+     「一番長い文章のスライド」の高さに自動で合わせる（余白を作らない） */
+  .slides{min-height:0;display:grid}
+  .slide{position:relative;inset:auto;grid-area:1/1;align-items:center}
+  .slide .wrap{padding-top:44px;padding-bottom:64px;gap:0}
+  .dots{bottom:26px}
+  .slide-btns{flex-wrap:nowrap!important;gap:8px!important}
+  .slide-btns .btn{flex:1 1 0;min-width:0;padding:12px 6px;letter-spacing:.06em;font-size:12px;white-space:nowrap}
   .slide .h1{font-size:27px}
   .slide p{font-size:13.5px}
   .eyebrow{font-size:10px;letter-spacing:.32em}

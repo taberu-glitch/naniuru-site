@@ -96,7 +96,7 @@
           <p class="eyebrow">Buy &amp; Trust — Hachioji No.1</p>
           <p class="h1">他社に売って、<br>損していませんか。<br>高額査定はナニウルへ。</p>
           <p>貴金属・宝飾品・ブランド品。GIA GG有資格者の指導を受けたスタッフが、世界規模の販路を背景に、相場以上の価格で査定いたします。手数料は一切かかりません。</p>
-          <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div class="slide-btns" style="display:flex;gap:12px;flex-wrap:wrap">
             <a class="btn gold" href="#gold">本日の金相場を見る</a>
             <a class="btn ghost-w" href="#results">買取実績を見る</a>
           </div>
@@ -189,12 +189,13 @@
     <div class="sec-head reveal">
       <p class="en">Today's Gold Price</p>
       <h2>本日の貴金属買取価格</h2>
-      <p class="lead">ご売却の際に手数料はかかりません。<br>買取価格 = 1g単価 × 重量 × 色石 × デザイン</p>
+      <p class="lead">ご売却の際に手数料はかかりません。<br>買取価格 = 1g単価 × 重量 + 色石 + デザイン</p>
       <div class="rule"></div>
     </div>
 
     <div class="gold-head reveal">
       <span class="updated-tag"><span class="pulse"></span><span id="goldUpdated">読み込み中…</span>｜毎朝 10:00 更新</span>
+      <p class="gold-notice">※貴金属相場及び為替に大きな変動があった場合、午前10時以外にも変更させて頂く場合がございます。</p>
     </div>
     <div class="gold-cols reveal" id="goldCols"></div>
     <p class="gold-meta reveal" id="goldSource"></p>
