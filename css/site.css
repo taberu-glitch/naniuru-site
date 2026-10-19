@@ -64,7 +64,20 @@ li.has-mega:hover>.mega,li.has-mega:focus-within>.mega{opacity:1;visibility:visi
 .mega-links{display:flex;flex-wrap:wrap;gap:10px 12px}
 .mega-links a{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border:1px solid var(--line-dk);font-size:12.5px;letter-spacing:.08em;transition:.3s;white-space:nowrap}
 .mega-links a:hover{background:#fff;color:var(--green);border-color:#fff}
-.menu-toggle{display:none;background:none;border:1px solid var(--line);padding:10px 14px;font-size:11px;letter-spacing:.2em;cursor:pointer;font-family:var(--mont)}
+/* モバイル用メニューボタン（ディープグリーン×ゴールド） */
+.menu-toggle{display:none;position:relative;flex-shrink:0;width:54px;height:50px;padding:0;border:0;background:var(--green);color:#fff;cursor:pointer;font-family:var(--mont);box-shadow:inset 0 0 0 1px rgba(201,169,106,.55);transition:background .3s;-webkit-tap-highlight-color:transparent}
+.menu-toggle:hover{background:var(--green-deep)}
+.menu-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.menu-toggle .mt-bars{position:absolute;left:50%;top:12px;width:22px;height:14px;transform:translateX(-50%)}
+.menu-toggle .mt-bars i{position:absolute;left:0;width:100%;height:1.5px;background:var(--gold-lt);transition:top .3s,transform .3s,opacity .2s}
+.menu-toggle .mt-bars i:nth-child(1){top:0}
+.menu-toggle .mt-bars i:nth-child(2){top:6px}
+.menu-toggle .mt-bars i:nth-child(3){top:12px}
+.menu-toggle .mt-label{position:absolute;left:0;right:0;bottom:7px;font-size:8.5px;font-weight:600;letter-spacing:.18em;text-indent:.18em;line-height:1;text-align:center}
+.menu-toggle.is-open{background:var(--green-deep)}
+.menu-toggle.is-open .mt-bars i:nth-child(1){top:6px;transform:rotate(45deg)}
+.menu-toggle.is-open .mt-bars i:nth-child(2){opacity:0}
+.menu-toggle.is-open .mt-bars i:nth-child(3){top:6px;transform:rotate(-45deg)}
 
 /* ---------- 常時表示CTA（今すぐ電話する／LINE査定はこちら） ---------- */
 .float-cta{position:fixed;right:22px;bottom:22px;z-index:150;display:flex;flex-direction:column;gap:10px}
@@ -307,8 +320,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   nav.gnav{display:none}
   nav.gnav.open{display:block}
   nav.gnav>ul{flex-direction:column}
-  .mega{position:static;opacity:1;visibility:visible;transform:none;display:none}
-  li.opened>.mega{display:block}
+  .mega{display:none}
   .menu-toggle{display:block}
   .tel-big{display:none}
   .res-nav{display:none}

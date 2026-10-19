@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=20261013">
+<link rel="stylesheet" href="css/site.css?v=20261020">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
       <div class="tel-big"><b>042-620-5615</b><span>査定のご相談はお気軽に</span></div>
       <a class="btn green" href="line/">LINE査定</a>
       <a class="btn black" href="tel:0426205615">電話で相談する</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="メニューを開く">MENU</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="gnav"><span class="mt-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="mt-label">MENU</span></button>
     </div>
   </div>
   <nav class="gnav" id="gnav">
@@ -631,16 +631,18 @@ const io = new IntersectionObserver(es=>{
 },{threshold:.12});
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
-document.getElementById("menuToggle").addEventListener("click",()=>{
-  document.getElementById("gnav").classList.toggle("open");
-});
-document.querySelectorAll("nav.gnav>ul>li.has-mega").forEach(li=>{
-  li.addEventListener("click",e=>{
-    if(window.innerWidth<=960 && e.target===li.querySelector(":scope>a")){
-      e.preventDefault(); li.classList.toggle("opened");
-    }
-  });
-});
+const gnav = document.getElementById("gnav");
+const menuBtn = document.getElementById("menuToggle");
+const setMenu = open=>{
+  gnav.classList.toggle("open",open);
+  menuBtn.classList.toggle("is-open",open);
+  menuBtn.setAttribute("aria-expanded",open);
+  menuBtn.setAttribute("aria-label",open?"メニューを閉じる":"メニューを開く");
+  menuBtn.querySelector(".mt-label").textContent = open?"CLOSE":"MENU";
+};
+menuBtn.addEventListener("click",()=>setMenu(!gnav.classList.contains("open")));
+/* メニュー内のリンクはどれを押しても一覧を閉じる */
+gnav.addEventListener("click",e=>{ if(e.target.closest("a")) setMenu(false); });
 
 /* 起動 */
 loadGold();

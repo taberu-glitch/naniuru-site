@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/site.css?v=20261013">
+<link rel="stylesheet" href="../css/site.css?v=20261020">
 <link rel="stylesheet" href="../css/items.css?v=20261019">
 </head>
 <body>
@@ -29,7 +29,7 @@
       <div class="tel-big"><b>042-620-5615</b><span>査定のご相談はお気軽に</span></div>
       <a class="btn green" href="../index.html#line">LINE査定</a>
       <a class="btn black" href="tel:0426205615">電話で相談する</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="メニューを開く">MENU</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="gnav"><span class="mt-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="mt-label">MENU</span></button>
     </div>
   </div>
   <nav class="gnav" id="gnav">
@@ -258,6 +258,6 @@ window.ITEM = {label:"その他", cats:["その他"], tags:[]};
 /* 記事データはキャッシュを避けて毎回最新を読み込む */
 document.write('<script src="../data/posts.js?v=' + Date.now() + '"><\/script>');
 </script>
-<script src="../js/items.js?v=20261013"></script>
+<script src="../js/items.js?v=20261020"></script>
 </body>
 </html>

@@ -102,16 +102,18 @@
       es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
     },{threshold:.12});
     document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
-    document.getElementById("menuToggle").addEventListener("click",()=>{
-      document.getElementById("gnav").classList.toggle("open");
-    });
-    document.querySelectorAll("nav.gnav>ul>li.has-mega").forEach(li=>{
-      li.addEventListener("click",e=>{
-        if(window.innerWidth<=960 && e.target===li.querySelector(":scope>a")){
-          e.preventDefault(); li.classList.toggle("opened");
-        }
-      });
-    });
+    const gnav = document.getElementById("gnav");
+    const menuBtn = document.getElementById("menuToggle");
+    const setMenu = open=>{
+      gnav.classList.toggle("open",open);
+      menuBtn.classList.toggle("is-open",open);
+      menuBtn.setAttribute("aria-expanded",open);
+      menuBtn.setAttribute("aria-label",open?"メニューを閉じる":"メニューを開く");
+      menuBtn.querySelector(".mt-label").textContent = open?"CLOSE":"MENU";
+    };
+    menuBtn.addEventListener("click",()=>setMenu(!gnav.classList.contains("open")));
+    /* メニュー内のリンクはどれを押しても一覧を閉じる */
+    gnav.addEventListener("click",e=>{ if(e.target.closest("a")) setMenu(false); });
   }
 
   renderResults();
