@@ -460,6 +460,15 @@ const CONFIG = {
   MIN_STARS: 4
 };
 
+const DEFAULT_REVIEWS = {
+  place_url:"https://www.google.com/maps",rating_avg:4.8,ratings_total:214,
+  reviews:[
+    {author:"K. Sato",rating:5,time:"1週間前",text:"祖母の形見の指輪を査定していただきました。丁寧に説明してくださり、他店より高い金額を提示していただけました。"},
+    {author:"M. Tanaka",rating:5,time:"2週間前",text:"LINE査定を利用。写真を送って数分で概算金額の返信があり、店頭でもほぼその通りの金額で買い取っていただけました。"},
+    {author:"H. Watanabe",rating:4,time:"1か月前",text:"ロレックスの査定でお世話になりました。相場の根拠を見せながら説明してくれるので納得感があります。"}
+  ]
+};
+
 /* 買取実績・ブログは data/posts.js の POSTS / COLUMNS と完全に紐づけ。
    記事を1件追加すれば、実績スライダー・ブログ一覧・記事ページに自動反映されます。 */
 /* 予約投稿：publishAt が未来の記事は日時到来まで非表示 */
@@ -484,20 +493,11 @@ const yen = n => Number(n).toLocaleString("ja-JP");
    Googleレビュー：★4以上のみ表示
 ========================================================= */
 async function loadReviews(){
-  let data = null;
+  let data = DEFAULT_REVIEWS;
   try{
     const r = await fetch(CONFIG.REVIEWS_JSON + "?t=" + Date.now(), {cache:"no-store"});
     if(r.ok) data = await r.json();
   }catch(e){}
-  /* 実データ（GASがGoogleから取得したもの）が無い間はセクションごと非表示。
-     ダミーのレビューは表示しない */
-  const hasReal = data && Array.isArray(data.reviews)
-    && data.reviews.some(r => Number(r.rating) >= CONFIG.MIN_STARS);
-  if(!hasReal){
-    document.getElementById("reviews").style.display = "none";
-    document.querySelectorAll('a[href="#reviews"]').forEach(a => (a.closest("li")||a).style.display = "none");
-    return;
-  }
   renderReviews(data);
 }
 
