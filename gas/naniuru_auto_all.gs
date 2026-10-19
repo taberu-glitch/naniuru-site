@@ -4,7 +4,8 @@
  * ---------------------------------------------------------
  * ・金相場       … 毎朝10:00ちょうど に data/gold.json を更新（毎日。失敗時は1時間ごとに再実行＋メール通知）
  *                  金 / プラチナ / シルバー の3カラム・インゴット価格＋前日比つき
- * ・Googleレビュー … 毎朝10:00 に ★4以上を評価順で data/reviews.json に更新
+ * ・Googleレビュー … 週1回（毎週月曜10:00）に ★4以上を評価順で data/reviews.json に更新
+ *                    月4〜5回の取得のみ＝Google Maps Platform の無料枠内
  *
  * ▼すでに稼働中の場合（コードを差し替えるだけ）
  *   1. GASエディタのコードを全部消して、このファイルを全文貼り付け → 保存
@@ -163,9 +164,8 @@ function runDailyUpdates_() {
   } catch (e) { errors.push("金相場: " + e.message); }
 
   try {
-    if (props.getProperty("LAST_REVIEW_OK") !== today && props.getProperty("PLACES_API_KEY")) {
+    if (isReviewDay_() && props.getProperty("LAST_REVIEW_OK") !== today && props.getProperty("PLACES_API_KEY")) {
       updateReviews();
-      props.setProperty("LAST_REVIEW_OK", today);
     }
   } catch (e) { errors.push("レビュー: " + e.message); }
 
@@ -355,21 +355,36 @@ function testFetchOnly() {
      1. Google Cloud で「Places API (New)」を有効化 → APIキー発行
         （キーの制限：APIの制限＝Places API (New) のみ）
      2. スクリプトプロパティ PLACES_API_KEY にキーを登録
-     3. findPlaceId を実行 → ログに出た ID を PLACE_ID に登録
+     3. findPlaceId を実行 → ログに出た ID をスクリプトプロパティに登録
+        PLACE_ID（本店・Googleロゴのリンク先）／ PLACE_ID_2 ／ PLACE_ID_3 ／ PLACE_ID_4 …
+        登録した全店舗のレビューをまとめ、サイトでランダムに5件表示します
      4. testReviewsOnly を実行 → ログでレビュー内容を確認（GitHubには書き込まない）
      5. updateReviews を実行 → data/reviews.json がコミットされサイトに表示
 ========================================================= */
 const REVIEW_FILE = "data/reviews.json";
 const MIN_STARS = 4;
-const PLACE_SEARCH_WORD = "ナニウル 八王子";   // findPlaceId の検索語（必要に応じて変更）
+const EXCLUDE_AUTHOR_WORDS = ["ナニウル"];  // 投稿者名にこの語を含むレビューは表示しない（お店・関係者の投稿を除外。一般のお客様の投稿のみ掲載）
+const REVIEW_WEEKDAY = 1;   // レビューを更新する曜日（1=月 2=火 … 7=日）。週1回だけAPIを呼ぶ
+const PLACE_SEARCH_WORD = "ナニウル 八王子";   // 4店舗とも出ない場合は「ナニウル 横山」などに変えて再実行   // findPlaceId の検索語（必要に応じて変更）
 
-/** Google から取得して整形（コミットはしない） */
-function fetchReviews_() {
-  const p = PropertiesService.getScriptProperties();
-  const key = p.getProperty("PLACES_API_KEY");
-  const placeId = p.getProperty("PLACE_ID");
-  if (!key || !placeId) throw new Error("PLACES_API_KEY / PLACE_ID が未設定です（checkSettings で確認）");
+/** 登録されている店舗ID（PLACE_ID, PLACE_ID_2, PLACE_ID_3 …）を順に返す */
+function placeIds_() {
+  const all = PropertiesService.getScriptProperties().getProperties();
+  return Object.keys(all)
+    .filter(k => /^PLACE_ID(_\d+)?$/.test(k) && String(all[k]).trim())
+    .sort((x, y) => (Number((x.match(/_(\d+)$/) || [0, 1])[1])) - (Number((y.match(/_(\d+)$/) || [0, 1])[1])))
+    .map(k => String(all[k]).trim());
+}
 
+/** 店名を短く（例：「買取/販売 ナニウル 八幡町 本店」→「八幡町 本店」） */
+function storeLabel_(name) {
+  const s = String(name || "").replace(/買取\s*[\/／・]?\s*販売/g, " ")
+    .replace(/(^|\s)ナニウル(?=\s|$)/g, " ").replace(/\s+/g, " ").trim();   // 単独の「ナニウル」だけ外す（レナニウル等は残す）
+  return s.length >= 2 ? s : String(name || "").trim();
+}
+
+/** 1店舗分を取得 */
+function fetchPlace_(key, placeId) {
   const res = UrlFetchApp.fetch(
     "https://places.googleapis.com/v1/places/" + encodeURIComponent(placeId) + "?languageCode=ja&regionCode=JP",
     {
@@ -381,47 +396,81 @@ function fetchReviews_() {
     });
   const code = res.getResponseCode();
   const body = res.getContentText();
-  if (code !== 200) throw new Error("Places API (New) " + code + ": " + body.slice(0, 300));
-  const r = JSON.parse(body);
+  if (code !== 200) throw new Error("Places API (New) " + code + "（" + placeId + "）: " + body.slice(0, 300));
+  return JSON.parse(body);
+}
 
-  const reviews = (r.reviews || [])
-    .filter(v => Number(v.rating) >= MIN_STARS)                 // ★4以上のみ
-    .sort((a, b) => Number(b.rating) - Number(a.rating))        // 評価が高い順（同評価は取得順）
-    .map(v => {
+/** 全店舗から取得して整形（コミットはしない） */
+function fetchReviews_() {
+  const key = PropertiesService.getScriptProperties().getProperty("PLACES_API_KEY");
+  const ids = placeIds_();
+  if (!key || !ids.length) throw new Error("PLACES_API_KEY / PLACE_ID が未設定です（checkSettings で確認）");
+
+  const stores = [];
+  let reviews = [];
+  ids.forEach(id => {
+    const r = fetchPlace_(key, id);
+    const name = (r.displayName && r.displayName.text) || "";
+    const label = storeLabel_(name);
+    stores.push({ name: name, label: label, url: r.googleMapsUri || "",
+                  rating: r.rating || 0, total: r.userRatingCount || 0 });
+    (r.reviews || []).forEach(v => {
       const t = (v.text && v.text.text) || (v.originalText && v.originalText.text) || "";
       const a = v.authorAttribution || {};
-      return {
+      reviews.push({
         author: a.displayName || "Googleユーザー",
         author_url: a.uri || "",
         rating: v.rating,
         time: v.relativePublishTimeDescription || "",
         published: v.publishTime || "",
+        store: label,
         text: t.slice(0, 200)
-      };
-    })
-    .filter(v => v.text);                                        // 本文なし（★だけ）のレビューは除外
+      });
+    });
+  });
+
+  reviews = reviews
+    .filter(v => Number(v.rating) >= MIN_STARS)                              // ★4以上のみ
+    .filter(v => v.text)                                                      // 本文なし（★だけ）は除外
+    .filter(v => !EXCLUDE_AUTHOR_WORDS.some(w => v.author.indexOf(w) >= 0))  // お店・関係者の投稿を除外
+    .sort((x, y) => Number(y.rating) - Number(x.rating));                    // 評価が高い順
+
+  // 4店舗合計の件数と、件数で重み付けした平均評価
+  const total = stores.reduce((n, s) => n + s.total, 0);
+  const avg = total ? Math.round(stores.reduce((n, s) => n + s.rating * s.total, 0) / total * 10) / 10 : 0;
 
   return {
     updated: Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd HH:mm"),
-    place_name: (r.displayName && r.displayName.text) || "",
-    place_url: r.googleMapsUri || "",
-    rating_avg: r.rating,
-    ratings_total: r.userRatingCount,
+    place_name: stores.map(s => s.label).join("・"),
+    place_url: stores[0].url,          // 「Google」ロゴのリンク先（1店舗目＝PLACE_ID）
+    rating_avg: avg,
+    ratings_total: total,
     min_stars: MIN_STARS,
-    reviews: reviews
+    stores: stores,
+    reviews: reviews                   // サイト側でこの中からランダムに5件表示
   };
 }
 
-/** 毎日の自動更新で呼ばれる本体 */
+/** 今日がレビュー更新日か */
+function isReviewDay_() {
+  return Number(Utilities.formatDate(new Date(), "Asia/Tokyo", "u")) === REVIEW_WEEKDAY;
+}
+
+/** レビュー更新の本体（自動では週1回。手動実行も可） */
 function updateReviews() {
   const json = fetchReviews_();
   if (!json.reviews.length) {
     // 0件で上書きするとサイトのレビュー欄が消えるため、前回のデータを残す
     Logger.log("★" + MIN_STARS + "以上のレビューが取得できなかったため、今回は更新をスキップしました");
+    PropertiesService.getScriptProperties().setProperty("LAST_REVIEW_OK",
+      Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd"));   // 同じ日に再取得しない
     return;
   }
   commitToGitHub(REVIEW_FILE, JSON.stringify(json, null, 2), "auto: レビュー更新 " + json.updated);
-  Logger.log("レビューを更新しました: " + json.reviews.length + "件（★" + MIN_STARS + "以上・評価順）"
+  json.stores.forEach(st => Logger.log("  " + st.label + "：★" + st.rating + "／" + st.total + "件"));
+  PropertiesService.getScriptProperties().setProperty("LAST_REVIEW_OK",
+    Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd"));
+  Logger.log("レビューを更新しました: " + json.stores.length + "店舗・" + json.reviews.length + "件（★" + MIN_STARS + "以上・関係者除外）"
     + " / 平均" + json.rating_avg + "・総数" + json.ratings_total);
 }
 
@@ -484,7 +533,8 @@ function commitToGitHub(path, content, message) {
 ========================================================= */
 function checkSettings() {
   const p = PropertiesService.getScriptProperties();
-  ["GITHUB_TOKEN", "GITHUB_REPO", "GITHUB_BRANCH", "PLACES_API_KEY", "PLACE_ID"].forEach(k => {
+  Logger.log("店舗ID: " + (placeIds_().length ? placeIds_().length + "店舗分を登録済み" : "未登録"));
+  ["GITHUB_TOKEN", "GITHUB_REPO", "GITHUB_BRANCH", "PLACES_API_KEY", "PLACE_ID", "PLACE_ID_2", "PLACE_ID_3", "PLACE_ID_4"].forEach(k => {
     const v = p.getProperty(k);
     Logger.log((v ? "✔ " : "✖ 未設定 ") + k + (v && k !== "GITHUB_TOKEN" && k !== "PLACES_API_KEY" ? " = " + v : ""));
   });

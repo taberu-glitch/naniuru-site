@@ -143,6 +143,7 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 .g-who{flex:1;min-width:0;line-height:1.35}
 .g-who b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .g-who time{font-size:11px;color:var(--grey)}
+.g-store{display:inline-block;margin-left:8px;padding:0 7px;font-size:10.5px;line-height:17px;color:var(--grey);border:1px solid var(--line);border-radius:9px;white-space:nowrap;vertical-align:1px}
 .g-mark{width:20px;height:20px;flex:none}
 .g-rate{display:flex;align-items:center;gap:7px}
 .g-rate .st{color:#F5B301;font-size:16px;letter-spacing:1.5px;line-height:1}

@@ -456,8 +456,9 @@ document.write('<script src="data/posts.js?v=' + Date.now() + '"><\/script>');
    設定
 ========================================================= */
 const CONFIG = {
-  REVIEWS_JSON: "data/reviews.json", // ★4以上のみ格納
-  MIN_STARS: 4
+  REVIEWS_JSON: "data/reviews.json", // ★4以上のみ格納（全店舗分）
+  MIN_STARS: 4,
+  SHOW_COUNT: 5                       // 表示件数（開くたびにランダムで選ぶ）
 };
 
 const DEFAULT_REVIEWS = {
@@ -515,9 +516,10 @@ function ratingWord(avg){
 function renderReviews(data){
   const track = document.getElementById("revTrack");
   track.innerHTML = "";
-  /* ★4以上のみ → 評価が高い順（同評価は元の並び=新しい順を維持する安定ソート） */
-  const list = (data.reviews||[])
-    .filter(r => Number(r.rating) >= CONFIG.MIN_STARS)
+  /* ★4以上のみ → 全店舗分からランダムに SHOW_COUNT 件 → 評価が高い順に並べて表示 */
+  const pool = (data.reviews||[]).filter(r => Number(r.rating) >= CONFIG.MIN_STARS);
+  for(let i = pool.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [pool[i],pool[j]] = [pool[j],pool[i]]; }
+  const list = pool.slice(0, CONFIG.SHOW_COUNT)
     .sort((a,b) => Number(b.rating) - Number(a.rating));
   list.forEach((r,i)=>{
     const card = document.createElement("article");
@@ -527,7 +529,7 @@ function renderReviews(data){
     card.innerHTML = `
       <div class="g-top">
         <span class="g-ava" style="background:${color}">${initial}</span>
-        <div class="g-who"><b>${r.author}</b><time>${r.time||""}</time></div>
+        <div class="g-who"><b>${r.author}</b><time>${r.time||""}</time>${r.store ? `<span class="g-store">${r.store}</span>` : ""}</div>
         ${G_SVG}
       </div>
       <div class="g-rate"><span class="st">${"★".repeat(r.rating)}</span>${CHECK_SVG}</div>
