@@ -2,20 +2,26 @@
  * =========================================================
  * ナニウル｜自動更新オールインワン（このファイル1つだけでOK）
  * ---------------------------------------------------------
- * ・金相場       … 毎朝10:00ちょうど に data/gold.json を更新（土日はスキップ）
+ * ・金相場       … 毎朝10:00ちょうど に data/gold.json を更新（毎日。失敗時は1時間ごとに再実行＋メール通知）
  *                  金 / プラチナ / シルバー の3カラム・インゴット価格＋前日比つき
  * ・Googleレビュー … 毎朝10:00 に ★4以上を評価順で data/reviews.json に更新
  *
  * ▼すでに稼働中の場合（コードを差し替えるだけ）
  *   1. GASエディタのコードを全部消して、このファイルを全文貼り付け → 保存
  *   2. 「testFetchOnly」を実行 → ログに新しい金種・前日比が出ればOK
- *   3. 「updateGoldPrice」を実行 → サイトにすぐ反映（トリガーは設定済みのまま動きます）
+ *   3. 「updateGoldPrice」を実行 → サイトにすぐ反映
+ *   4. 「setupAllTriggers」を実行（★今回の版では必須。見張りトリガーが追加されます）
+ *      ※メール通知の許可を求められたら「許可」してください
+ *   5. 動作状況は「checkSettings」でいつでも確認できます
  *
  * ▼新規に設定する場合
  *   1. script.google.com → 新規プロジェクト → このコードを全文貼り付け
  *   2. プロジェクトの設定 → スクリプトプロパティに登録
  *        GITHUB_TOKEN / GITHUB_REPO / GITHUB_BRANCH / PLACES_API_KEY / PLACE_ID
  *   3. 「testFetchOnly」→「updateGoldPrice」→「setupAllTriggers」の順に実行
+ *
+ * ▼Googleレビューを動かす場合（下の「Googleレビュー更新」の手順を参照）
+ *   PLACES_API_KEY 登録 →「findPlaceId」→ PLACE_ID 登録 →「testReviewsOnly」→「updateReviews」
  * =========================================================
  */
 
@@ -75,20 +81,28 @@ function runAllNow() {
   Logger.log("★テスト完了。GitHubの data/gold.json と data/reviews.json のコミットを確認してください。");
 }
 
-/* ============ ② トリガー設定（10:00ちょうど版） ============
+/* ============ ② トリガー設定（毎日10:00・自己復旧つき） ============
  * GASの「毎日◯時」トリガーは1時間の幅で実行されるため、
- * 「次の10:00に一回だけ動く単発トリガー」を毎日自動で予約し直す方式にしています。
+ * 「次の10:00に一回だけ動く単発トリガー」を毎日予約し直す方式にしています。
  * ・dailyUpdateAt10 …… 10:00に実行 → 翌日10:00の単発トリガーを予約 → 更新処理
- * ・dailyFallback   …… 11時台の保険。今日まだ更新していなければ実行（万一の取りこぼし対策）
+ * ・watchdog        …… 1時間ごとの見張り役。
+ *      ① 10:00の単発トリガーが消えていたら作り直す（連鎖が切れても翌日には復旧）
+ *      ② 10:00以降に金相場の更新が成功していなければ再実行（RETRY_UNTIL_HOUR時まで）
+ *      ③ 失敗が続いたら1日1回メールで通知（トークン切れ等に気づけるように）
+ * ※setupAllTriggers は、このコードに差し替えた後に必ず1回実行してください。
  */
-const RUN_HOUR = 10;   // 実行時刻（時）
-const RUN_MIN  = 0;    // 実行時刻（分）
+const RUN_HOUR = 10;          // 実行時刻（時）
+const RUN_MIN  = 0;           // 実行時刻（分）
+const RETRY_UNTIL_HOUR = 18;  // 失敗時に見張り役が再実行を続ける上限（時）
+const SKIP_WEEKENDS = false;  // true にすると土日は金相場を更新しない（田中貴金属は土日の公表なし＝金曜の価格を表示）
+const NOTIFY_EMAIL = "";      // 失敗通知の宛先。空ならGASの実行ユーザーのGmailへ
 
 function setupAllTriggers() {
   ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
   scheduleNextRun_();
-  ScriptApp.newTrigger("dailyFallback").timeBased().atHour(RUN_HOUR + 1).everyDays(1).inTimezone("Asia/Tokyo").create();
-  Logger.log("次回 " + Utilities.formatDate(nextRunTime_(), "Asia/Tokyo", "M/d HH:mm") + " の単発トリガーと、" + (RUN_HOUR + 1) + "時台の保険トリガーを設定しました。");
+  ScriptApp.newTrigger("watchdog").timeBased().everyHours(1).create();
+  Logger.log("次回 " + Utilities.formatDate(nextRunTime_(), "Asia/Tokyo", "M/d HH:mm")
+    + " の単発トリガーと、1時間ごとの見張りトリガーを設定しました。");
 }
 
 /** 次の RUN_HOUR:RUN_MIN（JST）を返す */
@@ -106,6 +120,8 @@ function scheduleNextRun_() {
     if (t.getHandlerFunction() === "dailyUpdateAt10") ScriptApp.deleteTrigger(t);
   });
   ScriptApp.newTrigger("dailyUpdateAt10").timeBased().at(nextRunTime_()).create();
+  PropertiesService.getScriptProperties().setProperty("NEXT_RUN",
+    Utilities.formatDate(nextRunTime_(), "Asia/Tokyo", "yyyy-MM-dd HH:mm"));
 }
 
 /** 10:00ちょうどに実行される本体 */
@@ -114,25 +130,76 @@ function dailyUpdateAt10() {
   runDailyUpdates_();
 }
 
-/** 11時台の保険：今日まだ動いていなければ実行 */
-function dailyFallback() {
-  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd");
-  const last = PropertiesService.getScriptProperties().getProperty("LAST_RUN_DATE");
-  if (last === today) { Logger.log("本日分は10:00に実行済みのためスキップ"); return; }
-  Logger.log("10:00の実行が確認できないため、保険トリガーで実行します");
-  scheduleNextRun_();
+/** 1時間ごとの見張り役 */
+function watchdog() {
+  const props = PropertiesService.getScriptProperties();
+  // ① 10:00の単発トリガーが無い／予定時刻を過ぎて残っている → 作り直す
+  const has = ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === "dailyUpdateAt10");
+  const next = props.getProperty("NEXT_RUN");
+  const stale = next && new Date(next.replace(" ", "T") + ":00+09:00").getTime() < Date.now() - 30 * 60 * 1000;
+  if (!has || stale) { Logger.log("10:00トリガーを再設定しました"); scheduleNextRun_(); }
+
+  // ② 今日の10:00以降で、まだ成功していなければ再実行
+  const now = new Date();
+  const hour = Number(Utilities.formatDate(now, "Asia/Tokyo", "H"));
+  const today = Utilities.formatDate(now, "Asia/Tokyo", "yyyy-MM-dd");
+  if (hour < RUN_HOUR || hour > RETRY_UNTIL_HOUR) return;
+  if (props.getProperty("LAST_GOLD_OK") === today) return;
+  if (SKIP_WEEKENDS && isWeekend_()) return;
+  Logger.log("本日の金相場更新が未完了のため、見張り役が再実行します");
   runDailyUpdates_();
 }
 
 /** 金相場・レビューを順に実行（片方が失敗してももう片方は動かす） */
 function runDailyUpdates_() {
+  const props = PropertiesService.getScriptProperties();
+  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd");
   const errors = [];
-  try { updateGoldPrice(); } catch (e) { errors.push("金相場: " + e.message); }
-  try { updateReviews(); }   catch (e) { errors.push("レビュー: " + e.message); }
-  PropertiesService.getScriptProperties().setProperty("LAST_RUN_DATE",
-    Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd"));
-  if (errors.length) Logger.log("一部エラー: " + errors.join(" / "));
-  else Logger.log("本日の自動更新が完了しました。");
+
+  try {
+    if (props.getProperty("LAST_GOLD_OK") !== today) {
+      if (updateGoldPrice() !== false) props.setProperty("LAST_GOLD_OK", today);
+    }
+  } catch (e) { errors.push("金相場: " + e.message); }
+
+  try {
+    if (props.getProperty("LAST_REVIEW_OK") !== today && props.getProperty("PLACES_API_KEY")) {
+      updateReviews();
+      props.setProperty("LAST_REVIEW_OK", today);
+    }
+  } catch (e) { errors.push("レビュー: " + e.message); }
+
+  props.setProperty("LAST_RUN", Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd HH:mm"));
+  if (errors.length) {
+    props.setProperty("LAST_ERROR", props.getProperty("LAST_RUN") + " " + errors.join(" / "));
+    Logger.log("一部エラー: " + errors.join(" / "));
+    notifyError_(errors);
+  } else {
+    props.deleteProperty("LAST_ERROR");
+    Logger.log("本日の自動更新が完了しました。");
+  }
+}
+
+function isWeekend_() {
+  return Number(Utilities.formatDate(new Date(), "Asia/Tokyo", "u")) >= 6; // 1=月…7=日
+}
+
+/** 失敗通知（1日1回まで） */
+function notifyError_(errors) {
+  const props = PropertiesService.getScriptProperties();
+  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd");
+  if (props.getProperty("LAST_NOTIFY") === today) return;
+  try {
+    const to = NOTIFY_EMAIL || Session.getEffectiveUser().getEmail();
+    if (!to) return;
+    let hint = "";
+    if (errors.some(e => /認証|401/.test(e))) hint = "\n\n▼対処\nGitHubのトークン（PAT）の有効期限切れの可能性が高いです。GitHubでトークンを再発行し、GASのスクリプトプロパティ GITHUB_TOKEN を差し替えてください。";
+    else if (errors.some(e => /解析に失敗/.test(e))) hint = "\n\n▼対処\n田中貴金属のページ構造が変わった可能性があります。制作担当にご連絡ください。";
+    MailApp.sendEmail(to, "【ナニウル】サイトの自動更新でエラーが発生しました",
+      "本日の自動更新でエラーが発生しました。\n\n" + errors.join("\n") + hint
+      + "\n\n※" + RETRY_UNTIL_HOUR + "時まで1時間ごとに自動で再実行します。");
+    props.setProperty("LAST_NOTIFY", today);
+  } catch (e) { Logger.log("通知メール送信失敗: " + e.message); }
 }
 
 /* =========================================================
@@ -141,8 +208,7 @@ function runDailyUpdates_() {
 const GOLD_FILE = "data/gold.json";
 
 function updateGoldPrice(force) {
-  const day = Number(Utilities.formatDate(new Date(), "Asia/Tokyo", "u")); // 1=月…7=日
-  if (force !== true && day >= 6) { Logger.log("土日のため金相場はスキップ"); return; }
+  if (force !== true && SKIP_WEEKENDS && isWeekend_()) { Logger.log("土日のため金相場はスキップ"); return false; }
 
   const json = buildGoldJson(fetchLatestPrice());
   commitToGitHub(GOLD_FILE, JSON.stringify(json, null, 2), "auto: 金相場更新 " + json.updated);
@@ -279,46 +345,107 @@ function testFetchOnly() {
 
 /* =========================================================
    Googleレビュー更新（★4以上・評価が高い順）
+   ---------------------------------------------------------
+   Google Places API (New) の Place Details を使用。
+   ※旧 Places API（maps/api/place/details）は新規プロジェクトでは
+     有効化できないため、New 版に切り替えています。
+   ※APIの仕様上、取得できるレビューはGoogleが選ぶ「関連性の高い」最大5件です。
+     そこから★4以上だけを残して評価順に並べます。
+   ▼初回の手順
+     1. Google Cloud で「Places API (New)」を有効化 → APIキー発行
+        （キーの制限：APIの制限＝Places API (New) のみ）
+     2. スクリプトプロパティ PLACES_API_KEY にキーを登録
+     3. findPlaceId を実行 → ログに出た ID を PLACE_ID に登録
+     4. testReviewsOnly を実行 → ログでレビュー内容を確認（GitHubには書き込まない）
+     5. updateReviews を実行 → data/reviews.json がコミットされサイトに表示
 ========================================================= */
 const REVIEW_FILE = "data/reviews.json";
 const MIN_STARS = 4;
+const PLACE_SEARCH_WORD = "ナニウル 八王子";   // findPlaceId の検索語（必要に応じて変更）
 
-function updateReviews() {
+/** Google から取得して整形（コミットはしない） */
+function fetchReviews_() {
   const p = PropertiesService.getScriptProperties();
   const key = p.getProperty("PLACES_API_KEY");
   const placeId = p.getProperty("PLACE_ID");
-  if (!key || !placeId) throw new Error("PLACES_API_KEY / PLACE_ID が未設定です");
+  if (!key || !placeId) throw new Error("PLACES_API_KEY / PLACE_ID が未設定です（checkSettings で確認）");
 
-  const url = "https://maps.googleapis.com/maps/api/place/details/json"
-    + "?place_id=" + encodeURIComponent(placeId)
-    + "&fields=name,rating,user_ratings_total,reviews,url"
-    + "&language=ja&reviews_sort=newest&key=" + key;
-
-  const res = JSON.parse(UrlFetchApp.fetch(url).getContentText());
-  if (res.status !== "OK") throw new Error("Places API: " + res.status + " " + (res.error_message || ""));
-  const r = res.result;
+  const res = UrlFetchApp.fetch(
+    "https://places.googleapis.com/v1/places/" + encodeURIComponent(placeId) + "?languageCode=ja&regionCode=JP",
+    {
+      headers: {
+        "X-Goog-Api-Key": key,
+        "X-Goog-FieldMask": "displayName,rating,userRatingCount,reviews,googleMapsUri"
+      },
+      muteHttpExceptions: true
+    });
+  const code = res.getResponseCode();
+  const body = res.getContentText();
+  if (code !== 200) throw new Error("Places API (New) " + code + ": " + body.slice(0, 300));
+  const r = JSON.parse(body);
 
   const reviews = (r.reviews || [])
     .filter(v => Number(v.rating) >= MIN_STARS)                 // ★4以上のみ
-    .sort((a, b) => Number(b.rating) - Number(a.rating))        // 評価が高い順
-    .map(v => ({
-      author: v.author_name,
-      rating: v.rating,
-      time: v.relative_time_description,
-      text: (v.text || "").slice(0, 200)
-    }));
+    .sort((a, b) => Number(b.rating) - Number(a.rating))        // 評価が高い順（同評価は取得順）
+    .map(v => {
+      const t = (v.text && v.text.text) || (v.originalText && v.originalText.text) || "";
+      const a = v.authorAttribution || {};
+      return {
+        author: a.displayName || "Googleユーザー",
+        author_url: a.uri || "",
+        rating: v.rating,
+        time: v.relativePublishTimeDescription || "",
+        published: v.publishTime || "",
+        text: t.slice(0, 200)
+      };
+    })
+    .filter(v => v.text);                                        // 本文なし（★だけ）のレビューは除外
 
-  const json = {
+  return {
     updated: Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd HH:mm"),
-    place_name: r.name,
-    place_url: r.url,
+    place_name: (r.displayName && r.displayName.text) || "",
+    place_url: r.googleMapsUri || "",
     rating_avg: r.rating,
-    ratings_total: r.user_ratings_total,
+    ratings_total: r.userRatingCount,
     min_stars: MIN_STARS,
     reviews: reviews
   };
+}
+
+/** 毎日の自動更新で呼ばれる本体 */
+function updateReviews() {
+  const json = fetchReviews_();
+  if (!json.reviews.length) {
+    // 0件で上書きするとサイトのレビュー欄が消えるため、前回のデータを残す
+    Logger.log("★" + MIN_STARS + "以上のレビューが取得できなかったため、今回は更新をスキップしました");
+    return;
+  }
   commitToGitHub(REVIEW_FILE, JSON.stringify(json, null, 2), "auto: レビュー更新 " + json.updated);
-  Logger.log("レビューを更新しました: " + reviews.length + "件（★" + MIN_STARS + "以上・評価順）");
+  Logger.log("レビューを更新しました: " + json.reviews.length + "件（★" + MIN_STARS + "以上・評価順）"
+    + " / 平均" + json.rating_avg + "・総数" + json.ratings_total);
+}
+
+/** 確認用：取得結果をログに出すだけ（GitHubには書き込まない） */
+function testReviewsOnly() {
+  Logger.log(JSON.stringify(fetchReviews_(), null, 2));
+}
+
+/** 初回のみ：店名で検索して PLACE_ID の候補をログに出す */
+function findPlaceId() {
+  const key = PropertiesService.getScriptProperties().getProperty("PLACES_API_KEY");
+  if (!key) throw new Error("先に PLACES_API_KEY を登録してください");
+  const res = UrlFetchApp.fetch("https://places.googleapis.com/v1/places:searchText", {
+    method: "post", contentType: "application/json",
+    headers: { "X-Goog-Api-Key": key, "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.userRatingCount" },
+    payload: JSON.stringify({ textQuery: PLACE_SEARCH_WORD, languageCode: "ja", regionCode: "JP" }),
+    muteHttpExceptions: true
+  });
+  if (res.getResponseCode() !== 200) throw new Error("検索失敗 " + res.getResponseCode() + ": " + res.getContentText().slice(0, 300));
+  const places = JSON.parse(res.getContentText()).places || [];
+  if (!places.length) { Logger.log("候補が見つかりません。PLACE_SEARCH_WORD を変えて再実行してください"); return; }
+  places.forEach(pl => Logger.log(
+    "PLACE_ID = " + pl.id + "｜" + (pl.displayName && pl.displayName.text) + "｜" + pl.formattedAddress + "｜クチコミ" + (pl.userRatingCount || 0) + "件"));
+  Logger.log("↑ 掲載したい店舗の PLACE_ID をスクリプトプロパティに登録してください");
 }
 
 /* =========================================================
@@ -362,4 +489,15 @@ function checkSettings() {
     Logger.log((v ? "✔ " : "✖ 未設定 ") + k + (v && k !== "GITHUB_TOKEN" && k !== "PLACES_API_KEY" ? " = " + v : ""));
   });
   Logger.log("トリガー: " + ScriptApp.getProjectTriggers().map(t => t.getHandlerFunction()).join(", "));
+  ["NEXT_RUN", "LAST_RUN", "LAST_GOLD_OK", "LAST_REVIEW_OK", "LAST_ERROR"].forEach(k =>
+    Logger.log(k + " = " + (p.getProperty(k) || "—")));
+  // GitHubトークンが有効か確認
+  const token = p.getProperty("GITHUB_TOKEN"), repo = p.getProperty("GITHUB_REPO");
+  if (token && repo) {
+    const r = UrlFetchApp.fetch("https://api.github.com/repos/" + repo,
+      { headers: { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" }, muteHttpExceptions: true });
+    const exp = r.getHeaders()["github-authentication-token-expiration"] || r.getHeaders()["Github-Authentication-Token-Expiration"];
+    Logger.log("GitHubトークン: " + (r.getResponseCode() === 200 ? "✔ 有効" : "✖ 無効（" + r.getResponseCode() + "）→ 再発行が必要")
+      + (exp ? "｜有効期限 " + exp : ""));
+  }
 }

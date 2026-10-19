@@ -11,8 +11,9 @@ naniuru-site/
 │ ├ reviews.json          … Google高評価レビュー（同上）
 │ └ posts.js              … 買取実績×ブログ 共通データ（1件追加で全箇所反映）
 └ gas/
-  ├ gold_price_updater.gs … 金相場 自動更新（GAS）
-  └ reviews_updater.gs    … レビュー 自動更新（GAS）
+  ├ naniuru_auto_all.gs  … 金相場＋Googleレビュー 自動更新（GAS・これ1つでOK）
+  ├ gold_price_updater.gs … 旧版
+  └ reviews_updater.gs    … 旧版
 ```
 
 ## 仕組み（毎朝10:00の自動更新）
@@ -29,9 +30,11 @@ naniuru-site/
 2. GASプロジェクトを作成し、`gas/` の2ファイルを貼り付け
 3. スクリプトプロパティを設定
    - `GITHUB_TOKEN` / `GITHUB_REPO` / `GITHUB_BRANCH`
-   - `PLACES_API_KEY` / `PLACE_ID`（レビュー用）
-4. `setupTrigger()` と `setupReviewTrigger()` を各1回実行
-5. `updateGoldPrice()` を手動実行して初回動作を確認
+   - `PLACES_API_KEY`（Google Cloud で「Places API (New)」を有効化して発行）/ `PLACE_ID`（`findPlaceId()` で取得）
+4. `testReviewsOnly()` でレビュー取得を確認 → `updateReviews()` で初回反映
+5. `setupAllTriggers()` を1回実行（金相場・レビューとも毎日10:00に更新。失敗時は18時まで1時間ごとに再実行し、メールで通知）
+   - 動かないときは `checkSettings()` で、トリガー・最終成功日・直近のエラー・GitHubトークンの有効期限を確認
+   - `data/reviews.json` にレビューが無い間、サイトのレビュー欄は自動で非表示になります
 
 ## CMS（admin.html）の使い方
 1. admin.html をブラウザで開く（サイトと同じ場所に置くとposts.jsを自動読込）
