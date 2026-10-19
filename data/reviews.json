@@ -1,10 +1,40 @@
 {
-  "updated": "2026-10-19 13:21",
-  "place_name": "買取/販売 ナニウル 八幡町 本店",
+  "updated": "2026-10-19 13:30",
+  "place_name": "八幡町 本店・ナニウル横山町店・Re:naniuru －リ：ナニウル－・子安町店",
   "place_url": "https://maps.google.com/?cid=12592961814198062576&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
-  "rating_avg": 4.8,
-  "ratings_total": 11,
+  "rating_avg": 4.9,
+  "ratings_total": 273,
   "min_stars": 4,
+  "stores": [
+    {
+      "name": "買取/販売 ナニウル 八幡町 本店",
+      "label": "八幡町 本店",
+      "url": "https://maps.google.com/?cid=12592961814198062576&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+      "rating": 4.8,
+      "total": 11
+    },
+    {
+      "name": "買取/販売 ナニウル横山町店",
+      "label": "ナニウル横山町店",
+      "url": "https://maps.google.com/?cid=16844368980178539615&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+      "rating": 4.9,
+      "total": 153
+    },
+    {
+      "name": "Re:naniuru －リ：ナニウル－",
+      "label": "Re:naniuru －リ：ナニウル－",
+      "url": "https://maps.google.com/?cid=10896798946545289485&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+      "rating": 4.8,
+      "total": 88
+    },
+    {
+      "name": "ナニウル 子安町店",
+      "label": "子安町店",
+      "url": "https://maps.google.com/?cid=7337964069565257365&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+      "rating": 4.9,
+      "total": 21
+    }
+  ],
   "reviews": [
     {
       "author": "桑名千浪",
@@ -12,6 +42,7 @@
       "rating": 5,
       "time": "1 年前",
       "published": "2025-08-07T03:08:38.156594693Z",
+      "store": "八幡町 本店",
       "text": "親切に一点づつ説明してくださって、購入時よりはお値段は低くなりますが、まあまあ満足のいくお値段で引き取って頂きました。\nありがとうございました😊"
     },
     {
@@ -20,6 +51,7 @@
       "rating": 5,
       "time": "2 年前",
       "published": "2023-10-28T05:02:44.701169Z",
+      "store": "八幡町 本店",
       "text": "とても丁寧に相談に乗って頂き\n安心して取引ができました。\nありがとうございます。"
     },
     {
@@ -28,6 +60,7 @@
       "rating": 5,
       "time": "3 年前",
       "published": "2023-10-04T08:03:13.449814Z",
+      "store": "八幡町 本店",
       "text": "入りやすく対応も説明も丁寧でした。\n初めての方にはオススメです。"
     },
     {
@@ -36,7 +69,143 @@
       "rating": 5,
       "time": "6 年前",
       "published": "2020-07-23T01:48:29.896114Z",
+      "store": "八幡町 本店",
       "text": "対応してくれた店員さんがいい感じでした！"
+    },
+    {
+      "author": "T Y",
+      "author_url": "https://www.google.com/maps/contrib/111741505150077608154/reviews",
+      "rating": 5,
+      "time": "4 か月前",
+      "published": "2026-06-12T04:22:19.079870458Z",
+      "store": "ナニウル横山町店",
+      "text": "最近、貴金属の相場が下がっているので、少しでも高く売ろうと色々回りましたが、ここが一番高かったです。親身になってくれたので安心して手放すことができました。八王子で売るならここがおすすめです。"
+    },
+    {
+      "author": "F K",
+      "author_url": "https://www.google.com/maps/contrib/101452417403910539574/reviews",
+      "rating": 5,
+      "time": "4 か月前",
+      "published": "2026-06-16T03:41:37.728942637Z",
+      "store": "ナニウル横山町店",
+      "text": "対応が優しくて良かったです。\nドキドキしながら来たのですが、親切に色々と教えて頂きました。ありがとうございます。"
+    },
+    {
+      "author": "nangmn",
+      "author_url": "https://www.google.com/maps/contrib/100835180066221764981/reviews",
+      "rating": 5,
+      "time": "1 か月前",
+      "published": "2026-09-03T05:33:43.216790035Z",
+      "store": "ナニウル横山町店",
+      "text": "納得のいく価格でネックレスを売れてて嬉しかったです！ありがとうございます。satisfying price"
+    },
+    {
+      "author": "根本聡志",
+      "author_url": "https://www.google.com/maps/contrib/101514235148184506591/reviews",
+      "rating": 5,
+      "time": "5 か月前",
+      "published": "2026-05-13T07:19:44.951210279Z",
+      "store": "ナニウル横山町店",
+      "text": "3店舗目に伺って、気持ちよく査定頂き希望額出して頂けました。\n次回も利用してみようと思います。"
+    },
+    {
+      "author": "まーぼどーふ",
+      "author_url": "https://www.google.com/maps/contrib/114094949840126883206/reviews",
+      "rating": 5,
+      "time": "4 か月前",
+      "published": "2026-06-15T07:49:30.701601331Z",
+      "store": "ナニウル横山町店",
+      "text": "付き添い人として行ったのですが、とても丁寧な対応で接客して頂きました！いいお店です✨"
+    },
+    {
+      "author": "ばにら。",
+      "author_url": "https://www.google.com/maps/contrib/110448013558764268472/reviews",
+      "rating": 5,
+      "time": "1 か月前",
+      "published": "2026-08-28T02:28:24.215810337Z",
+      "store": "Re:naniuru －リ：ナニウル－",
+      "text": "２回目の来店です。満足のお値段をつけて頂きました。なにより、査定が早いのが嬉しいです。担当の方も感じが良く、また利用させて頂きたいと思います。"
+    },
+    {
+      "author": "小柴敏子",
+      "author_url": "https://www.google.com/maps/contrib/113774775459675207673/reviews",
+      "rating": 5,
+      "time": "4 か月前",
+      "published": "2026-06-18T09:19:27.295746790Z",
+      "store": "Re:naniuru －リ：ナニウル－",
+      "text": "とても親切に応対していただきました！片方無くしたピアスとかの金を持ってきてみました。思ったよりも高くてびっくり！次の旅行のお小遣いにしまーす！ありがとう😊"
+    },
+    {
+      "author": "久保田真司",
+      "author_url": "https://www.google.com/maps/contrib/116131409100815741623/reviews",
+      "rating": 5,
+      "time": "2 か月前",
+      "published": "2026-07-30T04:20:08.209116945Z",
+      "store": "Re:naniuru －リ：ナニウル－",
+      "text": "店のかたがとても紳士に頑張って査定額を上げてくれ助かりました。とても良いお店で助かりました。"
+    },
+    {
+      "author": "與那嶺紀和美",
+      "author_url": "https://www.google.com/maps/contrib/113557660678766024063/reviews",
+      "rating": 5,
+      "time": "3 か月前",
+      "published": "2026-07-09T02:29:34.423712736Z",
+      "store": "Re:naniuru －リ：ナニウル－",
+      "text": "思わず入ったお店が楽しくて、説明も丁寧で嬉しいです。また、何かあれば伺います。色々ありがとうございました。"
+    },
+    {
+      "author": "平野豊",
+      "author_url": "https://www.google.com/maps/contrib/102839125507978177575/reviews",
+      "rating": 5,
+      "time": "2 か月前",
+      "published": "2026-08-19T09:54:49.074158572Z",
+      "store": "Re:naniuru －リ：ナニウル－",
+      "text": "とても親切に対応していただき、満足のいく金額での買い取りにも感謝です"
+    },
+    {
+      "author": "Nana 18",
+      "author_url": "https://www.google.com/maps/contrib/107493863795509250086/reviews",
+      "rating": 5,
+      "time": "3 年前",
+      "published": "2023-05-11T02:22:03.811518Z",
+      "store": "子安町店",
+      "text": "とても良いお店です。\n店員さんも気さくで丁寧な接客です😺"
+    },
+    {
+      "author": "SHANGRI-LAたるほ",
+      "author_url": "https://www.google.com/maps/contrib/106201238075315013847/reviews",
+      "rating": 5,
+      "time": "3 年前",
+      "published": "2023-05-11T02:10:45.931406Z",
+      "store": "子安町店",
+      "text": "ギターやシルバーアクセサリーなど買い取っていただいきました。\nいつもありがとうございます😊"
+    },
+    {
+      "author": "Rinda Rinda",
+      "author_url": "https://www.google.com/maps/contrib/106886093291455054046/reviews",
+      "rating": 5,
+      "time": "6 年前",
+      "published": "2020-08-03T01:05:51.928695Z",
+      "store": "子安町店",
+      "text": "思っていたより修理が早くて良かった"
+    },
+    {
+      "author": "動画なしで1万人",
+      "author_url": "https://www.google.com/maps/contrib/111762309394687369018/reviews",
+      "rating": 5,
+      "time": "3 年前",
+      "published": "2023-05-11T02:22:16.607164Z",
+      "store": "子安町店",
+      "text": "とてもいいお店です。"
+    },
+    {
+      "author": "y",
+      "author_url": "https://www.google.com/maps/contrib/105046125901332212509/reviews",
+      "rating": 5,
+      "time": "3 週間前",
+      "published": "2026-09-26T08:04:21.387957870Z",
+      "store": "子安町店",
+      "text": "店長の村上さん。とても丁寧にありがとうございました。買取金額も本当に大満足です！お話もすごく楽しく、時間があっという間でした！もう他のお店には行けません。これからも是非、よろしくお願いします。"
     }
   ]
 }
