@@ -14,6 +14,8 @@
 .item-hero .wrap{position:relative;z-index:1;text-align:center}
 .item-hero .eyebrow{margin-bottom:16px}
 .item-hero h1{font-family:var(--serif);font-size:clamp(22px,3.2vw,34px);font-weight:700;letter-spacing:.08em;line-height:1.7}
+/* 見出しは語句単位で改行（PC：2行／スマホ：語句ごとに折り返し） */
+.item-hero h1 .h1-l{display:inline-block}
 .item-hero .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),transparent)}
 
 /* 説明文 */
@@ -59,6 +61,8 @@
 
 @media(max-width:600px){
   .item-hero{padding:56px 0 50px}
+  .item-hero h1{font-size:21px;letter-spacing:.06em;line-height:1.6}
+  .item-hero h1 .h1-br{display:none}
   .item-intro p{font-size:17px;line-height:1.95}
   .consult{grid-template-columns:1fr;gap:14px}
   .consult a{padding:24px 16px}
