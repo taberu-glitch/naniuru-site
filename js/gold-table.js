@@ -219,7 +219,7 @@ async function loadGold(){
 
 function renderGold(){
   document.getElementById("goldUpdated").textContent = (goldData.updated||"") + " 更新";
-  document.getElementById("goldSource").textContent = "※価格は1gあたり・税込。実際の買取価格はお品物の状態により変動します。";
+  document.getElementById("goldSource").textContent = "※色石・デザインを加味した価格になります。";
   const box = document.getElementById("goldCols");
   const esc = t => String(t==null?"":t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const fmt = (n,d) => Number(n).toLocaleString("ja-JP",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
