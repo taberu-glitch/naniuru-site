@@ -1,9 +1,9 @@
 {
-  "updated": "2026-10-19 13:30",
+  "updated": "2026-10-26 10:00",
   "place_name": "八幡町 本店・ナニウル横山町店・Re:naniuru －リ：ナニウル－・子安町店",
   "place_url": "https://maps.google.com/?cid=12592961814198062576&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
   "rating_avg": 4.9,
-  "ratings_total": 273,
+  "ratings_total": 281,
   "min_stars": 4,
   "stores": [
     {
@@ -18,14 +18,14 @@
       "label": "ナニウル横山町店",
       "url": "https://maps.google.com/?cid=16844368980178539615&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
       "rating": 4.9,
-      "total": 153
+      "total": 156
     },
     {
       "name": "Re:naniuru －リ：ナニウル－",
       "label": "Re:naniuru －リ：ナニウル－",
       "url": "https://maps.google.com/?cid=10896798946545289485&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
       "rating": 4.8,
-      "total": 88
+      "total": 93
     },
     {
       "name": "ナニウル 子安町店",
@@ -136,15 +136,6 @@
       "text": "とても親切に応対していただきました！片方無くしたピアスとかの金を持ってきてみました。思ったよりも高くてびっくり！次の旅行のお小遣いにしまーす！ありがとう😊"
     },
     {
-      "author": "久保田真司",
-      "author_url": "https://www.google.com/maps/contrib/116131409100815741623/reviews",
-      "rating": 5,
-      "time": "2 か月前",
-      "published": "2026-07-30T04:20:08.209116945Z",
-      "store": "Re:naniuru －リ：ナニウル－",
-      "text": "店のかたがとても紳士に頑張って査定額を上げてくれ助かりました。とても良いお店で助かりました。"
-    },
-    {
       "author": "與那嶺紀和美",
       "author_url": "https://www.google.com/maps/contrib/113557660678766024063/reviews",
       "rating": 5,
@@ -161,6 +152,24 @@
       "published": "2026-08-19T09:54:49.074158572Z",
       "store": "Re:naniuru －リ：ナニウル－",
       "text": "とても親切に対応していただき、満足のいく金額での買い取りにも感謝です"
+    },
+    {
+      "author": "久保田真司",
+      "author_url": "https://www.google.com/maps/contrib/116131409100815741623/reviews",
+      "rating": 5,
+      "time": "2 か月前",
+      "published": "2026-07-30T04:20:08.209116945Z",
+      "store": "Re:naniuru －リ：ナニウル－",
+      "text": "店のかたがとても紳士に頑張って査定額を上げてくれ助かりました。とても良いお店で助かりました。"
+    },
+    {
+      "author": "y",
+      "author_url": "https://www.google.com/maps/contrib/105046125901332212509/reviews",
+      "rating": 5,
+      "time": "4 週間前",
+      "published": "2026-09-26T08:04:21.387957870Z",
+      "store": "子安町店",
+      "text": "店長の村上さん。とても丁寧にありがとうございました。買取金額も本当に大満足です！お話もすごく楽しく、時間があっという間でした！もう他のお店には行けません。これからも是非、よろしくお願いします。"
     },
     {
       "author": "Nana 18",
@@ -197,15 +206,6 @@
       "published": "2023-05-11T02:22:16.607164Z",
       "store": "子安町店",
       "text": "とてもいいお店です。"
-    },
-    {
-      "author": "y",
-      "author_url": "https://www.google.com/maps/contrib/105046125901332212509/reviews",
-      "rating": 5,
-      "time": "3 週間前",
-      "published": "2026-09-26T08:04:21.387957870Z",
-      "store": "子安町店",
-      "text": "店長の村上さん。とても丁寧にありがとうございました。買取金額も本当に大満足です！お話もすごく楽しく、時間があっという間でした！もう他のお店には行けません。これからも是非、よろしくお願いします。"
     }
   ]
 }
