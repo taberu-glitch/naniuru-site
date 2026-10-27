@@ -1174,7 +1174,13 @@ async function openGold(){
     }
     if(!goldCur.groups) throw new Error("gold.json の形式が古いため手動更新できません");
   }catch(e){
-    $("gmBody").innerHTML = `<div class="empty">金相場データを読み込めませんでした（${escH(e.message)}）</div>`;
+    const auth = /: (401|403)\b/.test(e.message);
+    $("gmBody").innerHTML = auth
+      ? `<div class="empty">GitHubの接続設定（トークン）が無効になっているため、金相場を読み込めませんでした（${escH(e.message)}）。<br>
+           右上の「⚙ 接続設定」で、有効なトークンを入れ直して「保存して接続テスト」を押してください。<br><br>
+           <button class="btn sm solid" id="gmToSettings">接続設定を開く</button></div>`
+      : `<div class="empty">金相場データを読み込めませんでした（${escH(e.message)}）</div>`;
+    if(auth){ setGhStatus(false); $("gmToSettings").addEventListener("click",()=>{ closeGold(); openSettings(); }); }
     return;
   }
   renderGoldForm();
