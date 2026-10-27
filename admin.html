@@ -138,6 +138,33 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
 .log.show{display:block}
 
 .empty{padding:40px 20px;text-align:center;color:var(--grey);font-size:12.5px}
+
+/* 金相場（手動更新）モーダル */
+.gm-wrap{position:fixed;inset:0;background:rgba(20,20,20,.55);z-index:180;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 12px}
+.gm-wrap.show{display:flex}
+.gm{width:min(880px,100%)}
+.gm-lead{font-size:12px;color:var(--grey);line-height:1.9;margin-bottom:14px}
+.gm-status{font-size:12.5px;border:1px solid var(--line);background:var(--ivory);padding:12px 14px;margin-bottom:18px;line-height:2}
+.gm-status.locked{border-color:#D9A54A;background:#FBF3E2;color:#8A6520}
+.gm-metals{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.gm-metal{border:1px solid var(--line);padding:14px 14px 4px}
+.gm-metal h4{font-size:13px;letter-spacing:.12em;margin-bottom:10px;color:var(--green)}
+.gm-metal h4 small{font-family:var(--mont);font-size:9.5px;letter-spacing:.2em;color:var(--grey);margin-left:8px}
+.gm-sec{font-size:11px;letter-spacing:.16em;color:var(--grey);font-weight:700;margin:20px 0 8px}
+.gm-lock label{display:flex;gap:10px;align-items:flex-start;font-size:13px;padding:6px 0;cursor:pointer;line-height:1.7}
+.gm-lock input[type=radio]{accent-color:var(--green);margin-top:5px;flex:none}
+.gm-lock small{display:block;color:var(--grey);font-size:11px}
+.gm-lock input[type=datetime-local]{margin-top:6px;padding:8px 10px;border:1px solid var(--line);font-family:var(--sans);font-size:13.5px}
+.gm-pv{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.gm-pv table{width:100%;border-collapse:collapse;font-size:12.5px}
+.gm-pv caption{text-align:left;font-weight:700;font-size:12px;padding-bottom:4px;color:var(--green)}
+.gm-pv th,.gm-pv td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;font-family:var(--mont);white-space:nowrap}
+.gm-pv th{text-align:left;font-family:var(--sans)}
+.gm-pv tr.ig th,.gm-pv tr.ig td{background:var(--green-soft);font-weight:700}
+.gm-pv .old{color:var(--grey);font-size:11px}
+.gm-pv .up{color:#2E7D4F}.gm-pv .down{color:var(--red)}
+.gm-err{color:var(--red);font-size:12px;margin-top:10px}
+.gm-foot{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 @media(max-width:980px){.layout{grid-template-columns:1fr}}
 @media(max-width:600px){
@@ -160,6 +187,7 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
     <span class="logo"><img src="img/logo/logo-h-white.png" alt="ナニウル" style="height:30px;width:auto;display:block"><small>CMS — RESULTS × BLOG</small></span>
     <div class="head-btns">
       <span class="status-dot" id="ghStatus"><i></i><span>GitHub未接続</span></span>
+      <button class="btn sm" id="btnGold">◆ 金相場</button>
       <button class="btn sm" id="btnSettings">⚙ 接続設定</button>
       <button class="btn sm" id="btnExport">JSエクスポート</button>
       <button class="btn green" id="btnPublish">サイトに公開する</button>
@@ -189,7 +217,8 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
         3. 「予約投稿」を選ぶと、指定日時までサイト上で非表示になり、日時到来で自動表示されます（公開操作は事前に済ませてください）。<br>
         4. GitHub未接続でも「JSエクスポート」でposts.jsをダウンロードし、手動アップロードできます。<br>
         5. <b>カテゴリ</b>は商品ジャンル、<b>ブランドタグ</b>はブランド名（SEO用）。カテゴリを選ぶとそのジャンルのブランド候補に切り替わります。<br>
-        6. 画像カードの「本文に挿入」で、本文の好きな位置に画像を配置できます（文章→画像→文章…の構成が可能）。
+        6. 画像カードの「本文に挿入」で、本文の好きな位置に画像を配置できます（文章→画像→文章…の構成が可能）。<br>
+        7. 右上の「◆ 金相場」から、本日の買取価格表を手動で変更できます（田中貴金属から取得できない時・急な相場変動時用）。
       </div>
     </div>
   </div>
@@ -358,6 +387,14 @@ header{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
         <button class="btn sm solid" id="ghSave">保存して接続テスト</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ============ 金相場（手動更新）モーダル ============ -->
+<div class="gm-wrap" id="goldModal">
+  <div class="panel gm">
+    <h2>金相場の手動更新<button class="btn sm" id="gmClose">閉じる</button></h2>
+    <div class="in" id="gmBody"></div>
   </div>
 </div>
 
@@ -1084,6 +1121,256 @@ $("btnDelete").addEventListener("click",deletePost);
 $("btnDup").addEventListener("click",dupPost);
 $("searchBox").addEventListener("input",renderList);
 window.addEventListener("beforeunload",e=>{ if(dirty){e.preventDefault();e.returnValue="";} });
+
+/* =========================================================
+   金相場の手動更新
+   ---------------------------------------------------------
+   data/gold.json を直接書き換えます。各品目の計算式（インゴット価格 × 掛け率）は
+   自動更新（GAS）と同じです。掛け率は gold.json の rate を使用し、
+   無い場合のみ下の既定値（GASの METAL_GROUPS と同じ値）を使います。
+   「固定」を選ぶと gold.json に manual.until が記録され、
+   GASはその日時まで自動更新で上書きしません。
+========================================================= */
+const GOLD_PATH = "data/gold.json";
+const DEFAULT_RATES = {
+  K24:0.9991, K22:0.9182, K20:0.821, K18:0.7731, K14:0.5732, K10:0.4142, K9:0.37,
+  Pt1000:0.9952, Pt950:0.9405, Pt900:1.022, Pt850:0.98,
+  SV1000:0.967, SV925:0.873, SV:0.81
+};
+let goldCur = null;   // 現在サイトに出ている gold.json
+
+const escH = t => String(t==null?"":t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function jstParts(d){
+  const o = {};
+  new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"})
+    .formatToParts(d).forEach(p=>{ o[p.type]=p.value; });
+  return o;
+}
+const jstStr = d => { const p=jstParts(d); return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`; };
+const jstIso = d => { const p=jstParts(d); return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:00+09:00`; };
+const roundD = (v,d) => { const f=Math.pow(10,d||0); return Math.round(v*f)/f; };
+const fmtD = (n,d) => Number(n).toLocaleString("ja-JP",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+const signD = (n,d) => n==null ? "—" : n===0 ? "±0" : (n>0?"+":"−") + fmtD(Math.abs(n),d);
+function goldLockUntil(j){
+  const u = j && j.manual && j.manual.until; if(!u) return null;
+  const d = new Date(u); return d > new Date() ? d : null;
+}
+function tomorrow10(){
+  const p = jstParts(new Date());
+  return new Date(new Date(`${p.year}-${p.month}-${p.day}T10:00:00+09:00`).getTime() + 86400000);
+}
+
+async function openGold(){
+  $("goldModal").classList.add("show");
+  $("gmBody").innerHTML = '<div class="empty">読み込み中…</div>';
+  const gh = ghConf();
+  try{
+    if(gh.token && gh.repo){
+      goldCur = JSON.parse((await ghGetFile(GOLD_PATH)).text);
+    } else {
+      const r = await fetch(GOLD_PATH+"?t="+Date.now(),{cache:"no-store"});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      goldCur = await r.json();
+    }
+    if(!goldCur.groups) throw new Error("gold.json の形式が古いため手動更新できません");
+  }catch(e){
+    $("gmBody").innerHTML = `<div class="empty">金相場データを読み込めませんでした（${escH(e.message)}）</div>`;
+    return;
+  }
+  renderGoldForm();
+}
+
+function renderGoldForm(){
+  const lock = goldLockUntil(goldCur);
+  const manual = !!goldCur.manual;
+  const t10 = tomorrow10();
+  const metals = goldCur.groups.map(g=>{
+    const d = g.digits||0, step = d ? "0.01" : "1";
+    return `<div class="gm-metal">
+      <h4>${escH(g.title)}<small>${escH(g.en||"")}</small></h4>
+      <div class="field">
+        <label>${escH(g.ig.label)} インゴット価格（円/g） <b>*</b></label>
+        <input type="number" min="0" step="${step}" id="gmP_${g.key}" value="${g.ig.price}">
+      </div>
+      <div class="field">
+        <label>前日比（円）</label>
+        <input type="number" step="${step}" id="gmC_${g.key}" placeholder="空欄＝自動計算">
+        <div class="hint">空欄なら前日の価格との差を自動で計算します</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  $("gmBody").innerHTML = `
+    <div class="gm-status${lock?" locked":""}">
+      現在サイトに表示中：<b>${escH(goldCur.updated)} 更新</b>（${manual?"管理画面から手動入力":"田中貴金属から自動取得"}）<br>
+      ${lock
+        ? `◆ 手動価格を固定中：<b>${jstStr(lock)}</b> まで自動更新で上書きされません <button class="btn sm" id="gmUnlock" style="margin-left:6px">固定を解除</button>`
+        : "自動更新：有効（毎朝10:00に田中貴金属の価格へ更新）"}
+    </div>
+    <p class="gm-lead">田中貴金属の「店頭買取価格（税込）」と同じ基準で、<b>インゴット価格</b>を入力してください。<br>
+      K18・Pt900・SV925 などの各品目は、自動更新と同じ掛け率で自動計算されます。</p>
+    <div class="gm-metals">${metals}</div>
+
+    <div class="gm-sec">自動更新との関係</div>
+    <div class="gm-lock">
+      <label><input type="radio" name="gmLock" value="tomorrow" checked>
+        <span>明日の朝10:00まで固定する（おすすめ）<small>${jstStr(t10)} の定時更新から、田中貴金属の価格に自動で戻ります。急な相場変動で先に価格を変えたい時はこちら。</small></span></label>
+      <label><input type="radio" name="gmLock" value="custom">
+        <span>日時を指定して固定する<small>指定した日時まで自動更新で上書きされません。</small>
+          <input type="datetime-local" id="gmUntil"></span></label>
+      <label><input type="radio" name="gmLock" value="none">
+        <span>固定しない<small>田中貴金属から価格を取得でき次第、自動で上書きされます。田中のサイトがメンテナンス中の時などはこちら。</small></span></label>
+    </div>
+
+    <div class="gm-sec">反映される価格（左：現在 → 右：変更後）</div>
+    <div class="gm-pv" id="gmPv"></div>
+    <div class="gm-err" id="gmErr"></div>
+
+    <div class="gm-foot">
+      <button class="btn sm" id="gmCancel">キャンセル</button>
+      <button class="btn solid" id="gmPublish">サイトに反映する</button>
+    </div>`;
+
+  $("gmBody").querySelectorAll("input").forEach(el=>el.addEventListener("input",renderGoldPreview));
+  $("gmBody").querySelectorAll("input[name=gmLock]").forEach(el=>el.addEventListener("change",renderGoldPreview));
+  $("gmUntil").addEventListener("focus",()=>{ $("gmBody").querySelector("input[name=gmLock][value=custom]").checked=true; });
+  $("gmCancel").addEventListener("click",closeGold);
+  $("gmPublish").addEventListener("click",publishGold);
+  if(lock) $("gmUnlock").addEventListener("click",unlockGold);
+  renderGoldPreview();
+}
+
+/* 入力値から新しい gold.json を組み立てる */
+function buildManualGold(){
+  const now = new Date(), errs = [];
+  const today = jstStr(now).slice(0,10);
+  const sameDay = String(goldCur.updated||"").slice(0,10) === today;
+  const groups = goldCur.groups.map(g=>{
+    const d = g.digits||0;
+    const p = Number($("gmP_"+g.key).value);
+    if(!(p>0)) errs.push(`${g.title}のインゴット価格`);
+    const cin = $("gmC_"+g.key).value.trim();
+    /* 前日比の基準：今日すでに更新済みなら「その更新の前日価格」、そうでなければ現在の価格 */
+    const prev = (sameDay && g.ig.change!=null) ? g.ig.price - g.ig.change : g.ig.price;
+    const change = cin!=="" ? roundD(Number(cin),d) : roundD(p - prev, d);
+    const items = g.items.map(it=>{
+      const rate = it.rate!=null ? it.rate : DEFAULT_RATES[it.key];
+      if(rate==null){ errs.push(`${it.label}の掛け率が不明`); return {...it}; }
+      return {...it, rate, price: roundD(p*rate, d)};
+    });
+    return {...g, ig:{...g.ig, price: roundD(p,d), change}, items};
+  });
+
+  const mode = ($("gmBody").querySelector("input[name=gmLock]:checked")||{}).value || "tomorrow";
+  let until = null;
+  if(mode==="tomorrow") until = tomorrow10();
+  if(mode==="custom"){
+    const v = $("gmUntil").value;
+    if(!v) errs.push("固定する日時");
+    else { until = new Date(v); if(!(until > now)) errs.push("固定する日時（現在より後にしてください）"); }
+  }
+
+  const metals = {};
+  groups.forEach(g=>{
+    metals[g.ig.key] = {label:g.ig.label, price:g.ig.price, change:g.ig.change};
+    g.items.forEach(it=>{ metals[it.key] = {label:it.label, price:it.price}; });
+  });
+  const stamp = jstStr(now);
+  const json = {
+    updated: stamp,
+    published: stamp,
+    source: `管理画面から手動入力（${stamp}）`,
+    unit: goldCur.unit || "円/g",
+    groups, metals,
+    manual: { at: stamp, until: until && !isNaN(until) ? jstIso(until) : null }
+  };
+  return {json, errs, mode, until};
+}
+
+function renderGoldPreview(){
+  const {json, errs} = buildManualGold();
+  const oldOf = key => {
+    for(const g of goldCur.groups){
+      if(g.ig.key===key) return g.ig.price;
+      const it = g.items.find(x=>x.key===key); if(it) return it.price;
+    }
+    return null;
+  };
+  const row = (label, key, price, d, cls) => {
+    const o = oldOf(key), diff = (o==null||!(price>0)) ? null : roundD(price-o,d);
+    const dc = diff>0?"up":diff<0?"down":"";
+    return `<tr class="${cls||""}"><th>${escH(label)}</th>
+      <td class="old">${o==null?"—":fmtD(o,d)}</td>
+      <td>${price>0?"¥"+fmtD(price,d):"—"}</td>
+      <td class="${dc}">${diff==null?"":signD(diff,d)}</td></tr>`;
+  };
+  $("gmPv").innerHTML = json.groups.map(g=>{
+    const d = g.digits||0;
+    return `<table><caption>${escH(g.title)}（前日比 ${signD(g.ig.change,d)}円）</caption><tbody>
+      ${row(g.ig.label, g.ig.key, g.ig.price, d, "ig")}
+      ${g.items.map(it=>row(it.label, it.key, it.price, d)).join("")}
+    </tbody></table>`;
+  }).join("");
+  $("gmErr").textContent = errs.length ? "未入力・不備: "+errs.join("、") : "";
+}
+
+async function publishGold(){
+  const gh = ghConf();
+  if(!gh.token || !gh.repo){ closeGold(); openSettings(); toast("先にGitHub接続設定をしてください",true); return; }
+  const {json, errs, mode, until} = buildManualGold();
+  if(errs.length){ toast("未入力・不備: "+errs.join("、"),true); return; }
+
+  /* 入力ミス防止：金＞プラチナ＞シルバー の順か／前回から大きく動いていないか */
+  const ig = k => (json.groups.find(g=>g.key===k)||{}).ig;
+  const G=ig("gold"), P=ig("platinum"), S=ig("silver");
+  if((G&&P&&!(G.price>P.price)) || (P&&S&&!(P.price>S.price))){
+    if(!confirm("金・プラチナ・シルバーの価格の大小が通常と逆になっています。入力ミスはありませんか？\nこのまま反映する場合は「OK」を押してください。")) return;
+  }
+  const big = json.groups.filter(g=>{
+    const o = goldCur.groups.find(x=>x.key===g.key);
+    return o && o.ig.price>0 && Math.abs(g.ig.price-o.ig.price)/o.ig.price > 0.15;
+  });
+  if(big.length && !confirm(`${big.map(g=>g.title).join("・")}の価格が現在より15%以上変わります。桁の間違いなどはありませんか？\nこのまま反映する場合は「OK」を押してください。`)) return;
+
+  const lockText = mode==="none" ? "固定しない（田中貴金属から取得でき次第、自動で上書き）"
+    : `${jstStr(until)} まで固定（それまで自動更新で上書きしない）`;
+  const lines = json.groups.map(g=>`・${g.ig.label}：¥${fmtD(g.ig.price,g.digits||0)}（前日比 ${signD(g.ig.change,g.digits||0)}）`).join("\n");
+  if(!confirm(`次の価格でサイトの買取価格表を更新します。\n\n${lines}\n\n自動更新：${lockText}\n\nよろしいですか？`)) return;
+
+  $("gmPublish").disabled = true;
+  try{
+    log("data/gold.json を手動更新中…");
+    await ghPutFile(GOLD_PATH, toB64Utf8(JSON.stringify(json,null,2)), "cms: 金相場手動更新 "+json.updated);
+    goldCur = json;
+    log("金相場を手動更新しました。");
+    toast("金相場を更新しました。1〜2分でサイトに反映されます");
+    renderGoldForm();
+  }catch(e){
+    toast("更新に失敗しました: "+e.message,true);
+    log("エラー: "+e.message);
+  }finally{
+    if($("gmPublish")) $("gmPublish").disabled = false;
+  }
+}
+
+async function unlockGold(){
+  if(!confirm("手動価格の固定を解除し、自動更新に戻します。\n（価格は田中貴金属から次に取得できた時点で更新されます。表示中の価格はそれまでそのままです）\nよろしいですか？")) return;
+  const gh = ghConf();
+  if(!gh.token || !gh.repo){ closeGold(); openSettings(); toast("先にGitHub接続設定をしてください",true); return; }
+  const json = JSON.parse(JSON.stringify(goldCur));
+  json.manual = {...(json.manual||{}), until:null, released: jstStr(new Date())};
+  try{
+    await ghPutFile(GOLD_PATH, toB64Utf8(JSON.stringify(json,null,2)), "cms: 金相場の固定を解除 "+jstStr(new Date()));
+    goldCur = json;
+    toast("固定を解除しました。自動更新に戻ります");
+    log("金相場の固定を解除しました。");
+    renderGoldForm();
+  }catch(e){ toast("解除に失敗しました: "+e.message,true); }
+}
+
+function closeGold(){ $("goldModal").classList.remove("show"); }
+$("btnGold").addEventListener("click",openGold);
+$("gmClose").addEventListener("click",closeGold);
 
 /* 起動 */
 setGhStatus(!!(ghConf().token&&ghConf().repo));
