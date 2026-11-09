@@ -189,7 +189,7 @@ section.dark .rule{background:linear-gradient(90deg,transparent,var(--gold-lt),t
 .gc-ig .pr small{font-family:var(--mont);font-size:12px;font-weight:500;color:rgba(255,255,255,.75);margin-left:6px}
 .gc-ig .chg{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.75)}
 .gc-ig .chg b{font-family:var(--mont);font-size:14px;font-weight:600;letter-spacing:.02em}
-.chg.up b{color:#F4A8A0}.chg.down b{color:#9FCBF2}.chg.flat b{color:rgba(255,255,255,.85)}
+.chg.up b{color:#9FCBF2}.chg.down b{color:#F4A8A0}.chg.flat b{color:rgba(255,255,255,.85)}
 .gold-col table.metal th,.gold-col table.metal td{padding:11px 4px;white-space:nowrap}
 .gold-col table.metal th{font-family:var(--mont);font-size:14px;font-weight:600;letter-spacing:.06em}
 .gold-col table.metal tr:last-child th,.gold-col table.metal tr:last-child td{border-bottom:none}
@@ -335,6 +335,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
   .float-cta{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));flex-direction:row;gap:8px}
   .float-cta a{flex:1;min-width:0;padding:14px 8px;font-size:12px}
+  .float-cta .line{box-shadow:inset 0 0 0 1.5px var(--gold),0 12px 28px rgba(20,20,20,.22)}
 
   /* ヘッダー・ロゴ */
   .topbar{font-size:10px}
