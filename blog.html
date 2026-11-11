@@ -38,7 +38,7 @@ ul{list-style:none}
 header.site{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .head-in{display:flex;align-items:center;justify-content:space-between;height:78px}
 .logo{display:flex;align-items:center}
-.logo img{height:42px;width:auto;display:block}
+.logo img{height:48px;width:auto;display:block}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;font-size:12.5px;letter-spacing:.16em;border:1px solid var(--black);transition:.3s;cursor:pointer;background:var(--white);color:var(--black);font-weight:500}
 .btn:hover{background:var(--black);color:#fff}
 .btn.green{background:var(--green);border-color:var(--green);color:#fff}
@@ -183,14 +183,20 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.85);padding:44px 0 3
   body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
   .float-cta{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));flex-direction:row;gap:8px}
   .float-cta a{flex:1;min-width:0;padding:14px 8px;font-size:12px}
-  .float-cta .line{box-shadow:inset 0 0 0 1.5px var(--gold),0 12px 28px rgba(20,20,20,.22)}
+  .float-cta .tel,.float-cta .line{box-shadow:inset 0 0 0 1.5px var(--gold),0 12px 28px rgba(20,20,20,.22)}
   .head-in{height:62px}
-  .logo img{height:34px}
+  .logo img{height:40px}
   .page-head{padding:38px 0 34px}
   .post-price{padding:30px 18px 26px}
   .post-price .v{font-size:40px}
   .post-cta{padding:28px 18px}
   select.archive{font-size:16px}
+}
+@media(max-width:380px){
+  .logo img{height:36px}
+}
+@media(max-width:340px){
+  .logo img{height:34px}
 }
 </style>
 </head>

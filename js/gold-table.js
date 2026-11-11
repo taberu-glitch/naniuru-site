@@ -218,7 +218,7 @@ async function loadGold(){
 }
 
 function renderGold(){
-  document.getElementById("goldUpdated").textContent = (goldData.updated||"") + " 更新";
+  document.getElementById("goldUpdated").textContent = String(goldData.updated||"").replace(/-/g,"/") + " 更新";
   document.getElementById("goldSource").textContent = "※色石・デザインを加味した価格になります。";
   const box = document.getElementById("goldCols");
   const esc = t => String(t==null?"":t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
