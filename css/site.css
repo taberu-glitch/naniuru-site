@@ -237,7 +237,8 @@ table.metal td.price{text-align:right;font-family:var(--didone);font-size:22px;f
 
 /* ---------- damaged ---------- */
 .dmg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
-.dmg li{background:#fff;border:1px solid var(--line);padding:26px 20px;text-align:center;font-size:14px;line-height:1.9}
+.dmg li{background:#fff;border:1px solid var(--line);padding:12px 12px 20px;text-align:center;font-size:14px;line-height:1.9}
+.dmg li img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;margin-bottom:16px}
 .dmg li .ic{font-family:var(--didone);font-size:26px;color:var(--gold-deep);margin-bottom:10px}
 
 /* ---------- reasons ---------- */
@@ -388,3 +389,6 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.88);padding:80px 0 3
   .grv-stars{font-size:26px}
   .g-word{font-size:26px}
 }
+
+/* 2026-11-15 わけあり品カード：スマホは2列 */
+@media (max-width:600px){.dmg{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dmg li{padding:8px 8px 14px;font-size:12px;line-height:1.7}.dmg li img{margin-bottom:10px}}
