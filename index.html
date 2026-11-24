@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=20261115">
+<link rel="stylesheet" href="css/site.css?v=20261124">
 </head>
 <body>
 
@@ -75,6 +75,7 @@
       <li><a href="#results">買取実績</a></li>
       <li><a href="#faq">よくあるご質問</a></li>
       <li><a href="#blog">ブログ</a></li>
+      <li><a href="#company">会社概要</a></li>
     </ul>
   </nav>
 </header>
@@ -375,6 +376,31 @@
   </div>
 </section>
 
+<!-- ============ COMPANY ============ -->
+<section id="company">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="en">Company</p>
+      <h2>会社概要</h2>
+      <div class="rule"></div>
+    </div>
+    <dl class="company reveal">
+      <div><dt>会社名</dt><dd>株式会社yxxk</dd></div>
+      <div><dt>所在地</dt><dd>東京都八王子市八幡町3番17号 マルミビル1F</dd></div>
+      <div><dt>設立年月日</dt><dd>2020年2月3日</dd></div>
+      <div><dt>代表取締役社長</dt><dd>髙橋勇騎</dd></div>
+      <div><dt>資本金</dt><dd>500万円</dd></div>
+      <div><dt>事業内容</dt><dd>
+        <ul>
+          <li>リユース事業（八王子市内4店舗直営）<span class="sub">東京都公安委員会許可 第308832005363号</span></li>
+          <li>FC展開・運営・コンサルティング事業</li>
+          <li>お酒の買取及び販売</li>
+        </ul>
+      </dd></div>
+    </dl>
+  </div>
+</section>
+
 <!-- ============ FOOTER ============ -->
 <footer id="shops">
   <div class="wrap">
@@ -435,6 +461,7 @@
           <li><a href="#reviews">お客さまの声</a></li>
           <li><a href="#faq">よくあるご質問</a></li>
           <li><a href="blog.html">スタッフブログ</a></li>
+          <li><a href="#company">会社概要</a></li>
         </ul>
       </div>
     </div>
@@ -455,7 +482,7 @@ document.write('<script src="data/posts.js?v=' + Date.now() + '"><\/script>');
 const CONFIG = {
   REVIEWS_JSON: "data/reviews.json", // ★4以上のみ格納（全店舗分）
   MIN_STARS: 4,
-  SHOW_COUNT: 5                       // 表示件数（開くたびにランダムで選ぶ）
+  SHOW_COUNT: 15                      // 表示件数（開くたびにランダムで選ぶ。在庫が少ない時は全件）
 };
 
 const DEFAULT_REVIEWS = {
@@ -550,8 +577,15 @@ function renderReviews(data){
   if(data.place_url) document.getElementById("revMoreBtn").href = data.place_url;
 
   const step = () => (track.querySelector(".g-card")?.offsetWidth || 300) + 18;
-  document.getElementById("revPrev").onclick = () => track.scrollBy({left:-step(),behavior:"smooth"});
-  document.getElementById("revNext").onclick = () => track.scrollBy({left:step(),behavior:"smooth"});
+  /* ループ：最後で「›」→ 1件目へ戻る／最初で「‹」→ 最後へ */
+  const atEnd   = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+  const atStart = () => track.scrollLeft <= 4;
+  document.getElementById("revPrev").onclick = () => atStart()
+    ? track.scrollTo({left:track.scrollWidth,behavior:"smooth"})
+    : track.scrollBy({left:-step(),behavior:"smooth"});
+  document.getElementById("revNext").onclick = () => atEnd()
+    ? track.scrollTo({left:0,behavior:"smooth"})
+    : track.scrollBy({left:step(),behavior:"smooth"});
 }
 
 /* =========================================================
