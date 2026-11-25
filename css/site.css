@@ -56,7 +56,7 @@ nav.gnav{border-bottom:1px solid var(--line);background:var(--white)}
 nav.gnav>ul{display:flex;justify-content:center}
 nav.gnav>ul>li>a{display:block;padding:15px 22px;font-size:12.5px;letter-spacing:.2em;transition:.3s}
 nav.gnav>ul>li>a:hover{color:var(--green)}
-@media(max-width:1150px){nav.gnav>ul>li>a{padding:15px 13px;letter-spacing:.14em}}
+@media(max-width:1200px){nav.gnav>ul>li>a{padding:15px 13px;letter-spacing:.14em}}
 /* メガメニュー（横並び） */
 .mega{position:absolute;left:0;right:0;top:100%;background:var(--green);color:#fff;opacity:0;visibility:hidden;transform:translateY(6px);transition:.25s;z-index:60;border-top:1px solid var(--green-deep)}
 li.has-mega:hover>.mega,li.has-mega:focus-within>.mega{opacity:1;visibility:visible;transform:none}
@@ -271,8 +271,9 @@ table.metal td.price{text-align:right;font-family:var(--didone);font-size:22px;f
 /* ---------- company（会社概要：FAQと同じ幅・細いグレー線で区切る） ---------- */
 .company{max-width:820px;margin:0 auto;border-top:1px solid #D4D3CF}
 .company>div{display:grid;grid-template-columns:180px minmax(0,1fr);gap:16px;padding:22px 8px;border-bottom:1px solid #D4D3CF}
-.company dt{font-size:14.5px;font-weight:700;letter-spacing:.08em;color:var(--black)}
-.company dd{margin:0;font-size:14.5px;line-height:1.9;color:#2B2A25}
+.company dt,.company dd{font-size:15px;letter-spacing:.06em;line-height:1.9}
+.company dt{font-weight:700;color:var(--black)}
+.company dd{margin:0;font-weight:500;color:var(--black)}
 .company ul{list-style:none;margin:0;padding:0}
 .company li+li{margin-top:6px}
 .company .sub{display:block;font-size:12.5px;color:var(--grey);letter-spacing:.04em}
