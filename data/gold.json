@@ -1,7 +1,7 @@
 {
-  "updated": "2026-11-26 10:00",
-  "published": "2026-11-26 09:30",
-  "source": "田中貴金属 店頭買取価格（税込）ベース（自動取得・公表 2026-11-26 09:30）",
+  "updated": "2026-11-27 10:00",
+  "published": "2026-11-27 09:30",
+  "source": "田中貴金属 店頭買取価格（税込）ベース（自動取得・公表 2026-11-27 09:30）",
   "unit": "円/g",
   "groups": [
     {
@@ -13,51 +13,51 @@
         "key": "K24IG",
         "label": "K24 IG",
         "sub": "インゴット",
-        "price": 19985,
-        "change": 164
+        "price": 19956,
+        "change": -29
       },
       "items": [
         {
           "key": "K24",
           "label": "K24",
           "rate": 0.9991,
-          "price": 19967
+          "price": 19938
         },
         {
           "key": "K22",
           "label": "K22",
           "rate": 0.9182,
-          "price": 18350
+          "price": 18324
         },
         {
           "key": "K20",
           "label": "K20",
           "rate": 0.821,
-          "price": 16408
+          "price": 16384
         },
         {
           "key": "K18",
           "label": "K18",
           "rate": 0.7731,
-          "price": 15450
+          "price": 15428
         },
         {
           "key": "K14",
           "label": "K14",
           "rate": 0.5732,
-          "price": 11455
+          "price": 11439
         },
         {
           "key": "K10",
           "label": "K10",
           "rate": 0.4142,
-          "price": 8278
+          "price": 8266
         },
         {
           "key": "K9",
           "label": "K9",
           "rate": 0.37,
-          "price": 7394
+          "price": 7384
         }
       ]
     },
@@ -70,33 +70,33 @@
         "key": "Pt1000IG",
         "label": "Pt1000 IG",
         "sub": "インゴット",
-        "price": 7047,
-        "change": 150
+        "price": 7098,
+        "change": 51
       },
       "items": [
         {
           "key": "Pt1000",
           "label": "Pt1000",
           "rate": 0.9952,
-          "price": 7013
+          "price": 7064
         },
         {
           "key": "Pt950",
           "label": "Pt950",
           "rate": 0.9405,
-          "price": 6628
+          "price": 6676
         },
         {
           "key": "Pt900",
           "label": "Pt900",
           "rate": 1.022,
-          "price": 7202
+          "price": 7254
         },
         {
           "key": "Pt850",
           "label": "Pt850",
           "rate": 0.98,
-          "price": 6906
+          "price": 6956
         }
       ]
     },
@@ -109,27 +109,27 @@
         "key": "SV1000IG",
         "label": "SV1000 IG",
         "sub": "インゴット",
-        "price": 227.26,
-        "change": 3.74
+        "price": 228.47,
+        "change": 1.21
       },
       "items": [
         {
           "key": "SV1000",
           "label": "SV1000",
           "rate": 0.967,
-          "price": 219.76
+          "price": 220.93
         },
         {
           "key": "SV925",
           "label": "SV925",
           "rate": 0.873,
-          "price": 198.4
+          "price": 199.45
         },
         {
           "key": "SV",
           "label": "SV",
           "rate": 0.81,
-          "price": 184.08
+          "price": 185.06
         }
       ]
     }
@@ -137,74 +137,74 @@
   "metals": {
     "K24IG": {
       "label": "K24 IG",
-      "price": 19985,
-      "change": 164
+      "price": 19956,
+      "change": -29
     },
     "K24": {
       "label": "K24",
-      "price": 19967
+      "price": 19938
     },
     "K22": {
       "label": "K22",
-      "price": 18350
+      "price": 18324
     },
     "K20": {
       "label": "K20",
-      "price": 16408
+      "price": 16384
     },
     "K18": {
       "label": "K18",
-      "price": 15450
+      "price": 15428
     },
     "K14": {
       "label": "K14",
-      "price": 11455
+      "price": 11439
     },
     "K10": {
       "label": "K10",
-      "price": 8278
+      "price": 8266
     },
     "K9": {
       "label": "K9",
-      "price": 7394
+      "price": 7384
     },
     "Pt1000IG": {
       "label": "Pt1000 IG",
-      "price": 7047,
-      "change": 150
+      "price": 7098,
+      "change": 51
     },
     "Pt1000": {
       "label": "Pt1000",
-      "price": 7013
+      "price": 7064
     },
     "Pt950": {
       "label": "Pt950",
-      "price": 6628
+      "price": 6676
     },
     "Pt900": {
       "label": "Pt900",
-      "price": 7202
+      "price": 7254
     },
     "Pt850": {
       "label": "Pt850",
-      "price": 6906
+      "price": 6956
     },
     "SV1000IG": {
       "label": "SV1000 IG",
-      "price": 227.26,
-      "change": 3.74
+      "price": 228.47,
+      "change": 1.21
     },
     "SV1000": {
       "label": "SV1000",
-      "price": 219.76
+      "price": 220.93
     },
     "SV925": {
       "label": "SV925",
-      "price": 198.4
+      "price": 199.45
     },
     "SV": {
       "label": "SV",
-      "price": 184.08
+      "price": 185.06
     }
   }
 }
